@@ -116,8 +116,8 @@ async function checkApi() {
   <div class="admin fade-up container">
     <div class="head">
       <span class="section-label">Staff Portal</span>
-      <h1 class="page-title">HR System</h1>
-      <p>Manage the team, shifts and HR reports from one place. Access is restricted to administrators.</p>
+      <h1 class="page-title">Admin System</h1>
+      <p>Manage the team, shifts and Admin reports from one place. Access is restricted to administrators.</p>
     </div>
 
     <p v-if="notice" class="notice" role="status">{{ notice }}</p>
