@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductsStore } from '../stores/products'
 import { useCartStore } from '../stores/cart'
@@ -11,13 +11,32 @@ const products = useProductsStore()
 const cart = useCartStore()
 
 const product = computed(() => products.byId(route.params.id))
-const selectedOption = ref(product.value?.options?.[0] ?? '')
+const selectedOption = ref('')
 const quantity = ref(1)
 const faq = ref(0)
 const added = ref(false)
 
+watch(
+  () => product.value?.options,
+  (options) => {
+    const first = options?.[0]
+    if (first && !options.includes(selectedOption.value)) {
+      selectedOption.value = first
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  () => route.params.id,
+  () => {
+    quantity.value = 1
+    added.value = false
+  }
+)
+
 function add() {
-  cart.addToCart(product.value, quantity.value)
+  cart.addToCart(product.value, quantity.value, selectedOption.value)
   added.value = true
   setTimeout(() => (added.value = false), 1600)
 }
@@ -28,9 +47,7 @@ const faqs = [
   { q: 'Can I return a product?', a: 'Yes. If you are not happy with your print, you can request a return or reprint within 30 days of delivery.' },
 ]
 
-if (!product.value) {
-  // handled in template fallback
-}
+
 </script>
 
 <template>

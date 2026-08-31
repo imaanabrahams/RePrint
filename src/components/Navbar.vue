@@ -1,21 +1,29 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
 import { useWishlistStore } from '../stores/wishlist'
+import { useAuthStore } from '../stores/auth'
 
 const route = useRoute()
 const router = useRouter()
 const cart = useCartStore()
 const wishlist = useWishlistStore()
+const auth = useAuthStore()
 const open = ref(false)
 
-const links = [
-  { to: '/', label: 'Home' },
-  { to: '/shop', label: 'Shop' },
-  { to: '/create', label: 'Create' },
-  { to: '/contact', label: 'Contact' },
-]
+const links = computed(() => {
+  const base = [
+    { to: '/', label: 'Home' },
+    { to: '/shop', label: 'Shop' },
+    { to: '/create', label: 'Create' },
+    { to: '/contact', label: 'Contact' },
+  ]
+  if (auth.isAdmin) {
+    base.push({ to: '/hr', label: 'HR System' })
+  }
+  return base
+})
 
 function isActive(to) {
   if (to === '/') return route.path === '/'

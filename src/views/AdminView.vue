@@ -1,8 +1,11 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { api } from '../api'
 
+const route = useRoute()
+const router = useRouter()
 const auth = useAuthStore()
 
 const email = ref('admin@reprint.com')
@@ -13,7 +16,11 @@ const notice = ref('')
 
 const apiUp = ref(null)
 
-const tab = ref('dashboard')
+const tab = computed(() => route.meta.tab || 'dashboard')
+
+function goToTab(name) {
+  router.push({ name })
+}
 
 const overview = ref(null)
 const employees = ref([])
@@ -71,10 +78,10 @@ async function loadData() {
 
 async function logout() {
   auth.logout()
-  tab.value = 'dashboard'
   overview.value = null
   employees.value = []
   shifts.value = []
+  router.push({ name: 'hr-overview' })
 }
 
 function fmtDate(d) {
@@ -109,8 +116,8 @@ async function checkApi() {
   <div class="admin fade-up container">
     <div class="head">
       <span class="section-label">Staff Portal</span>
-      <h1 class="page-title">Admin &amp; HR</h1>
-      <p>Manage the team, shifts and HR reports. Access is restricted to administrators.</p>
+      <h1 class="page-title">HR System</h1>
+      <p>Manage the team, shifts and HR reports from one place. Access is restricted to administrators.</p>
     </div>
 
     <p v-if="notice" class="notice" role="status">{{ notice }}</p>
@@ -155,11 +162,11 @@ async function checkApi() {
     <div v-else class="portal">
       <div class="toolbar">
         <div class="tabs">
-          <button class="tab" :class="{ active: tab === 'dashboard' }" @click="tab = 'dashboard'">Overview</button>
-          <button class="tab" :class="{ active: tab === 'employees' }" @click="tab = 'employees'">
+          <button class="tab" :class="{ active: tab === 'dashboard' }" @click="goToTab('hr-overview')">Overview</button>
+          <button class="tab" :class="{ active: tab === 'employees' }" @click="goToTab('hr-employees')">
             Employees <span class="pill">{{ employees.length }}</span>
           </button>
-          <button class="tab" :class="{ active: tab === 'shifts' }" @click="tab = 'shifts'">
+          <button class="tab" :class="{ active: tab === 'shifts' }" @click="goToTab('hr-shifts')">
             Shifts <span class="pill">{{ shifts.length }}</span>
           </button>
         </div>

@@ -9,27 +9,30 @@ export const useCartStore = defineStore('cart', () => {
     items.value.reduce((sum, i) => sum + i.price * i.quantity, 0)
   )
 
-  function addToCart(product, quantity = 1) {
-    const existing = items.value.find((i) => i.id === product.id)
+  function addToCart(product, quantity = 1, option = '') {
+    const key = option || 'default'
+    const existing = items.value.find((i) => i.id === product.id && i.option === key)
     if (existing) {
       existing.quantity += quantity
     } else {
-      items.value.push({ ...product, quantity })
+      items.value.push({ ...product, option: key, quantity })
     }
   }
 
-  function updateQuantity(id, quantity) {
-    const item = items.value.find((i) => i.id === id)
+  function updateQuantity(id, quantity, option = '') {
+    const key = option || 'default'
+    const item = items.value.find((i) => i.id === id && i.option === key)
     if (!item) return
     if (quantity <= 0) {
-      removeFromCart(id)
+      removeFromCart(id, option)
     } else {
       item.quantity = quantity
     }
   }
 
-  function removeFromCart(id) {
-    items.value = items.value.filter((i) => i.id !== id)
+  function removeFromCart(id, option = '') {
+    const key = option || 'default'
+    items.value = items.value.filter((i) => !(i.id === id && i.option === key))
   }
 
   function clear() {

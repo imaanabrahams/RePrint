@@ -34,7 +34,7 @@ function Icon({ type }) {
         <p v-if="sent" class="success" role="status">
           Thanks {{ form.name }}! Your message has been sent. We'll reply within 1–2 business days.
         </p>
-
+              
         <div class="row-2">
           <label>
             <span>Name</span>
@@ -85,7 +85,10 @@ function Icon({ type }) {
           <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
         </div>
         <h3>{{ i.title }}</h3>
-        <p v-for="l in i.lines" :key="l">{{ l }}</p>
+        <template v-for="(l, index) in i.lines" :key="l">
+          <a v-if="i.icon === 'phone' && index === 0" :href="`tel:${l.replace(/[^+\d]/g, '')}`">{{ l }}</a>
+          <p v-else>{{ l }}</p>
+        </template>
       </div>
     </div>
   </div>
@@ -240,6 +243,16 @@ label > span {
 .info-card p {
   color: var(--grey);
   font-size: 14.5px;
+}
+
+.info-card a {
+  color: var(--primary-dark);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.info-card a:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 820px) {

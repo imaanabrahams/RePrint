@@ -5,9 +5,25 @@ import { getToken, getStoredUser } from '../api'
 const routes = [
   {
     path: '/admin',
-    name: 'admin',
+    redirect: '/hr',
+  },
+  {
+    path: '/hr',
+    name: 'hr-overview',
     component: () => import('../views/AdminView.vue'),
-    meta: { requiresAuth: true, adminOnly: true },
+    meta: { requiresAuth: true, adminOnly: true, tab: 'dashboard' },
+  },
+  {
+    path: '/hr/employees',
+    name: 'hr-employees',
+    component: () => import('../views/AdminView.vue'),
+    meta: { requiresAuth: true, adminOnly: true, tab: 'employees' },
+  },
+  {
+    path: '/hr/shifts',
+    name: 'hr-shifts',
+    component: () => import('../views/AdminView.vue'),
+    meta: { requiresAuth: true, adminOnly: true, tab: 'shifts' },
   },
   { path: '/', name: 'home', component: HomeView },
   { path: '/shop', name: 'shop', component: () => import('../views/ShopView.vue') },
@@ -42,13 +58,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  if (!to.meta.requiresAuth) return true
-  const user = getStoredUser()
-  if (!getToken()) {
-    return { name: 'admin', query: { login: '1' } }
-  }
-  if (to.meta.adminOnly && user?.role !== 'admin') {
-    return { name: 'admin', query: { login: '1' } }
+  if (to.meta.requiresAuth && to.meta.adminOnly) {
+    const user = getStoredUser()
+    if (getToken() && user?.role !== 'admin') {
+      return { name: 'home' }
+    }
+  } else if (to.meta.requiresAuth && !getToken()) {
+    return { name: 'login', query: { redirect: to.fullPath } }
   }
   return true
 })

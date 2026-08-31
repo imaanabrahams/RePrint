@@ -25,22 +25,23 @@ const total = computed(() => cart.subtotal + shipping.value)
 
     <div v-else class="layout">
       <div class="items">
-        <div class="item" v-for="item in cart.items" :key="item.id">
+        <div class="item" v-for="item in cart.items" :key="`${item.id}-${item.option}`">
           <div class="thumb">
             <img :src="item.image" :alt="item.name" />
           </div>
           <div class="info">
             <h3>{{ item.name }}</h3>
             <p class="cat">{{ item.category }}</p>
+            <p v-if="item.option && item.option !== 'default'" class="option">{{ item.option }}</p>
             <div class="stepper">
-              <button @click="cart.updateQuantity(item.id, item.quantity - 1)">−</button>
+              <button @click="cart.updateQuantity(item.id, item.quantity - 1, item.option)">−</button>
               <span>{{ item.quantity }}</span>
-              <button @click="cart.updateQuantity(item.id, item.quantity + 1)">+</button>
+              <button @click="cart.updateQuantity(item.id, item.quantity + 1, item.option)">+</button>
             </div>
           </div>
           <div class="price-col">
             <span class="price">{{ formatRand(item.price * item.quantity) }}</span>
-            <button class="remove" @click="cart.removeFromCart(item.id)" aria-label="Remove">✕</button>
+            <button class="remove" @click="cart.removeFromCart(item.id, item.option)" aria-label="Remove">✕</button>
           </div>
         </div>
 
@@ -130,6 +131,13 @@ const total = computed(() => cart.subtotal + shipping.value)
   letter-spacing: 0.5px;
   font-weight: 600;
   margin: 2px 0 10px;
+}
+
+.option {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .stepper {
