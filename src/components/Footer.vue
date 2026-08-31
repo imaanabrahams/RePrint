@@ -1,5 +1,8 @@
 <script setup>
+import { useAuthStore } from '../stores/auth'
+
 const year = new Date().getFullYear()
+const auth = useAuthStore()
 </script>
 
 <template>
@@ -38,9 +41,9 @@ const year = new Date().getFullYear()
           <RouterLink to="/login">My Account</RouterLink>
         </div>
 
-        <div class="col">
+        <div v-if="auth.isAdmin" class="col">
           <h4>Staff</h4>
-          <RouterLink to="/admin">HR &amp; Admin</RouterLink>
+          <RouterLink to="/admin">Admin log in</RouterLink>
         </div>
  
         <div class="col">
