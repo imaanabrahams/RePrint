@@ -27,7 +27,7 @@ A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend
 # From the project root
 npm install           # frontend dependencies
 npm install --prefix server   # backend dependencies
-```
+``` 
 
 ### Run everything (recommended)
 
