@@ -354,6 +354,7 @@ function backToCredentials() {
   cursor: pointer;
   border-radius: 6px;
 }
+
 .ghost-icon-btn:hover {
   color: var(--accent);
   background: rgba(74, 107, 82, 0.08);

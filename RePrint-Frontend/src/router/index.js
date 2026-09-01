@@ -8,6 +8,10 @@ const router = createRouter({
       name: 'EmployeeLogin',
       component: () => import('@/views/employeeLogin.vue'),
     },
+    { 
+      path: '/staff/dashboard', 
+      name: 'EmployeeDashboard', 
+      component: () => import('@/views/employeeDashboard.vue') }
   ],
 })
 
