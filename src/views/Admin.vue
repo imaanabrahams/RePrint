@@ -1,113 +1,113 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
-import { api } from '../api'
+import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "../stores/authStores";
+import { api } from "../apiReprint";
 
-const route = useRoute()
-const router = useRouter()
-const auth = useAuthStore()
+const route = useRoute();
+const router = useRouter();
+const auth = useAuthStore();
 
-const email = ref('admin@reprint.com')
-const password = ref('')
-const loading = ref(false)
-const err = ref('')
-const notice = ref('')
+const email = ref("admin@reprint.com");
+const password = ref("");
+const loading = ref(false);
+const err = ref("");
+const notice = ref("");
 
-const apiUp = ref(null)
+const apiUp = ref(null);
 
-const tab = computed(() => route.meta.tab || 'dashboard')
+const tab = computed(() => route.meta.tab || "dashboard");
 
 function goToTab(name) {
-  router.push({ name })
+  router.push({ name });
 }
 
-const overview = ref(null)
-const employees = ref([])
-const shifts = ref([])
-const deptFilter = ref('')
-const statusFilter = ref('')
-const loadingData = ref(false)
+const overview = ref(null);
+const employees = ref([]);
+const shifts = ref([]);
+const deptFilter = ref("");
+const statusFilter = ref("");
+const loadingData = ref(false);
 
 const departments = computed(() => {
-  const set = new Set(employees.value.map((e) => e.department).filter(Boolean))
-  return ['', ...set]
-})
+  const set = new Set(employees.value.map((e) => e.department).filter(Boolean));
+  return ["", ...set];
+});
 
 const filteredEmployees = computed(() => {
   return employees.value.filter((e) => {
-    const d = deptFilter.value && e.department !== deptFilter.value
-    const s = statusFilter.value && e.status !== statusFilter.value
-    return !d && !s
-  })
-})
+    const d = deptFilter.value && e.department !== deptFilter.value;
+    const s = statusFilter.value && e.status !== statusFilter.value;
+    return !d && !s;
+  });
+});
 
 async function doLogin() {
-  loading.value = true
-  err.value = ''
+  loading.value = true;
+  err.value = "";
   try {
-    await auth.login(email.value, password.value)
-    notice.value = `Signed in as ${auth.user?.name || email.value}`
-    await loadData()
+    await auth.login(email.value, password.value);
+    notice.value = `Signed in as ${auth.user?.name || email.value}`;
+    await loadData();
   } catch (e) {
-    err.value = e.message || 'Login failed'
+    err.value = e.message || "Login failed";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 async function loadData() {
-  if (!auth.isAuthenticated) return
-  loadingData.value = true
-  err.value = ''
+  if (!auth.isAuthenticated) return;
+  loadingData.value = true;
+  err.value = "";
   try {
     const [ov, emp, sh] = await Promise.all([
-      api.get('/hr/reports/overview'),
-      api.get('/hr/employees'),
-      api.get('/hr/shifts'),
-    ])
-    overview.value = ov
-    employees.value = emp
-    shifts.value = sh
+      api.get("/hr/reports/overview"),
+      api.get("/hr/employees"),
+      api.get("/hr/shifts"),
+    ]);
+    overview.value = ov;
+    employees.value = emp;
+    shifts.value = sh;
   } catch (e) {
-    err.value = e.message || 'Failed to load data'
+    err.value = e.message || "Failed to load data";
   } finally {
-    loadingData.value = false
+    loadingData.value = false;
   }
 }
 
 async function logout() {
-  auth.logout()
-  overview.value = null
-  employees.value = []
-  shifts.value = []
-  router.push({ name: 'hr-overview' })
+  auth.logout();
+  overview.value = null;
+  employees.value = [];
+  shifts.value = [];
+  router.push({ name: "hr-overview" });
 }
 
 function fmtDate(d) {
-  if (!d) return '—'
-  return new Date(d).toLocaleDateString()
+  if (!d) return "—";
+  return new Date(d).toLocaleDateString();
 }
 
 function fmtMoney(n) {
-  if (n === null || n === undefined) return '—'
-  return 'R' + Number(n).toLocaleString()
+  if (n === null || n === undefined) return "—";
+  return "R" + Number(n).toLocaleString();
 }
 
 onMounted(() => {
-  checkApi()
+  checkApi();
   if (auth.isAuthenticated && auth.isAdmin) {
-    loadData()
+    loadData();
   }
-})
+});
 
 async function checkApi() {
-  apiUp.value = null
+  apiUp.value = null;
   try {
-    await api.get('/health', { auth: false })
-    apiUp.value = true
+    await api.get("/health", { auth: false });
+    apiUp.value = true;
   } catch {
-    apiUp.value = false
+    apiUp.value = false;
   }
 }
 </script>
@@ -117,42 +117,81 @@ async function checkApi() {
     <div class="head">
       <span class="section-label">Staff Portal</span>
       <h1 class="page-title">Admin System</h1>
-      <p>Manage the team, shifts and Admin reports from one place. Access is restricted to administrators.</p>
+      <p>
+        Manage the team, shifts and Admin reports from one place. Access is
+        restricted to administrators.
+      </p>
     </div>
 
     <p v-if="notice" class="notice" role="status">{{ notice }}</p>
     <p v-if="err" class="error" role="alert">{{ err }}</p>
 
     <div v-if="apiUp === false" class="banner error-banner" role="alert">
-      ⚠ The backend API is not reachable. Start the RePrint-API server
-      (<code>npm run dev</code> in the RePrint-API folder on port 5000), then refresh this page.
+      ⚠ The backend API is not reachable. Start the RePrint-API server (<code
+        >npm run dev</code
+      >
+      in the RePrint-API folder on port 5000), then refresh this page.
     </div>
 
     <!-- LOGIN GATE -->
-    <div v-if="!auth.isAuthenticated || !auth.isAdmin" class="panel login-panel">
+    <div
+      v-if="!auth.isAuthenticated || !auth.isAdmin"
+      class="panel login-panel"
+    >
       <div class="brand">
         <span class="logo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 7c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3v1H4V7z" fill="currentColor"/>
-            <path d="M4 10h16v8c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3v-8z" fill="currentColor" opacity="0.85"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 7c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3v1H4V7z"
+              fill="currentColor"
+            />
+            <path
+              d="M4 10h16v8c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3v-8z"
+              fill="currentColor"
+              opacity="0.85"
+            />
           </svg>
         </span>
         <span class="word">RePrint</span>
       </div>
       <h2>Admin sign in</h2>
-      <p class="sub">Enter your administrator credentials to open the staff portal.</p>
+      <p class="sub">
+        Enter your administrator credentials to open the staff portal.
+      </p>
 
       <form class="form" @submit.prevent="doLogin">
         <label>
           <span>Email</span>
-          <input v-model="email" type="email" class="input-field" placeholder="you@example.com" required />
+          <input
+            v-model="email"
+            type="email"
+            class="input-field"
+            placeholder="you@example.com"
+            required
+          />
         </label>
         <label>
           <span>Password</span>
-          <input v-model="password" type="password" class="input-field" placeholder="Password" required />
+          <input
+            v-model="password"
+            type="password"
+            class="input-field"
+            placeholder="Password"
+            required
+          />
         </label>
-        <button type="submit" class="btn btn-primary submit" :disabled="loading">
-          {{ loading ? 'Signing in...' : 'Sign in' }}
+        <button
+          type="submit"
+          class="btn btn-primary submit"
+          :disabled="loading"
+        >
+          {{ loading ? "Signing in..." : "Sign in" }}
         </button>
       </form>
       <p class="hint">Demo credentials — admin@reprint.com / password123</p>
@@ -162,17 +201,39 @@ async function checkApi() {
     <div v-else class="portal">
       <div class="toolbar">
         <div class="tabs">
-          <button class="tab" :class="{ active: tab === 'dashboard' }" @click="goToTab('hr-overview')">Overview</button>
-          <button class="tab" :class="{ active: tab === 'employees' }" @click="goToTab('hr-employees')">
+          <button
+            class="tab"
+            :class="{ active: tab === 'dashboard' }"
+            @click="goToTab('hr-overview')"
+          >
+            Overview
+          </button>
+          <button
+            class="tab"
+            :class="{ active: tab === 'employees' }"
+            @click="goToTab('hr-employees')"
+          >
             Employees <span class="pill">{{ employees.length }}</span>
           </button>
-          <button class="tab" :class="{ active: tab === 'shifts' }" @click="goToTab('hr-shifts')">
+          <button
+            class="tab"
+            :class="{ active: tab === 'shifts' }"
+            @click="goToTab('hr-shifts')"
+          >
             Shifts <span class="pill">{{ shifts.length }}</span>
           </button>
         </div>
         <div class="toolbar-right">
-          <button class="btn btn-accent btn-sm" @click="loadData" :disabled="loadingData">Refresh</button>
-          <button class="btn btn-primary btn-sm" @click="logout">Sign out</button>
+          <button
+            class="btn btn-accent btn-sm"
+            @click="loadData"
+            :disabled="loadingData"
+          >
+            Refresh
+          </button>
+          <button class="btn btn-primary btn-sm" @click="logout">
+            Sign out
+          </button>
         </div>
       </div>
 
@@ -181,11 +242,19 @@ async function checkApi() {
       <!-- OVERVIEW -->
       <template v-if="tab === 'dashboard' && overview">
         <div class="stat-grid">
-          <div class="stat" v-for="row in [
-            { label: 'Active employees', value: overview.totalEmployees },
-            { label: 'Shifts today', value: overview.shiftsToday },
-            { label: 'Monthly payroll', value: fmtMoney(overview.totalPayroll), money: true },
-          ]" :key="row.label">
+          <div
+            class="stat"
+            v-for="row in [
+              { label: 'Active employees', value: overview.totalEmployees },
+              { label: 'Shifts today', value: overview.shiftsToday },
+              {
+                label: 'Monthly payroll',
+                value: fmtMoney(overview.totalPayroll),
+                money: true,
+              },
+            ]"
+            :key="row.label"
+          >
             <strong>{{ row.value }}</strong>
             <span>{{ row.label }}</span>
           </div>
@@ -198,7 +267,12 @@ async function checkApi() {
               <span>{{ d.department }}</span>
               <span class="dept-count">{{ d.count }}</span>
             </li>
-            <li v-if="!overview.byDepartment || !overview.byDepartment.length" class="empty-line">No data</li>
+            <li
+              v-if="!overview.byDepartment || !overview.byDepartment.length"
+              class="empty-line"
+            >
+              No data
+            </li>
           </ul>
         </section>
 
@@ -206,7 +280,12 @@ async function checkApi() {
           <h3>Recent hires</h3>
           <table class="table">
             <thead>
-              <tr><th>Name</th><th>Position</th><th>Department</th><th>Hired</th></tr>
+              <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Department</th>
+                <th>Hired</th>
+              </tr>
             </thead>
             <tbody>
               <tr v-for="e in overview.recentHires || []" :key="e.id">
@@ -215,7 +294,9 @@ async function checkApi() {
                 <td>{{ e.department }}</td>
                 <td>{{ fmtDate(e.hire_date) }}</td>
               </tr>
-              <tr v-if="!(overview.recentHires || []).length"><td colspan="4" class="empty-line">No hires</td></tr>
+              <tr v-if="!(overview.recentHires || []).length">
+                <td colspan="4" class="empty-line">No hires</td>
+              </tr>
             </tbody>
           </table>
         </section>
@@ -227,7 +308,9 @@ async function checkApi() {
           <label>
             <span>Department</span>
             <select v-model="deptFilter" class="input-field">
-              <option v-for="d in departments" :key="d" :value="d">{{ d || 'All' }}</option>
+              <option v-for="d in departments" :key="d" :value="d">
+                {{ d || "All" }}
+              </option>
             </select>
           </label>
           <label>
@@ -244,7 +327,16 @@ async function checkApi() {
         <div class="panel" v-if="filteredEmployees.length">
           <table class="table">
             <thead>
-              <tr><th>Employee ID</th><th>Name</th><th>Position</th><th>Department</th><th>Type</th><th>Hired</th><th>Salary</th><th>Status</th></tr>
+              <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Department</th>
+                <th>Type</th>
+                <th>Hired</th>
+                <th>Salary</th>
+                <th>Status</th>
+              </tr>
             </thead>
             <tbody>
               <tr v-for="e in filteredEmployees" :key="e.id">
@@ -255,7 +347,9 @@ async function checkApi() {
                 <td>{{ e.employment_type }}</td>
                 <td>{{ fmtDate(e.hire_date) }}</td>
                 <td>{{ fmtMoney(e.salary) }}</td>
-                <td><span class="status" :class="e.status">{{ e.status }}</span></td>
+                <td>
+                  <span class="status" :class="e.status">{{ e.status }}</span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -268,7 +362,15 @@ async function checkApi() {
         <div class="panel" v-if="shifts.length">
           <table class="table">
             <thead>
-              <tr><th>Date</th><th>Employee</th><th>Position</th><th>Start</th><th>End</th><th>Break</th><th>Status</th></tr>
+              <tr>
+                <th>Date</th>
+                <th>Employee</th>
+                <th>Position</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Break</th>
+                <th>Status</th>
+              </tr>
             </thead>
             <tbody>
               <tr v-for="s in shifts" :key="s.id">
@@ -278,7 +380,9 @@ async function checkApi() {
                 <td>{{ s.start_time }}</td>
                 <td>{{ s.end_time }}</td>
                 <td>{{ s.break_minutes }}m</td>
-                <td><span class="status" :class="s.status">{{ s.status }}</span></td>
+                <td>
+                  <span class="status" :class="s.status">{{ s.status }}</span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -446,7 +550,9 @@ async function checkApi() {
   font-weight: 600;
   color: var(--grey);
   background: var(--bg-card);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .tab:hover {

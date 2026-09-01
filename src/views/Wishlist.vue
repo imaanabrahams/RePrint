@@ -1,16 +1,16 @@
 <script setup>
-import { useWishlistStore } from '../stores/wishlist'
-import { useCartStore } from '../stores/cart'
-import RatingStars from '../components/RatingStars.vue'
-import { useRouter } from 'vue-router'
-import { formatRand } from '../currency.js'
+import { useWishlistStore } from "../stores/wishlistStores.js";
+import { useCartStore } from "../stores/cartStores.js";
+import RatingStars from "../components/RatingstarsComp.vue/index.js";
+import { useRouter } from "vue-router";
+import { formatRand } from "../currencyReprint.js";
 
-const wishlist = useWishlistStore()
-const cart = useCartStore()
-const router = useRouter()
+const wishlist = useWishlistStore();
+const cart = useCartStore();
+const router = useRouter();
 
 function viewProduct(product) {
-  router.push(`/product/${product.id}`)
+  router.push(`/product/${product.id}`);
 }
 </script>
 
@@ -20,7 +20,7 @@ function viewProduct(product) {
       <span class="section-label">Saved for later</span>
       <h1 class="page-title">My wishlist</h1>
       <p v-if="wishlist.count" class="count">
-        {{ wishlist.count }} {{ wishlist.count === 1 ? 'item' : 'items' }} saved
+        {{ wishlist.count }} {{ wishlist.count === 1 ? "item" : "items" }} saved
       </p>
     </div>
 
@@ -28,13 +28,20 @@ function viewProduct(product) {
       <div class="empty-icon">♡</div>
       <h2>Your wishlist is empty</h2>
       <p>Tap the heart on any product to save it here.</p>
-      <RouterLink to="/shop" class="btn btn-primary">Browse products</RouterLink>
+      <RouterLink to="/shop" class="btn btn-primary"
+        >Browse products</RouterLink
+      >
     </div>
 
     <div v-else class="grid">
       <article v-for="product in wishlist.items" :key="product.id" class="card">
         <div class="thumb-wrap">
-          <div class="thumb" @click="viewProduct(product)" role="button" :aria-label="product.name">
+          <div
+            class="thumb"
+            @click="viewProduct(product)"
+            role="button"
+            :aria-label="product.name"
+          >
             <img :src="product.image" :alt="product.name" />
           </div>
           <button
@@ -42,8 +49,16 @@ function viewProduct(product) {
             @click="wishlist.remove(product.id)"
             :aria-label="`Remove ${product.name} from wishlist`"
           >
-            <svg width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 20.3 4.1 12.5a5.1 5.1 0 0 1 7.2-7.2l.7.7.7-.7a5.1 5.1 0 0 1 7.2 7.2L12 20.3z" fill="currentColor" />
+            <svg
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 20.3 4.1 12.5a5.1 5.1 0 0 1 7.2-7.2l.7.7.7-.7a5.1 5.1 0 0 1 7.2 7.2L12 20.3z"
+                fill="currentColor"
+              />
             </svg>
           </button>
         </div>
@@ -56,7 +71,9 @@ function viewProduct(product) {
           </div>
           <div class="row">
             <span class="price">{{ formatRand(product.price) }}</span>
-            <button class="add" @click="cart.addToCart(product)">Add to cart</button>
+            <button class="add" @click="cart.addToCart(product)">
+              Add to cart
+            </button>
           </div>
         </div>
       </article>

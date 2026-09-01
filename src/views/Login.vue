@@ -1,13 +1,28 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 
-const email = ref('')
-const password = ref('')
-const show = ref(false)
+const router = useRouter();
+const auth = useAuthStore();
 
-function submit() {
-  if (!email.value || !password.value) return
-  show.value = true
+const email = ref("");
+const password = ref("");
+const loading = ref(false);
+const err = ref("");
+
+async function submit() {
+  if (!email.value || !password.value) return;
+  loading.value = true;
+  err.value = "";
+  try {
+    await auth.login(email.value, password.value);
+    router.push("/");
+  } catch (e) {
+    err.value = e.message || "Login failed";
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 
@@ -16,9 +31,22 @@ function submit() {
     <div class="auth-card">
       <div class="brand">
         <span class="logo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 7c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3v1H4V7z" fill="currentColor"/>
-            <path d="M4 10h16v8c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3v-8z" fill="currentColor" opacity="0.85"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 7c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3v1H4V7z"
+              fill="currentColor"
+            />
+            <path
+              d="M4 10h16v8c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3v-8z"
+              fill="currentColor"
+              opacity="0.85"
+            />
           </svg>
         </span>
         <span class="word">RePrint</span>
@@ -27,19 +55,29 @@ function submit() {
       <h1 class="title">Welcome back</h1>
       <p class="subtitle">Log in to manage your orders and designs.</p>
 
-      <p v-if="show" class="notice" role="status">
-        Signed in as <strong>{{ email }}</strong>. (Demo only — no backend connected.)
-      </p>
+      <p v-if="err" class="error" role="alert">{{ err }}</p>
 
       <form @submit.prevent="submit" class="form">
         <label>
           <span>Email</span>
-          <input v-model="email" type="email" class="input-field" placeholder="you@example.com" required />
+          <input
+            v-model="email"
+            type="email"
+            class="input-field"
+            placeholder="you@example.com"
+            required
+          />
         </label>
 
         <label>
           <span>Password</span>
-          <input v-model="password" type="password" class="input-field" placeholder="Enter your password" required />
+          <input
+            v-model="password"
+            type="password"
+            class="input-field"
+            placeholder="Enter your password"
+            required
+          />
         </label>
 
         <div class="row">
@@ -47,17 +85,29 @@ function submit() {
             <input type="checkbox" />
             <span>Remember me</span>
           </label>
-          <RouterLink to="/login" class="forgot">Forgot password?</RouterLink>
+          <a href="#" class="forgot" onclick="return false;"
+            >Forgot password?</a
+          >
         </div>
 
-        <button type="submit" class="btn btn-primary submit">Log in</button>
+        <button
+          type="submit"
+          class="btn btn-primary submit"
+          :disabled="loading"
+        >
+          {{ loading ? "Signing in..." : "Log in" }}
+        </button>
       </form>
+
+      <p class="hint">Demo admin — admin@reprint.com / password123</p>
 
       <div class="divider"><span>or</span></div>
 
       <div class="auth-links">
         <span>Don't have an account?</span>
-        <RouterLink to="/signup" class="btn btn-accent signup-link">Create account</RouterLink>
+        <RouterLink to="/signup" class="btn btn-accent signup-link"
+          >Create account</RouterLink
+        >
       </div>
     </div>
   </div>
@@ -116,10 +166,10 @@ function submit() {
   margin: 8px 0 24px;
 }
 
-.notice {
-  background: rgba(85, 133, 100, 0.14);
-  border: 1px solid var(--primary);
-  color: var(--primary-dark);
+.error {
+  background: rgba(224, 83, 83, 0.12);
+  border: 1px solid #e05353;
+  color: #b23b3b;
   padding: 12px 14px;
   border-radius: 10px;
   font-size: 14px;
@@ -172,6 +222,13 @@ function submit() {
   margin-top: 4px;
 }
 
+.hint {
+  text-align: center;
+  margin-top: 16px;
+  color: var(--grey);
+  font-size: 13px;
+}
+
 .divider {
   display: flex;
   align-items: center;
@@ -183,7 +240,7 @@ function submit() {
 
 .divider::before,
 .divider::after {
-  content: '';
+  content: "";
   flex: 1;
   height: 1px;
   background: rgba(85, 133, 100, 0.25);

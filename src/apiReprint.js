@@ -79,6 +79,16 @@ export function logout() {
   clearSession()
 }
 
+export async function register(name, email, password) {
+  const data = await request('/auth/register', {
+    method: 'POST',
+    auth: false,
+    body: { name, email, password },
+  })
+  setSession(data)
+  return data
+}
+
 export async function getHealth() {
   return request('/health', { auth: false })
 }

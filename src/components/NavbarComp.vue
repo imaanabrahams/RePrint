@@ -1,33 +1,33 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useCartStore } from '../stores/cart'
-import { useWishlistStore } from '../stores/wishlist'
-import { useAuthStore } from '../stores/auth'
+import { computed, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useCartStore } from "../stores/cartStores";
+import { useWishlistStore } from "../stores/wishlistStores";
+import { useAuthStore } from "../stores/authStores";
 
-const route = useRoute()
-const router = useRouter()
-const cart = useCartStore()
-const wishlist = useWishlistStore()
-const auth = useAuthStore()
-const open = ref(false)
+const route = useRoute();
+const router = useRouter();
+const cart = useCartStore();
+const wishlist = useWishlistStore();
+const auth = useAuthStore();
+const open = ref(false);
 
 const links = computed(() => {
   const base = [
-    { to: '/', label: 'Home' },
-    { to: '/shop', label: 'Shop' },
-    { to: '/create', label: 'Create' },
-    { to: '/contact', label: 'Contact' },
-  ]
+    { to: "/", label: "Home" },
+    { to: "/shop", label: "Shop" },
+    { to: "/create", label: "Create" },
+    { to: "/contact", label: "Contact" },
+  ];
   if (auth.isAdmin) {
-    base.push({ to: '/hr', label: 'HR System' })
+    base.push({ to: "/hr", label: "HR System" });
   }
-  return base
-})
+  return base;
+});
 
 function isActive(to) {
-  if (to === '/') return route.path === '/'
-  return route.path.startsWith(to)
+  if (to === "/") return route.path === "/";
+  return route.path.startsWith(to);
 }
 </script>
 
@@ -36,9 +36,22 @@ function isActive(to) {
     <div class="container nav-inner">
       <RouterLink to="/" class="brand">
         <span class="logo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 7c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3v1H4V7z" fill="currentColor"/>
-            <path d="M4 10h16v8c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3v-8z" fill="currentColor" opacity="0.85"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 7c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3v1H4V7z"
+              fill="currentColor"
+            />
+            <path
+              d="M4 10h16v8c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3v-8z"
+              fill="currentColor"
+              opacity="0.85"
+            />
           </svg>
         </span>
         <span class="word">RePrint</span>
@@ -60,7 +73,12 @@ function isActive(to) {
 
       <div class="actions">
         <RouterLink to="/wishlist" class="cart-btn heart" aria-label="Wishlist">
-          <svg width="23" height="23" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            width="23"
+            height="23"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               d="M12 20.3 4.1 12.5a5.1 5.1 0 0 1 7.2-7.2l.7.7.7-.7a5.1 5.1 0 0 1 7.2 7.2L12 20.3z"
               fill="currentColor"
@@ -70,20 +88,41 @@ function isActive(to) {
         </RouterLink>
 
         <RouterLink to="/cart" class="cart-btn" aria-label="Cart">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               d="M6 6h12l-1 12a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 18L6 6zm3 1v3a3 3 0 0 0 6 0V7"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             />
           </svg>
           <span v-if="cart.count" class="count">{{ cart.count }}</span>
         </RouterLink>
 
-        <RouterLink to="/signup" class="btn btn-primary nav-cta">
-          {{ route.name === 'signup' ? 'Account' : 'Sign Up' }}
+        <RouterLink
+          v-if="auth.isAuthenticated"
+          to="/cart"
+          class="btn btn-primary nav-cta"
+        >
+          Account
+        </RouterLink>
+        <RouterLink v-else to="/signup" class="btn btn-primary nav-cta">
+          Sign Up
         </RouterLink>
 
-        <button class="burger" @click="open = !open" :aria-expanded="open" aria-label="Menu">
+        <button
+          class="burger"
+          @click="open = !open"
+          :aria-expanded="open"
+          aria-label="Menu"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -134,7 +173,7 @@ function isActive(to) {
 }
 
 .word::after {
-  content: '';
+  content: "";
   display: block;
   height: 2px;
   width: 26px;
@@ -192,7 +231,7 @@ function isActive(to) {
 }
 
 .heart::after {
-  content: '';
+  content: "";
   position: absolute;
   right: -8px;
   top: 50%;

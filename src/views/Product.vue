@@ -1,53 +1,60 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useProductsStore } from '../stores/products'
-import { useCartStore } from '../stores/cart'
-import RatingStars from '../components/RatingStars.vue'
-import { formatRand } from '../currency.js'
+import { computed, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+import { useProductsStore } from "../stores/productsStores.js";
+import { useCartStore } from "../stores/cartStores.js";
+import RatingStars from "../components/RatingstarsComp.vue/index.js";
+import { formatRand } from "../currencyReprint.js";
 
-const route = useRoute()
-const products = useProductsStore()
-const cart = useCartStore()
+const route = useRoute();
+const products = useProductsStore();
+const cart = useCartStore();
 
-const product = computed(() => products.byId(route.params.id))
-const selectedOption = ref('')
-const quantity = ref(1)
-const faq = ref(0)
-const added = ref(false)
+const product = computed(() => products.byId(route.params.id));
+const selectedOption = ref("");
+const quantity = ref(1);
+const faq = ref(0);
+const added = ref(false);
 
 watch(
   () => product.value?.options,
   (options) => {
-    const first = options?.[0]
+    const first = options?.[0];
     if (first && !options.includes(selectedOption.value)) {
-      selectedOption.value = first
+      selectedOption.value = first;
     }
   },
-  { immediate: true }
-)
+  { immediate: true },
+);
 
 watch(
   () => route.params.id,
   () => {
-    quantity.value = 1
-    added.value = false
-  }
-)
+    quantity.value = 1;
+    added.value = false;
+  },
+);
 
 function add() {
-  cart.addToCart(product.value, quantity.value, selectedOption.value)
-  added.value = true
-  setTimeout(() => (added.value = false), 1600)
+  cart.addToCart(product.value, quantity.value, selectedOption.value);
+  added.value = true;
+  setTimeout(() => (added.value = false), 1600);
 }
 
 const faqs = [
-  { q: 'What materials are used?', a: 'We use premium archival paper, eco-friendly inks and high-quality fabrics to ensure your products look great and last for years.' },
-  { q: 'How long does delivery take?', a: 'Most orders are printed within 1–2 business days and delivered in 3–7 days, depending on your location. Express options are available at checkout.' },
-  { q: 'Can I return a product?', a: 'Yes. If you are not happy with your print, you can request a return or reprint within 30 days of delivery.' },
-]
-
-
+  {
+    q: "What materials are used?",
+    a: "We use premium archival paper, eco-friendly inks and high-quality fabrics to ensure your products look great and last for years.",
+  },
+  {
+    q: "How long does delivery take?",
+    a: "Most orders are printed within 1–2 business days and delivered in 3–7 days, depending on your location. Express options are available at checkout.",
+  },
+  {
+    q: "Can I return a product?",
+    a: "Yes. If you are not happy with your print, you can request a return or reprint within 30 days of delivery.",
+  },
+];
 </script>
 
 <template>
@@ -71,7 +78,9 @@ const faqs = [
 
         <div class="rating-row">
           <RatingStars :rating="product.rating" :size="18" />
-          <span class="reviews">{{ product.rating }} · {{ product.reviews }} reviews</span>
+          <span class="reviews"
+            >{{ product.rating }} · {{ product.reviews }} reviews</span
+          >
         </div>
 
         <p class="price">{{ formatRand(product.price) }}</p>
@@ -102,12 +111,23 @@ const faqs = [
         </div>
 
         <button class="btn btn-primary add-btn" @click="add">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 6h12l-1 12a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 18L6 6zm3 1v3a3 3 0 0 0 6 0V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 6h12l-1 12a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 18L6 6zm3 1v3a3 3 0 0 0 6 0V7"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
           </svg>
-          {{ added ? 'Added to cart!' : 'Add to Cart' }}
+          {{ added ? "Added to cart!" : "Add to Cart" }}
         </button>
-        <p class="hint">Free shipping on orders over R30</p>
+        <p class="hint">Free shipping on orders over R1000</p>
       </div>
     </div>
 
@@ -118,7 +138,16 @@ const faqs = [
           <button class="faq-q" @click="faq = faq === i ? -1 : i">
             {{ f.q }}
             <span class="chev" :class="{ open: faq === i }">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
             </span>
           </button>
           <div class="faq-a" :class="{ open: faq === i }">

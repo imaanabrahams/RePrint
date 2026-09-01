@@ -1,17 +1,17 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { useProductsStore } from '../stores/products'
-import ProductCard from '../components/ProductCard.vue'
+import { computed, ref } from "vue";
+import { useProductsStore } from "../stores/productsStores.js";
+import ProductCard from "../components/ProductcardComp.vue/index.js";
 
-const products = useProductsStore()
-const active = ref('All')
-const categories = ['All', 'Home Decor', 'Office', 'Gaming', 'Toys', 'Garden']
+const products = useProductsStore();
+const active = ref("All");
+const categories = ["All", "Home Decor", "Office", "Gaming", "Toys", "Garden"];
 
 const filtered = computed(() =>
-  active.value === 'All'
+  active.value === "All"
     ? products.products
-    : products.products.filter((p) => p.category === active.value)
-)
+    : products.products.filter((p) => p.category === active.value),
+);
 </script>
 
 <template>
@@ -41,7 +41,9 @@ const filtered = computed(() =>
         <div class="sidebar-box">
           <h4>Need something unique?</h4>
           <p>Design a fully personalised product in minutes.</p>
-          <RouterLink to="/create" class="btn btn-accent btn-sm">Create now</RouterLink>
+          <RouterLink to="/create" class="btn btn-accent btn-sm"
+            >Create now</RouterLink
+          >
         </div>
       </aside>
 
@@ -107,7 +109,9 @@ const filtered = computed(() =>
   font-weight: 600;
   color: var(--grey);
   text-align: left;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .cat:hover {

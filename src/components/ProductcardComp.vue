@@ -1,21 +1,21 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import { useCartStore } from '../stores/cart'
-import { useWishlistStore } from '../stores/wishlist'
-import RatingStars from './RatingStars.vue'
-import { formatRand } from '../currency.js'
+import { useRouter } from "vue-router";
+import { useCartStore } from "../stores/cartStores.js";
+import { useWishlistStore } from "../stores/wishlistStores.js";
+import RatingStars from "./RatingstarsComp.vue/index.js";
+import { formatRand } from "../currency.js";
 
 const props = defineProps({
   product: { type: Object, required: true },
-  variant: { type: String, default: 'default' },
-})
+  variant: { type: String, default: "default" },
+});
 
-const router = useRouter()
-const cart = useCartStore()
-const wishlist = useWishlistStore()
+const router = useRouter();
+const cart = useCartStore();
+const wishlist = useWishlistStore();
 
 function goToProduct(product) {
-  router.push(`/product/${product.id}`)
+  router.push(`/product/${product.id}`);
 }
 </script>
 
@@ -34,9 +34,18 @@ function goToProduct(product) {
         class="wish"
         :class="{ wished: wishlist.isWished(product.id) }"
         @click.stop="wishlist.toggle(product)"
-        :aria-label="wishlist.isWished(product.id) ? 'Remove from wishlist' : 'Add to wishlist'"
+        :aria-label="
+          wishlist.isWished(product.id)
+            ? 'Remove from wishlist'
+            : 'Add to wishlist'
+        "
       >
-        <svg width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M12 20.3 4.1 12.5a5.1 5.1 0 0 1 7.2-7.2l.7.7.7-.7a5.1 5.1 0 0 1 7.2 7.2L12 20.3z"
             fill="currentColor"
@@ -53,9 +62,24 @@ function goToProduct(product) {
       </div>
       <div class="row">
         <span class="price">{{ formatRand(product.price) }}</span>
-        <button class="add" @click="cart.addToCart(product)" aria-label="Add to cart">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        <button
+          class="add"
+          @click="cart.addToCart(product)"
+          aria-label="Add to cart"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 5v14M5 12h14"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+            />
           </svg>
         </button>
       </div>
@@ -69,7 +93,9 @@ function goToProduct(product) {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
 }
@@ -121,7 +147,10 @@ function goToProduct(product) {
   display: grid;
   place-items: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transition: transform 0.15s ease, color 0.15s ease, background 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease;
 }
 
 .wish:hover {
@@ -191,7 +220,9 @@ function goToProduct(product) {
   color: var(--dark);
   display: grid;
   place-items: center;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
 }
 
 .add:hover {

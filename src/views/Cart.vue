@@ -1,12 +1,14 @@
 <script setup>
-import { computed } from 'vue'
-import { useCartStore } from '../stores/cart'
-import { formatRand } from '../currency.js'
+import { computed } from "vue";
+import { useCartStore } from "../stores/cartStores.js";
+import { formatRand } from "../currencyReprint.js";
 
-const cart = useCartStore()
+const cart = useCartStore();
 
-const shipping = computed(() => (cart.subtotal >= 1000 || cart.subtotal === 0 ? 0 : 80))
-const total = computed(() => cart.subtotal + shipping.value)
+const shipping = computed(() =>
+  cart.subtotal >= 1000 || cart.subtotal === 0 ? 0 : 80,
+);
+const total = computed(() => cart.subtotal + shipping.value);
 </script>
 
 <template>
@@ -20,28 +22,56 @@ const total = computed(() => cart.subtotal + shipping.value)
       <div class="empty-icon">🛒</div>
       <h2>Your cart is empty</h2>
       <p>Looks like you haven't added anything yet.</p>
-      <RouterLink to="/shop" class="btn btn-primary">Browse products</RouterLink>
+      <RouterLink to="/shop" class="btn btn-primary"
+        >Browse products</RouterLink
+      >
     </div>
 
     <div v-else class="layout">
       <div class="items">
-        <div class="item" v-for="item in cart.items" :key="`${item.id}-${item.option}`">
+        <div
+          class="item"
+          v-for="item in cart.items"
+          :key="`${item.id}-${item.option}`"
+        >
           <div class="thumb">
             <img :src="item.image" :alt="item.name" />
           </div>
           <div class="info">
             <h3>{{ item.name }}</h3>
             <p class="cat">{{ item.category }}</p>
-            <p v-if="item.option && item.option !== 'default'" class="option">{{ item.option }}</p>
+            <p v-if="item.option && item.option !== 'default'" class="option">
+              {{ item.option }}
+            </p>
             <div class="stepper">
-              <button @click="cart.updateQuantity(item.id, item.quantity - 1, item.option)">−</button>
+              <button
+                @click="
+                  cart.updateQuantity(item.id, item.quantity - 1, item.option)
+                "
+              >
+                −
+              </button>
               <span>{{ item.quantity }}</span>
-              <button @click="cart.updateQuantity(item.id, item.quantity + 1, item.option)">+</button>
+              <button
+                @click="
+                  cart.updateQuantity(item.id, item.quantity + 1, item.option)
+                "
+              >
+                +
+              </button>
             </div>
           </div>
           <div class="price-col">
-            <span class="price">{{ formatRand(item.price * item.quantity) }}</span>
-            <button class="remove" @click="cart.removeFromCart(item.id, item.option)" aria-label="Remove">✕</button>
+            <span class="price">{{
+              formatRand(item.price * item.quantity)
+            }}</span>
+            <button
+              class="remove"
+              @click="cart.removeFromCart(item.id, item.option)"
+              aria-label="Remove"
+            >
+              ✕
+            </button>
           </div>
         </div>
 
@@ -56,13 +86,15 @@ const total = computed(() => cart.subtotal + shipping.value)
         </div>
         <div class="line">
           <span>Shipping</span>
-          <span>{{ shipping === 0 ? 'Free' : formatRand(shipping) }}</span>
+          <span>{{ shipping === 0 ? "Free" : formatRand(shipping) }}</span>
         </div>
         <div class="line total">
           <span>Total</span>
           <span>{{ formatRand(total) }}</span>
         </div>
-        <button class="btn btn-primary checkout" @click="cart.clear()">Checkout</button>
+        <button class="btn btn-primary checkout" @click="cart.clear()">
+          Checkout
+        </button>
         <p class="note">Demo checkout — no payment is processed.</p>
       </aside>
     </div>
@@ -183,7 +215,9 @@ const total = computed(() => cart.subtotal + shipping.value)
   border-radius: 8px;
   display: grid;
   place-items: center;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .remove:hover {

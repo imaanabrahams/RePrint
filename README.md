@@ -1,6 +1,6 @@
 # RePrint
 
-A modern e-commerce storefront for 3D-printed products, built with Vue 3 and Vite. RePrint lets customers browse a curated catalogue of home decor, office, garden, gaming and toy items, manage a shopping cart and wishlist, and sign up or log in to an account. An admin dashboard is also included for managing products and orders.
+A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend** (this repository) lets customers browse a curated catalogue of home decor, office, garden, gaming and toy items, manage a shopping cart and wishlist, and sign up or log in to an account. The **Express backend** (`server/`) powers the API, authentication, and the HR admin dashboard.
 
 ## Tech Stack
 
@@ -11,7 +11,8 @@ A modern e-commerce storefront for 3D-printed products, built with Vue 3 and Vit
 | Routing | Vue Router 4 (history mode) |
 | State management | Pinia 4 |
 | Styling | Scoped CSS with CSS custom properties |
-| Backend API | Express/Node (`/api` proxy to `localhost:5000`) |
+| Backend API | Express/Node (`server/`) |
+| Authentication | JWT + bcrypt |
 
 ## Getting Started
 
@@ -20,27 +21,48 @@ A modern e-commerce storefront for 3D-printed products, built with Vue 3 and Vit
 - **Node.js** 18+ (recommended 20+)
 - **npm** (ships with Node) or another package manager
 
-### Install & Run
+### Install
 
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd RePrint
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm run dev
+# From the project root
+npm install           # frontend dependencies
+npm install --prefix server   # backend dependencies
 ```
 
-The app will be available at **http://localhost:5173** by default. API requests (`/api` and `/images`) are proxied to `http://localhost:5000` via the Vite config, so a compatible backend server should be running on that port for full functionality.
+### Run everything (recommended)
+
+```bash
+npm run dev:all
+```
+
+This starts both servers with a single command:
+- Frontend (Vite): **http://localhost:5173**
+- Backend (API): **http://localhost:5000**
+
+### Run servers separately
+
+```bash
+npm run dev:api      # start only the API on http://localhost:5000
+npm run dev          # start only the Vite frontend on http://localhost:5173
+```
+
+The app is served at **http://localhost:5173**. API requests (`/api` and `/images`) are proxied to `http://localhost:5000` via the Vite config.
+
+### Demo accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@reprint.com` | `password123` |
+| User | `user@reprint.com` | `user123` |
 
 ### Other Commands
 
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start Vite dev server with HMR |
+| `npm run dev:api` | Start the backend API with auto-reload |
+| `npm run dev:all` | Start frontend + backend together |
+| `npm run start:api` | Start the backend API (no watch) |
 | `npm run build` | Production build to `dist/` |
 | `npm run preview` | Preview the production build locally |
 
@@ -62,6 +84,10 @@ RePrint/
 ├── public/
 │   ├── favicon.svg
 │   └── icons.svg
+├── server/                 # Express backend API (RePrint-API)
+│   ├── server.js           # Express app, routes, middleware, static files
+│   ├── data.js             # In-memory seed data (products, users, HR)
+│   └── package.json
 ├── src/
 │   ├── main.js             # App bootstrap (Vue, Pinia, Router)
 │   ├── App.vue             # Root layout (Navbar + RouterView + Footer)
@@ -121,12 +147,20 @@ All stores live in `src/stores/` and use Pinia's Composition API style:
 
 ## API Integration
 
-The frontend communicates with a REST API through `src/api.js`:
+The frontend communicates with the Express backend through `src/api.js`:
 
 - **Base URL**: Configurable via `VITE_API_URL` (defaults to `/api`).
-- **Authentication**: JWT Bearer token stored in `localStorage` under `reprint_token`.
-- **Endpoints used**: `POST /auth/login`, `GET /products`, `GET /health`.
-- **Proxy**: Vite proxies `/api` and `/images` to `http://localhost:5000` during development.
+- **Authentication**: JWT Bearer token stored in `localStorage` under `reprint_token`. Passwords are hashed with bcrypt.
+- **Endpoints**:
+  - `GET /health` — health check
+  - `POST /auth/login` — user login
+  - `POST /auth/register` — new account
+  - `GET /products` — product catalogue
+  - `GET /hr/reports/overview` — admin dashboard stats (admin only)
+  - `GET /hr/employees` — employee list (admin only)
+  - `GET /hr/shifts` — shift schedule (admin only)
+  - `GET /images/*` — product images (served from `src/assets`)
+- **Proxy**: Vite rewrites `/api/*` → `http://localhost:5000/*` and proxies `/images` to `http://localhost:5000` during development.
 
 ## Styling
 

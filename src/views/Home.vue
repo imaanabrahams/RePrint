@@ -1,44 +1,59 @@
 <script setup>
-import { useProductsStore } from '../stores/products'
-import ProductCard from '../components/ProductCard.vue'
-import RatingStars from '../components/RatingStars.vue'
-import heroImg from '../assets/hero.png'
+import { useProductsStore } from "../stores/productsStores.js";
+import ProductCard from "../components/ProductcardComp.vue/index.js";
+import RatingStars from "../components/RatingstarsComp.vue/index.js";
+import heroImg from "../assets/hero.png";
 
-const products = useProductsStore()
-const featured = products.featured
+const products = useProductsStore();
+const featured = products.featured;
 
 const steps = [
-  { n: '01', title: 'Choose a product', text: 'Pick from our prints, apparel, mugs and more.' },
-  { n: '02', title: 'Add your design', text: 'Upload a photo or create something new in our editor.' },
-  { n: '03', title: 'We print & deliver', text: 'Premium quality printed and shipped to your door.' },
-]
+  {
+    n: "01",
+    title: "Choose a product",
+    text: "Pick from our prints, apparel, mugs and more.",
+  },
+  {
+    n: "02",
+    title: "Add your design",
+    text: "Upload a photo or create something new in our editor.",
+  },
+  {
+    n: "03",
+    title: "We print & deliver",
+    text: "Premium quality printed and shipped to your door.",
+  },
+];
 
 const testimonials = [
   {
-    name: 'Amelia Chen',
-    role: 'Photo Book',
-    initials: 'AC',
+    name: "Amelia Chen",
+    role: "Photo Book",
+    initials: "AC",
     rating: 5,
-    color: '#FFCFD2',
-    quote: 'The photo book I ordered was stunning. The colours are true to life and the quality is incredible.',
+    color: "#FFCFD2",
+    quote:
+      "The photo book I ordered was stunning. The colours are true to life and the quality is incredible.",
   },
   {
-    name: 'Marcus Reid',
-    role: 'Canvas Print',
-    initials: 'MR',
+    name: "Marcus Reid",
+    role: "Canvas Print",
+    initials: "MR",
     rating: 5,
-    color: '#558564',
-    quote: 'Fast delivery and the canvas looks amazing on my wall. I will definitely be ordering again.',
+    color: "#558564",
+    quote:
+      "Fast delivery and the canvas looks amazing on my wall. I will definitely be ordering again.",
   },
   {
-    name: 'Priya Sharma',
-    role: 'Custom Mug',
-    initials: 'PS',
+    name: "Priya Sharma",
+    role: "Custom Mug",
+    initials: "PS",
     rating: 4,
-    color: '#995E62',
-    quote: 'Simple to design and it arrived sooner than expected. The print quality is excellent.',
+    color: "#995E62",
+    quote:
+      "Simple to design and it arrived sooner than expected. The print quality is excellent.",
   },
-]
+];
 </script>
 
 <template>
@@ -46,14 +61,18 @@ const testimonials = [
     <section class="hero container">
       <div class="hero-text">
         <span class="badge-pill">⭐ Custom Print Studio</span>
-        <h1 class="hero-title">Bring your photos<br />to <span class="accent">life</span>.</h1>
+        <h1 class="hero-title">
+          Bring your photos<br />to <span class="accent">life</span>.
+        </h1>
         <p class="hero-sub">
           Create beautiful, personalised products from your favourite moments.
           Prints, apparel, gifts and more — made just for you.
         </p>
         <div class="hero-btns">
           <RouterLink to="/shop" class="btn btn-primary">Shop Now</RouterLink>
-          <RouterLink to="/create" class="btn btn-accent">Create Your Own</RouterLink>
+          <RouterLink to="/create" class="btn btn-accent"
+            >Create Your Own</RouterLink
+          >
         </div>
         <div class="hero-stats">
           <div class="stat">
@@ -69,7 +88,11 @@ const testimonials = [
 
       <div class="hero-art">
         <div class="hero-frame">
-          <img :src="heroImg" alt="RePrint custom print showcase" class="hero-img" />
+          <img
+            :src="heroImg"
+            alt="RePrint custom print showcase"
+            class="hero-img"
+          />
           <span class="tag tag-one">Pencil Holder</span>
           <span class="tag tag-two">Office Decor</span>
         </div>
@@ -77,9 +100,22 @@ const testimonials = [
     </section>
 
     <section class="features container">
-      <div class="feature" v-for="f in ['Premium quality', 'Fast delivery', 'Eco-friendly inks']" :key="f">
+      <div
+        class="feature"
+        v-for="f in ['Premium quality', 'Fast delivery', 'Eco-friendly inks']"
+        :key="f"
+      >
         <span class="tick">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+          >
+            <path d="M5 13l4 4L19 7" />
+          </svg>
         </span>
         <span>{{ f }}</span>
       </div>
@@ -94,7 +130,12 @@ const testimonials = [
         <RouterLink to="/shop" class="btn btn-accent">View all</RouterLink>
       </div>
       <div class="grid">
-        <ProductCard v-for="p in featured" :key="p.id" :product="p" variant="light" />
+        <ProductCard
+          v-for="p in featured"
+          :key="p.id"
+          :product="p"
+          variant="light"
+        />
       </div>
     </section>
 
@@ -118,7 +159,9 @@ const testimonials = [
           <span class="section-label">Ready to create?</span>
           <h2 class="cta-title">Turn your ideas into something real</h2>
         </div>
-        <RouterLink to="/create" class="btn btn-primary btn-lg">Start creating</RouterLink>
+        <RouterLink to="/create" class="btn btn-primary btn-lg"
+          >Start creating</RouterLink
+        >
       </div>
     </section>
 
@@ -134,7 +177,9 @@ const testimonials = [
           </div>
           <blockquote>{{ t.quote }}</blockquote>
           <figcaption>
-            <span class="avatar" :style="{ background: t.color }">{{ t.initials }}</span>
+            <span class="avatar" :style="{ background: t.color }">{{
+              t.initials
+            }}</span>
             <div>
               <strong>{{ t.name }}</strong>
               <span>{{ t.role }}</span>
