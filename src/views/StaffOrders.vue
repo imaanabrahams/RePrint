@@ -11,13 +11,13 @@ onMounted(async () => {
 })
 
 const statusStyles = {
-  pending: { bg: '#eef1ec', color: '#5b6f60', label: 'Pending' },
-  confirmed: { bg: '#e4eefb', color: '#2f5d8a', label: 'Confirmed' },
-  printing: { bg: '#e4f7ea', color: '#2f6b45', label: 'Printing' },
-  quality_check: { bg: '#fdf3dd', color: '#9a6d1f', label: 'Quality check' },
-  shipped: { bg: '#e8e4fb', color: '#5d4e9a', label: 'Shipped' },
-  delivered: { bg: '#eef1ec', color: '#5b6f60', label: 'Delivered' },
-  cancelled: { bg: '#fbe9e5', color: '#b3492f', label: 'Cancelled' },
+  pending: { bg: '#eef1ec', color: '#3d4c42', label: 'Pending' },
+  confirmed: { bg: '#e4eefb', color: '#1f4268', label: 'Confirmed' },
+  printing: { bg: '#e4f7ea', color: '#1d5534', label: 'Printing' },
+  quality_check: { bg: '#fdf3dd', color: '#7a5b0e', label: 'Quality check' },
+  shipped: { bg: '#e8e4fb', color: '#3e2870', label: 'Shipped' },
+  delivered: { bg: '#eef1ec', color: '#3d4c42', label: 'Delivered' },
+  cancelled: { bg: '#fbe9e5', color: '#8a2020', label: 'Cancelled' },
 }
 
 const filters = ['All', 'pending', 'confirmed', 'printing', 'quality_check', 'shipped', 'delivered', 'cancelled']
@@ -29,11 +29,15 @@ const filteredOrders = computed(() =>
     : orders.value.filter(o => o.status === activeFilter.value)
 )
 
+const totalRevenue = computed(() =>
+  filteredOrders.value.reduce((s, o) => s + Number(o.total_price || 0), 0)
+)
+
 function formatDate(iso) {
   return new Date(iso).toLocaleString('en-ZA', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
 }
 function formatPrice(n) {
-  return `R ${Number(n).toFixed(2)}`
+  return `R ${Number(n || 0).toFixed(2)}`
 }
 </script>
 
@@ -54,6 +58,11 @@ function formatPrice(n) {
       <p class="stat-value">{{ orders.filter(o => ['confirmed', 'printing', 'quality_check'].includes(o.status)).length }}</p>
       <p class="stat-sub">Confirmed through quality check</p>
     </div>
+    <div class="stat-card">
+      <p class="stat-label">Total revenue</p>
+      <p class="stat-value">{{ formatPrice(totalRevenue) }}</p>
+      <p class="stat-sub">{{ filteredOrders.length }} orders in view</p>
+    </div>
   </section>
 
   <section class="card">
@@ -70,16 +79,18 @@ function formatPrice(n) {
         :class="{ active: activeFilter === f }"
         @click="activeFilter = f"
       >
-        {{ f === 'All' ? 'All' : statusStyles[f].label }}
+        {{ f === 'All' ? 'All' : statusStyles[f]?.label || f }}
       </button>
     </div>
 
     <p v-if="loading" class="cell-secondary">Loading orders...</p>
+    <p v-else-if="!filteredOrders.length" class="cell-secondary">No orders in this view.</p>
 
     <table v-else class="table">
       <thead>
         <tr>
           <th>Order</th>
+          <th>Customer</th>
           <th>Product</th>
           <th>Material</th>
           <th>Qty</th>
@@ -90,17 +101,15 @@ function formatPrice(n) {
       </thead>
       <tbody>
         <tr v-for="o in filteredOrders" :key="o.id">
-          <td>
-            <div class="cell-primary">#{{ o.id }}</div>
-            <div class="cell-secondary">{{ o.customer.name }}</div>
-          </td>
-          <td class="cell-secondary">{{ o.product?.name ?? '---' }}</td>
-          <td class="cell-secondary">{{ o.material ? `${o.material.name} / ${o.material.color}` : '---' }}</td>
+          <td class="cell-primary">#{{ o.id }}</td>
+          <td class="cell-secondary">{{ o.customer_name || 'Customer' }}</td>
+          <td class="cell-secondary">{{ o.product_name || '---' }}</td>
+          <td class="cell-secondary">{{ o.material_name || '---' }}</td>
           <td class="cell-secondary">{{ o.quantity }}</td>
           <td class="cell-secondary">{{ formatPrice(o.total_price) }}</td>
           <td>
-            <span class="badge" :style="{ background: statusStyles[o.status].bg, color: statusStyles[o.status].color }">
-              {{ statusStyles[o.status].label }}
+            <span class="badge" :style="{ background: statusStyles[o.status]?.bg, color: statusStyles[o.status]?.color }">
+              {{ statusStyles[o.status]?.label || o.status }}
             </span>
           </td>
           <td class="cell-secondary">{{ formatDate(o.created_at) }}</td>

@@ -14,9 +14,9 @@ onMounted(async () => {
 })
 
 const statusStyles = {
-  confirmed: { bg: '#e4eefb', color: '#2f5d8a', label: 'Confirmed' },
-  printing: { bg: '#e4f7ea', color: '#2f6b45', label: 'Printing' },
-  quality_check: { bg: '#fdf3dd', color: '#9a6d1f', label: 'Quality check' },
+  confirmed: { bg: '#e4eefb', color: '#1f4268', label: 'Confirmed' },
+  printing: { bg: '#e4f7ea', color: '#1d5534', label: 'Printing' },
+  quality_check: { bg: '#fdf3dd', color: '#7a5b0e', label: 'Quality check' },
 }
 
 const filters = ['All', ...PRODUCTION_STATUSES]
@@ -28,12 +28,41 @@ const filteredOrders = computed(() =>
     : orders.value.filter(o => o.status === activeFilter.value)
 )
 
+const productionStats = computed(() => ({
+  confirmed: orders.value.filter(o => o.status === 'confirmed').length,
+  printing: orders.value.filter(o => o.status === 'printing').length,
+  quality_check: orders.value.filter(o => o.status === 'quality_check').length,
+}))
+
 function formatDate(iso) {
   return new Date(iso).toLocaleString('en-ZA', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
 }
 </script>
 
 <template>
+  <section class="stats-row">
+    <div class="stat-card">
+      <p class="stat-label">In production</p>
+      <p class="stat-value">{{ orders.length }}</p>
+      <p class="stat-sub">Total items being produced</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Confirmed</p>
+      <p class="stat-value">{{ productionStats.confirmed }}</p>
+      <p class="stat-sub">Awaiting printing</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Printing</p>
+      <p class="stat-value">{{ productionStats.printing }}</p>
+      <p class="stat-sub">Currently printing</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Quality check</p>
+      <p class="stat-value">{{ productionStats.quality_check }}</p>
+      <p class="stat-sub">Awaiting inspection</p>
+    </div>
+  </section>
+
   <section class="card">
     <div class="card-header">
       <h2>Production queue</h2>
@@ -48,7 +77,7 @@ function formatDate(iso) {
         :class="{ active: activeFilter === f }"
         @click="activeFilter = f"
       >
-        {{ f === 'All' ? 'All' : statusStyles[f].label }}
+        {{ f === 'All' ? 'All' : statusStyles[f]?.label || f }}
       </button>
     </div>
 
@@ -70,14 +99,14 @@ function formatDate(iso) {
         <tr v-for="o in filteredOrders" :key="o.id">
           <td>
             <div class="cell-primary">#{{ o.id }}</div>
-            <div class="cell-secondary">{{ o.customer.name }}</div>
+            <div class="cell-secondary">{{ o.customer_name || 'Customer' }}</div>
           </td>
-          <td class="cell-secondary">{{ o.product?.name ?? '---' }}</td>
-          <td class="cell-secondary">{{ o.material ? `${o.material.name} / ${o.material.color}` : '---' }}</td>
+          <td class="cell-secondary">{{ o.product_name || '---' }}</td>
+          <td class="cell-secondary">{{ o.material_name || '---' }}</td>
           <td class="cell-secondary">{{ o.quantity }}</td>
           <td>
-            <span class="badge" :style="{ background: statusStyles[o.status].bg, color: statusStyles[o.status].color }">
-              {{ statusStyles[o.status].label }}
+            <span class="badge" :style="{ background: statusStyles[o.status]?.bg, color: statusStyles[o.status]?.color }">
+              {{ statusStyles[o.status]?.label || o.status }}
             </span>
           </td>
           <td class="cell-secondary">{{ formatDate(o.updated_at) }}</td>

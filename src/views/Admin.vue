@@ -25,8 +25,14 @@ function goToTab(name) {
 const overview = ref(null);
 const employees = ref([]);
 const shifts = ref([]);
+const orders = ref([]);
+const orderStats = ref(null);
+const materials = ref([]);
+const products = ref([]);
 const deptFilter = ref("");
 const statusFilter = ref("");
+const orderStatusFilter = ref("");
+const materialTypeFilter = ref("");
 const loadingData = ref(false);
 
 const departments = computed(() => {
@@ -41,6 +47,46 @@ const filteredEmployees = computed(() => {
     return !d && !s;
   });
 });
+
+const orderStatusLabels = {
+  pending: "Pending",
+  confirmed: "Confirmed",
+  printing: "Printing",
+  quality_check: "Quality check",
+  shipped: "Shipped",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
+};
+
+const filteredOrders = computed(() => {
+  if (!orderStatusFilter.value) return orders.value;
+  return orders.value.filter((o) => o.status === orderStatusFilter.value);
+});
+
+const materialTypeLabel = (m) => {
+  const t = m.properties?.type;
+  if (t === "recycled") return "Recycled";
+  if (t === "virgin") return "Virgin";
+  return "Standard";
+};
+
+const filteredMaterials = computed(() => {
+  if (!materialTypeFilter.value) return materials.value;
+  if (materialTypeFilter.value === "out") {
+    return materials.value.filter((m) => !m.in_stock);
+  }
+  return materials.value;
+});
+
+const totalRevenue = computed(() => {
+  if (orderStats.value && orderStats.value.total_revenue) return Number(orderStats.value.total_revenue);
+  return orders.value.reduce((sum, o) => sum + Number(o.total_price || 0), 0);
+});
+
+function fmtPrice(n) {
+  if (n === null || n === undefined) return "—";
+  return "R" + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 
 async function doLogin() {
   loading.value = true;
@@ -61,14 +107,22 @@ async function loadData() {
   loadingData.value = true;
   err.value = "";
   try {
-    const [ov, emp, sh] = await Promise.all([
+    const [ov, emp, sh, ord, om, mat, prods] = await Promise.all([
       api.get("/hr/reports/overview"),
       api.get("/hr/employees"),
       api.get("/hr/shifts"),
+      api.get("/orders"),
+      api.get("/orders/stats"),
+      api.get("/materials"),
+      api.get("/products"),
     ]);
     overview.value = ov;
     employees.value = emp;
     shifts.value = sh;
+    orders.value = ord;
+    orderStats.value = om;
+    materials.value = mat;
+    products.value = prods;
   } catch (e) {
     err.value = e.message || "Failed to load data";
   } finally {
@@ -81,6 +135,10 @@ async function logout() {
   overview.value = null;
   employees.value = [];
   shifts.value = [];
+  orders.value = [];
+  orderStats.value = null;
+  materials.value = [];
+  products.value = [];
   router.push({ name: "hr-overview" });
 }
 
@@ -195,6 +253,14 @@ async function checkApi() {
         </button>
       </form>
       <p class="hint">Demo credentials — admin@reprint.com / password123</p>
+
+      <div class="cred-box">
+        <p class="cred-title">Staff login details</p>
+        <ul class="cred-list">
+          <li><strong>Admin:</strong> admin@reprint.com / password123</li>
+          <li><strong>Customer:</strong> user@reprint.com / user123</li>
+        </ul>
+      </div>
     </div>
 
     <!-- PORTAL -->
@@ -222,6 +288,20 @@ async function checkApi() {
           >
             Shifts <span class="pill">{{ shifts.length }}</span>
           </button>
+          <button
+            class="tab"
+            :class="{ active: tab === 'orders' }"
+            @click="goToTab('hr-orders')"
+          >
+            Orders <span class="pill">{{ orders.length }}</span>
+          </button>
+          <button
+            class="tab"
+            :class="{ active: tab === 'materials' }"
+            @click="goToTab('hr-materials')"
+          >
+            Materials <span class="pill">{{ materials.length }}</span>
+          </button>
         </div>
         <div class="toolbar-right">
           <button
@@ -241,7 +321,7 @@ async function checkApi() {
 
       <!-- OVERVIEW -->
       <template v-if="tab === 'dashboard' && overview">
-        <div class="stat-grid">
+        <div class="stat-grid stat-grid-4">
           <div
             class="stat"
             v-for="row in [
@@ -252,11 +332,31 @@ async function checkApi() {
                 value: fmtMoney(overview.totalPayroll),
                 money: true,
               },
+              { label: 'Total orders', value: orders.length },
             ]"
             :key="row.label"
           >
             <strong>{{ row.value }}</strong>
             <span>{{ row.label }}</span>
+          </div>
+        </div>
+
+        <div class="stat-grid stat-grid-4">
+          <div class="stat">
+            <strong>{{ materials.filter(m => !m.in_stock).length }}</strong>
+            <span>Materials out of stock</span>
+          </div>
+          <div class="stat">
+            <strong>{{ materials.length }}</strong>
+            <span>Materials tracked</span>
+          </div>
+          <div class="stat">
+            <strong>{{ products.length }}</strong>
+            <span>Products in store</span>
+          </div>
+          <div class="stat">
+            <strong>{{ fmtPrice(totalRevenue) }}</strong>
+            <span>Order revenue</span>
           </div>
         </div>
 
@@ -388,6 +488,114 @@ async function checkApi() {
           </table>
         </div>
         <p v-else class="loading">No shifts scheduled.</p>
+      </template>
+
+      <!-- ORDERS -->
+      <template v-if="tab === 'orders'">
+        <div class="stat-grid stat-grid-4">
+          <div class="stat">
+            <strong>{{ orders.length }}</strong>
+            <span>Total orders</span>
+          </div>
+          <div class="stat">
+            <strong>{{ orders.filter(o => o.status === 'pending').length }}</strong>
+            <span>Pending</span>
+          </div>
+          <div class="stat">
+            <strong>{{ orders.filter(o => ['printing','quality_check','confirmed'].includes(o.status)).length }}</strong>
+            <span>In production</span>
+          </div>
+          <div class="stat">
+            <strong>{{ fmtPrice(totalRevenue) }}</strong>
+            <span>Total revenue</span>
+          </div>
+        </div>
+
+        <div class="filters">
+          <label>
+            <span>Status</span>
+            <select v-model="orderStatusFilter" class="input-field">
+              <option value="">All</option>
+              <option v-for="(label, key) in orderStatusLabels" :key="key" :value="key">
+                {{ label }}
+              </option>
+            </select>
+          </label>
+        </div>
+
+        <div class="panel" v-if="filteredOrders.length">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Material</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Placed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="o in filteredOrders" :key="o.id">
+                <td>#{{ o.id }}</td>
+                <td>{{ o.customer_name || '—' }}</td>
+                <td>{{ o.product_name || '—' }}</td>
+                <td>{{ o.material_name || '—' }}</td>
+                <td>{{ o.quantity }}</td>
+                <td>{{ fmtPrice(o.total_price) }}</td>
+                <td>
+                  <span class="status" :class="o.status">{{ orderStatusLabels[o.status] || o.status }}</span>
+                </td>
+                <td>{{ fmtDate(o.created_at) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p v-else class="loading">No orders in this view.</p>
+      </template>
+
+      <!-- MATERIALS -->
+      <template v-if="tab === 'materials'">
+        <div class="filters">
+          <label>
+            <span>Filter</span>
+            <select v-model="materialTypeFilter" class="input-field">
+              <option value="">All materials</option>
+              <option value="out">Out of stock only</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="panel" v-if="filteredMaterials.length">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Color</th>
+                <th>Price / gram</th>
+                <th>Properties</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="m in filteredMaterials" :key="m.id">
+                <td>{{ m.name }}</td>
+                <td>{{ m.color }}</td>
+                <td>{{ fmtPrice(m.price_per_gram) }}</td>
+                <td>
+                  <span v-if="m.properties" class="status">{{ materialTypeLabel(m) }}</span>
+                  <span v-else>—</span>
+                </td>
+                <td>
+                  <span class="status" :class="m.in_stock ? 'active' : ''">{{ m.in_stock ? 'In stock' : 'Out of stock' }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p v-else class="loading">No materials.</p>
       </template>
     </div>
   </div>
@@ -521,6 +729,35 @@ async function checkApi() {
   font-size: 13px;
 }
 
+.cred-box {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  border: 1px dashed var(--primary);
+  text-align: left;
+}
+
+.cred-box .cred-title {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: var(--primary-dark);
+}
+
+.cred-box .cred-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--dark);
+}
+
+.cred-box .cred-list strong {
+  color: var(--primary-dark);
+}
+
 .portal {
   display: flex;
   flex-direction: column;
@@ -595,6 +832,10 @@ async function checkApi() {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+
+.stat-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .stat {
@@ -677,6 +918,46 @@ async function checkApi() {
 .status.active {
   background: rgba(85, 133, 100, 0.18);
   color: var(--primary-dark);
+}
+
+.status.pending {
+  background: rgba(143, 153, 147, 0.22);
+  color: #3a4840;
+}
+
+.status.confirmed {
+  background: rgba(59, 110, 170, 0.18);
+  color: #1f4268;
+}
+
+.status.printing {
+  background: rgba(48, 138, 86, 0.16);
+  color: #1d5534;
+}
+
+.status.quality_check {
+  background: rgba(170, 140, 40, 0.18);
+  color: #7a5b0e;
+}
+
+.status.shipped {
+  background: rgba(100, 70, 170, 0.16);
+  color: #3e2870;
+}
+
+.status.delivered {
+  background: rgba(100, 120, 110, 0.18);
+  color: #2d3c35;
+}
+
+.status.cancelled {
+  background: rgba(190, 50, 50, 0.14);
+  color: #8a2020;
+}
+
+.status.on_leave {
+  background: rgba(170, 150, 40, 0.18);
+  color: #7a5b0e;
 }
 
 .empty-line {

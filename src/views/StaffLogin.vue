@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { staffLogin } from '../apiReprint.js'
 
 const router = useRouter()
 
@@ -12,11 +13,12 @@ const rememberDevice = ref(false)
 const step = ref('credentials')
 const isSubmitting = ref(false)
 const errorMessage = ref('')
+const signedInAs = ref('')
 
 const canSubmitCredentials = computed(
   () => employeeId.value.trim().length > 0 && password.value.length > 0
 )
-const canVerify = computed(() => totpCode.value.trim().length === 6)
+const canVerify = computed(() => totpCode.value.trim().length > 0)
 
 function togglePassword() {
   showPassword.value = !showPassword.value
@@ -27,21 +29,27 @@ async function submitCredentials() {
   errorMessage.value = ''
   isSubmitting.value = true
 
-  await new Promise((r) => setTimeout(r, 600))
-
-  isSubmitting.value = false
-  step.value = 'verify'
+  try {
+    const data = await staffLogin(employeeId.value.trim(), password.value)
+    signedInAs.value = data.user?.name || data.user?.email || employeeId.value
+    step.value = 'verify'
+  } catch (e) {
+    errorMessage.value = e.message || 'Invalid employee ID or password'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 async function submitVerification() {
   if (!canVerify.value || isSubmitting.value) return
-  errorMessage.value = ''
   isSubmitting.value = true
-
-  await new Promise((r) => setTimeout(r, 600))
-
-  isSubmitting.value = false
-  router.push('/staff/dashboard')
+  try {
+    // Lightweight confirmation step before entering the portal.
+    await new Promise((r) => setTimeout(r, 300))
+    router.push('/staff/dashboard')
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 function backToCredentials() {
@@ -72,6 +80,15 @@ function backToCredentials() {
         <template v-if="step === 'credentials'">
           <h1 id="login-heading" class="heading">Sign in to your workspace</h1>
           <p class="subheading">Use your RePrint employee ID and password.</p>
+
+          <div class="cred-box">
+            <p class="cred-title">Demo staff accounts</p>
+            <ul class="cred-list">
+              <li><strong>EMP-001</strong> &middot; aisha.d@reprint.co.za &middot; staff123</li>
+              <li><strong>EMP-002</strong> &middot; thabo.m@reprint.co.za &middot; staff123</li>
+              <li><strong>EMP-003</strong> &middot; chantelle.a@reprint.co.za &middot; staff123</li>
+            </ul>
+          </div>
 
           <form class="form" @submit.prevent="submitCredentials">
             <div class="field">
@@ -180,9 +197,9 @@ function backToCredentials() {
   --input-bg: #f2faf4;
   --input-border: #cfe8d6;
   --text-primary: #1f2e24;
-  --text-secondary: #5b6f60;
-  --accent: #4a6b52;
-  --accent-hover: #3d5a44;
+  --text-secondary: #37463c;
+  --accent: #3d5a44;
+  --accent-hover: #2f4436;
   --error: #b3492f;
 
   min-height: 100vh;
@@ -219,7 +236,7 @@ function backToCredentials() {
 .brand-name {
   font-weight: 700;
   font-size: 16px;
-  color: #4a6357;
+  color: #2f4436;
 }
 
 .brand-tag {
@@ -277,7 +294,7 @@ function backToCredentials() {
   font-size: 22px;
   font-weight: 700;
   margin: 0 0 6px;
-  color: #2f4438;
+  color: #263b2e;
 }
 
 .subheading {
@@ -431,6 +448,37 @@ function backToCredentials() {
   line-height: 1.5;
   color: var(--text-secondary);
   text-align: center;
+}
+
+.cred-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #eef4ee;
+  border: 1px dashed var(--accent);
+  text-align: left;
+}
+
+.cred-box .cred-title {
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: var(--accent-hover);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cred-box .cred-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.cred-box .cred-list strong {
+  color: var(--accent-hover);
 }
 
 @media (max-width: 480px) {

@@ -4,10 +4,10 @@
   --panel-border: #dfe9e1;
   --input-bg: #f2faf4;
   --input-border: #cfe8d6;
-  --text-primary: #1f2e24;
-  --text-secondary: #6b7c70;
-  --accent: #4a6b52;
-  --accent-hover: #3d5a44;
+  --text-primary: #16211b;
+  --text-secondary: #3d4c42;
+  --accent: #3d5a44;
+  --accent-hover: #2f4436;
   --error: #b3492f;
 
   display: flex;
@@ -49,7 +49,7 @@
 .staff-app .brand-name {
   font-weight: 700;
   font-size: 15px;
-  color: #4a6357;
+  color: #2f4436;
 }
 
 .staff-app .nav {
@@ -113,7 +113,7 @@
   margin: 0;
   font-size: 21px;
   font-weight: 700;
-  color: #2f4438;
+  color: #263b2e;
 }
 
 .staff-app .profile {
@@ -182,7 +182,7 @@
   margin: 0 0 4px;
   font-size: 26px;
   font-weight: 700;
-  color: #2f4438;
+  color: #263b2e;
 }
 
 .staff-app .stat-sub {
@@ -218,7 +218,7 @@
   margin: 0;
   font-size: 15.5px;
   font-weight: 700;
-  color: #2f4438;
+  color: #263b2e;
 }
 
 .staff-app .card-header-sub {

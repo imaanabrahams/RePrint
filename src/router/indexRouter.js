@@ -25,6 +25,18 @@ const routes = [
     component: () => import("../views/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "shifts" },
   },
+  {
+    path: "/hr/orders",
+    name: "hr-orders",
+    component: () => import("../views/Admin.vue"),
+    meta: { requiresAuth: true, adminOnly: true, tab: "orders" },
+  },
+  {
+    path: "/hr/materials",
+    name: "hr-materials",
+    component: () => import("../views/Admin.vue"),
+    meta: { requiresAuth: true, adminOnly: true, tab: "materials" },
+  },
   { path: "/", name: "home", component: HomeView },
   {
     path: "/shop",

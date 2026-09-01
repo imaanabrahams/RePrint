@@ -75,6 +75,16 @@ export async function login(email, password) {
   return data
 }
 
+export async function staffLogin(identifier, password) {
+  const data = await request('/auth/staff-login', {
+    method: 'POST',
+    auth: false,
+    body: { identifier, password },
+  })
+  setSession(data)
+  return data
+}
+
 export function logout() {
   clearSession()
 }
@@ -108,7 +118,7 @@ const MOCK_ORDERS = [
 
 export async function getOrders() {
   try {
-    return await request('/orders', { auth: false })
+    return await request('/orders')
   } catch {
     return MOCK_ORDERS
   }
@@ -142,7 +152,7 @@ const MOCK_EMPLOYEES = [
 
 export async function getEmployees() {
   try {
-    return await request('/employees', { auth: false })
+    return await request('/employees')
   } catch {
     return MOCK_EMPLOYEES
   }
@@ -157,7 +167,7 @@ const MOCK_NOTIFICATIONS = [
 
 export async function getNotifications() {
   try {
-    return await request('/notifications', { auth: false })
+    return await request('/notifications')
   } catch {
     return MOCK_NOTIFICATIONS
   }
