@@ -67,6 +67,48 @@ const routes = [
     name: "wishlist",
     component: () => import("../views/Wishlist.vue"),
   },
+  {
+    path: "/staff/login",
+    name: "staff-login",
+    component: () => import("../views/StaffLogin.vue"),
+  },
+  {
+    path: "/staff",
+    component: () => import("../layouts/StaffLayout.vue"),
+    redirect: "/staff/dashboard",
+    children: [
+      {
+        path: "dashboard",
+        name: "staff-dashboard",
+        component: () => import("../views/StaffDashboard.vue"),
+        meta: { title: "Overview" },
+      },
+      {
+        path: "print-queue",
+        name: "staff-print-queue",
+        component: () => import("../views/StaffPrintQueue.vue"),
+        meta: { title: "Print queue" },
+      },
+      {
+        path: "inventory",
+        name: "staff-inventory",
+        component: () => import("../views/StaffInventory.vue"),
+        meta: { title: "Inventory" },
+      },
+      {
+        path: "orders",
+        name: "staff-orders",
+        component: () => import("../views/StaffOrders.vue"),
+        meta: { title: "Orders" },
+      },
+      {
+        path: "team",
+        name: "staff-team",
+        component: () => import("../views/StaffTeam.vue"),
+        meta: { title: "Team" },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

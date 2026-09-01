@@ -22,6 +22,7 @@ const links = computed(() => {
   if (auth.isAdmin) {
     base.push({ to: "/hr", label: "HR System" });
   }
+  base.push({ to: "/staff/login", label: "Staff Portal" });
   return base;
 });
 
