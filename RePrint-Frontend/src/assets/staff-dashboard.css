@@ -1,0 +1,533 @@
+/* Design tokens + shared component classes for the RePrint staff area.
+   Imported once, globally, in main.js — not scoped to any single component,
+   so it applies consistently across the layout and every nested page. */
+
+.staff-app {
+  --bg: #eef4ef;
+  --panel-bg: #ffffff;
+  --panel-border: #dfe9e1;
+  --input-bg: #f2faf4;
+  --input-border: #cfe8d6;
+  --text-primary: #1f2e24;
+  --text-secondary: #6b7c70;
+  --accent: #4a6b52;
+  --accent-hover: #3d5a44;
+  --error: #b3492f;
+
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+}
+
+/* --- sidebar --- */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--panel-border);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 24px;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #4a6357;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  background: #f2f7f3;
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: #e4f7ea;
+  color: var(--accent-hover);
+}
+
+.nav-item.logout {
+  margin-top: auto;
+  border-top: 1px solid var(--panel-border);
+  padding-top: 14px;
+}
+
+/* --- main / topbar --- */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #2f4438;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.profile-name {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.profile-role {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 28px 32px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- stats --- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.stat-label {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #2f4438;
+}
+
+.stat-sub {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* --- cards / grid --- */
+.grid-two {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 20px 22px 22px;
+}
+
+.card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #2f4438;
+}
+
+.card-header-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* --- filter tabs --- */
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-tab {
+  padding: 6px 13px;
+  border-radius: 100px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.filter-tab:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.filter-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* --- table --- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 0 10px 10px 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.table td {
+  padding: 11px 10px 11px 0;
+  border-bottom: 1px solid #f0f4f1;
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.cell-primary {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.cell-secondary {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.low-stock-text {
+  color: var(--error);
+  font-weight: 600;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 100px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.progress-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 100px;
+}
+
+.progress-track,
+.util-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 100px;
+  background: #eef1ec;
+  overflow: hidden;
+}
+
+.progress-fill,
+.util-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: var(--accent);
+}
+
+.util-fill.fill-low {
+  background: var(--error);
+}
+
+/* --- alerts --- */
+.alert-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.alert-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.alert-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.alert-message {
+  margin: 0 0 2px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.alert-time {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+/* --- printer / team fleet grid --- */
+.printer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.printer-card {
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.printer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.printer-name {
+  font-weight: 600;
+  font-size: 13.5px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.printer-model {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.printer-status {
+  margin: 0 0 2px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.printer-job {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.printer-card .util-track {
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+/* --- inventory --- */
+.inventory-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inventory-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 10px;
+}
+
+.tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: #eef1ec;
+  color: var(--text-secondary);
+}
+
+.tag.recycled {
+  background: #e4f7ea;
+  color: var(--accent-hover);
+}
+
+/* --- team --- */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.team-card {
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.team-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 13.5px;
+  margin: 0;
+}
+
+.team-role {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.team-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* --- responsive --- */
+@media (max-width: 1080px) {
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .sidebar {
+    display: none;
+  }
+  .topbar,
+  .content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}

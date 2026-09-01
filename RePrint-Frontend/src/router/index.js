@@ -6,17 +6,44 @@ const router = createRouter({
     {
       path: '/staff/login',
       name: 'EmployeeLogin',
-      component: () => import('@/views/employeeLogin.vue'),
+      component: () => import('@/views/EmployeeLogin.vue'),
     },
-    { 
-      path: '/staff/dashboard', 
-      name: 'EmployeeDashboard', 
-<<<<<<< HEAD
-      component: () => import('@/views/employeeDashboard.vue') }
-=======
-      component: () => import('@/views/employeeDashboard.vue') 
-    }
->>>>>>> 6d56780f8c6d48ab053964ac4b8ad4bd76f4f12c
+    {
+      path: '/staff',
+      component: () => import('@/layouts/StaffLayout.vue'),
+      children: [
+        {
+          path: 'dashboard',
+          name: 'DashboardOverview',
+          component: () => import('@/views/DashboardOverview.vue'),
+          meta: { title: 'Production overview' },
+        },
+        {
+          path: 'print-queue',
+          name: 'PrintQueue',
+          component: () => import('@/views/PrintQueue.vue'),
+          meta: { title: 'Print queue' },
+        },
+        {
+          path: 'inventory',
+          name: 'Inventory',
+          component: () => import('@/views/Inventory.vue'),
+          meta: { title: 'Inventory' },
+        },
+        {
+          path: 'orders',
+          name: 'Orders',
+          component: () => import('@/views/Orders.vue'),
+          meta: { title: 'Orders' },
+        },
+        {
+          path: 'team',
+          name: 'Team',
+          component: () => import('@/views/Team.vue'),
+          meta: { title: 'Team' },
+        },
+      ],
+    },
   ],
 })
 
