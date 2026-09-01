@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted } from 'vue'
-import Navbar from './components/Navbar.vue'
-import Footer from './components/Footer.vue'
-import { useProductsStore } from './stores/products'
+import Navbar from './components/NavbarComp.vue'
+import Footer from './components/FooterComp.vue'
+import { useProductsStore } from './stores/productsStores.js'
 
 onMounted(() => {
   useProductsStore().load()

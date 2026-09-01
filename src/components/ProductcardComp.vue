@@ -2,8 +2,8 @@
 import { useRouter } from "vue-router";
 import { useCartStore } from "../stores/cartStores.js";
 import { useWishlistStore } from "../stores/wishlistStores.js";
-import RatingStars from "./RatingstarsComp.vue/index.js";
-import { formatRand } from "../currency.js";
+import RatingStars from "./RatingstarsComp.vue";
+import { formatRand } from "../currencyReprint.js";
 
 const props = defineProps({
   product: { type: Object, required: true },

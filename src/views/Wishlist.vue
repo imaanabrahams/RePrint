@@ -1,7 +1,7 @@
 <script setup>
 import { useWishlistStore } from "../stores/wishlistStores.js";
 import { useCartStore } from "../stores/cartStores.js";
-import RatingStars from "../components/RatingstarsComp.vue/index.js";
+import RatingStars from "../components/RatingstarsComp.vue";
 import { useRouter } from "vue-router";
 import { formatRand } from "../currencyReprint.js";
 

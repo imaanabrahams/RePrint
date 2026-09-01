@@ -1,7 +1,7 @@
 <script setup>
 import { useProductsStore } from "../stores/productsStores.js";
-import ProductCard from "../components/ProductcardComp.vue/index.js";
-import RatingStars from "../components/RatingstarsComp.vue/index.js";
+import ProductCard from "../components/ProductcardComp.vue";
+import RatingStars from "../components/RatingstarsComp.vue";
 import heroImg from "../assets/hero.png";
 
 const products = useProductsStore();

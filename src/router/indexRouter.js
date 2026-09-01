@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "../views/Home.vue";
 import { getToken, getStoredUser } from "../apiReprint.js";
 
 const routes = [
@@ -10,62 +10,62 @@ const routes = [
   {
     path: "/hr",
     name: "hr-overview",
-    component: () => import("../views/AdminView.vue"),
+    component: () => import("../views/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "dashboard" },
   },
   {
     path: "/hr/employees",
     name: "hr-employees",
-    component: () => import("../views/AdminView.vue"),
+    component: () => import("../views/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "employees" },
   },
   {
     path: "/hr/shifts",
     name: "hr-shifts",
-    component: () => import("../views/AdminView.vue"),
+    component: () => import("../views/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "shifts" },
   },
   { path: "/", name: "home", component: HomeView },
   {
     path: "/shop",
     name: "shop",
-    component: () => import("../views/ShopView.vue"),
+    component: () => import("../views/Shop.vue"),
   },
   {
     path: "/product/:id",
     name: "product",
-    component: () => import("../views/ProductView.vue"),
+    component: () => import("../views/Product.vue"),
     props: true,
   },
   {
     path: "/create",
     name: "create",
-    component: () => import("../views/CreateView.vue"),
+    component: () => import("../views/Create.vue"),
   },
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/LoginView.vue"),
+    component: () => import("../views/Login.vue"),
   },
   {
     path: "/signup",
     name: "signup",
-    component: () => import("../views/SignupView.vue"),
+    component: () => import("../views/Signup.vue"),
   },
   {
     path: "/contact",
     name: "contact",
-    component: () => import("../views/ContactView.vue"),
+    component: () => import("../views/Contact.vue"),
   },
   {
     path: "/cart",
     name: "cart",
-    component: () => import("../views/CartView.vue"),
+    component: () => import("../views/Cart.vue"),
   },
   {
     path: "/wishlist",
     name: "wishlist",
-    component: () => import("../views/WishlistView.vue"),
+    component: () => import("../views/Wishlist.vue"),
   },
 ];
 

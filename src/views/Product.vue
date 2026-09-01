@@ -3,7 +3,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useProductsStore } from "../stores/productsStores.js";
 import { useCartStore } from "../stores/cartStores.js";
-import RatingStars from "../components/RatingstarsComp.vue/index.js";
+import RatingStars from "../components/RatingstarsComp.vue";
 import { formatRand } from "../currencyReprint.js";
 
 const route = useRoute();

@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useProductsStore } from "../stores/productsStores.js";
-import ProductCard from "../components/ProductcardComp.vue/index.js";
+import ProductCard from "../components/ProductcardComp.vue";
 
 const products = useProductsStore();
 const active = ref("All");
