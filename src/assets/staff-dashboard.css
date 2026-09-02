@@ -1,13 +1,13 @@
 .staff-app {
-  --bg: #eef4ef;
+  --bg: #fdeef1;
   --panel-bg: #ffffff;
-  --panel-border: #dfe9e1;
-  --input-bg: #f2faf4;
-  --input-border: #cfe8d6;
-  --text-primary: #16211b;
-  --text-secondary: #3d4c42;
-  --accent: #3d5a44;
-  --accent-hover: #2f4436;
+  --panel-border: #f6d6dd;
+  --input-bg: #fef6f8;
+  --input-border: #f3d3da;
+  --text-primary: #33222a;
+  --text-secondary: #5c4a51;
+  --accent: #d16b86;
+  --accent-hover: #bb5470;
   --error: #b3492f;
 
   display: flex;
@@ -49,7 +49,7 @@
 .staff-app .brand-name {
   font-weight: 700;
   font-size: 15px;
-  color: #2f4436;
+  color: #bb5470;
 }
 
 .staff-app .nav {
@@ -72,12 +72,12 @@
 }
 
 .staff-app .nav-item:hover {
-  background: #f2f7f3;
+  background: #fdf2f4;
   color: var(--text-primary);
 }
 
 .staff-app .nav-item.active {
-  background: #e4f7ea;
+  background: #fde4ea;
   color: var(--accent-hover);
 }
 
@@ -113,7 +113,7 @@
   margin: 0;
   font-size: 21px;
   font-weight: 700;
-  color: #263b2e;
+  color: #72354a;
 }
 
 .staff-app .profile {
@@ -182,7 +182,7 @@
   margin: 0 0 4px;
   font-size: 26px;
   font-weight: 700;
-  color: #263b2e;
+  color: #72354a;
 }
 
 .staff-app .stat-sub {
@@ -218,7 +218,7 @@
   margin: 0;
   font-size: 15.5px;
   font-weight: 700;
-  color: #263b2e;
+  color: #72354a;
 }
 
 .staff-app .card-header-sub {
@@ -272,7 +272,7 @@
 
 .staff-app .table td {
   padding: 11px 10px 11px 0;
-  border-bottom: 1px solid #f0f4f1;
+  border-bottom: 1px solid #f9e9ec;
   vertical-align: middle;
 }
 
@@ -358,12 +358,12 @@
   border-radius: 100px;
   font-size: 10.5px;
   font-weight: 600;
-  background: #eef1ec;
+  background: #f9eef1;
   color: var(--text-secondary);
 }
 
 .staff-app .tag.recycled {
-  background: #e4f7ea;
+  background: #fde4ea;
   color: var(--accent-hover);
 }
 

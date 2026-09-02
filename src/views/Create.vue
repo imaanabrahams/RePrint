@@ -1,12 +1,38 @@
 <script setup>
-import { ref } from 'vue'
-import previewImg from '../assets/create-design.png'
+import { ref, computed } from 'vue'
+import fallbackImg from '../assets/create-design.png'
+import p2 from '../assets/p2.png'
+import p3 from '../assets/p3.png'
+import p4 from '../assets/p4.png'
+import p6 from '../assets/p6.png'
+import p7 from '../assets/p7.png'
+import fidget from '../assets/fidget.png'
+import keyring from '../assets/keyring.png'
+import best2 from '../assets/best2.png'
+import best3 from '../assets/best3.png'
+import p8 from '../assets/p8.png'
 
 const form = ref({
   productType: 'Phone Stand',
   title: '',
   size: 'Small',
 })
+
+const imageMap = {
+  'Phone Stand': p8,
+  'Home Decor': p2,
+  'Planter': p6,
+  'Desk Organiser': p4,
+  'Cable Organiser': p3,
+  'Gaming Accessory': best3,
+  'Fidget Toy': fidget,
+  'Keyring': keyring,
+  'Jewellery Holder': best2,
+  'Toy Sweet Dispenser': p7,
+  'Custom Part': fallbackImg,
+}
+
+const previewImg = computed(() => imageMap[form.value.productType] || fallbackImg)
 
 const productTypes = [
   'Phone Stand',
@@ -18,7 +44,7 @@ const productTypes = [
   'Fidget Toy',
   'Keyring',
   'Jewellery Holder',
-  'Pet Accessory',
+  'Toy Sweet Dispenser',
   'Custom Part',
 ]
 const sizes = ['Small', 'Medium', 'Large']
@@ -51,7 +77,7 @@ const submitted = ref(false)
 
 const previewLabel = ref(
   {
-    'Phone Stand': 'Your stand',
+    'Phone Stand': 'Your design',
     'Home Decor': 'Your decor',
     'Planter': 'Your planter',
     'Desk Organiser': 'Your organiser',
@@ -60,7 +86,7 @@ const previewLabel = ref(
     'Fidget Toy': 'Your fidget',
     'Keyring': 'Your keyring',
     'Jewellery Holder': 'Your holder',
-    'Pet Accessory': 'Your pet item',
+    'Toy Sweet Dispenser': 'Your sweet dispenser',
     'Custom Part': 'Your part',
   }[form.value.productType]
 )
