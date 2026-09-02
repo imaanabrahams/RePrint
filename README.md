@@ -1,5 +1,6 @@
 # RePrint
 
+<<<<<<< HEAD
 A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend** (this repository) lets customers browse a curated catalogue of home decor, office, garden, gaming and toy items, manage a shopping cart and wishlist, and sign up or log in to an account. The **Express backend** (`server/`) powers the API, authentication, and the HR admin dashboard.
 
 ## Tech Stack
@@ -187,3 +188,9 @@ Components use scoped CSS. The font stack is Poppins with system-ui fallbacks.
 ## License
 
 This project is private and not currently licensed for public distribution.
+=======
+
+## Tech Stack
+FRONTEND:
+- Vue.JS
+>>>>>>> feature/frontend-account

@@ -1,11 +1,18 @@
 {
+<<<<<<< HEAD
   "name": "reprint",
   "private": true,
   "version": "0.0.0",
+=======
+  "name": "reprint-frontend",
+  "version": "0.0.0",
+  "private": true,
+>>>>>>> feature/frontend-account
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+<<<<<<< HEAD
     "preview": "vite preview",
     "dev:api": "npm run dev --prefix server",
     "start:api": "npm start --prefix server",
@@ -20,5 +27,22 @@
     "@vitejs/plugin-vue": "^6.0.8",
     "concurrently": "^9.1.0",
     "vite": "^8.2.2"
+=======
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "pinia": "^4.0.2",
+    "vue": "^3.5.40",
+    "vue-router": "^5.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitejs/plugin-vue-jsx": "^5.1.6",
+    "vite": "^8.1.5",
+    "vite-plugin-vue-devtools": "^8.1.5"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.12.0"
+>>>>>>> feature/frontend-account
   }
 }
