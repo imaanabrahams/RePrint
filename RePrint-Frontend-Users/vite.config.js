@@ -16,5 +16,17 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    include: ['tests/**/*.test.js'],
+    setupFiles: ['tests/setup/test-setup.js'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'json-summary'],
+      include: ['src/**/*.{js,vue}'],
+      exclude: ['src/mainReprint.js', 'src/router/indexRouter.js'],
+    },
+  },
 })
 
