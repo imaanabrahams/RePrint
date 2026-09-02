@@ -7,8 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "dev:api": "npm run dev --prefix server",
-    "start:api": "npm start --prefix server",
+    "dev:api": "npm run dev --prefix ../RePrint-API",
+    "start:api": "npm start --prefix ../RePrint-API",
     "dev:all": "concurrently -n api,web -c green,blue \"npm run dev:api\" \"npm run dev\""
   },
   "dependencies": {
