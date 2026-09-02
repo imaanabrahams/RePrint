@@ -279,17 +279,17 @@ const lowStockMaterials = computed(() =>
   gap: 8px;
   padding: 14px 12px;
   border-radius: 10px;
-  border: 1px solid #e0e4de;
-  background: #f6f8f5;
-  color: #263b2e;
+  border: 1px solid #f2d3db;
+  background: #fdf4f6;
+  color: #72354a;
   font-weight: 600;
   font-size: 13px;
   text-decoration: none;
   transition: background 0.15s, border-color 0.15s;
 }
 .quick-action-btn:hover {
-  background: #e4ebe2;
-  border-color: #3d5a44;
+  background: #fde4ea;
+  border-color: #d16b86;
 }
 .qa-icon {
   font-size: 18px;

@@ -191,15 +191,15 @@ function backToCredentials() {
 
 <style scoped>
 .page {
-  --bg: #e4f7ea;
+  --bg: #fdeef1;
   --panel-bg: #ffffff;
-  --panel-border: #cfe8d6;
-  --input-bg: #f2faf4;
-  --input-border: #cfe8d6;
-  --text-primary: #1f2e24;
-  --text-secondary: #37463c;
-  --accent: #3d5a44;
-  --accent-hover: #2f4436;
+  --panel-border: #f6d6dd;
+  --input-bg: #fef6f8;
+  --input-border: #f3d3da;
+  --text-primary: #33222a;
+  --text-secondary: #5c4a51;
+  --accent: #d16b86;
+  --accent-hover: #bb5470;
   --error: #b3492f;
 
   min-height: 100vh;
@@ -236,7 +236,7 @@ function backToCredentials() {
 .brand-name {
   font-weight: 700;
   font-size: 16px;
-  color: #2f4436;
+  color: #bb5470;
 }
 
 .brand-tag {
@@ -294,7 +294,7 @@ function backToCredentials() {
   font-size: 22px;
   font-weight: 700;
   margin: 0 0 6px;
-  color: #263b2e;
+  color: #72354a;
 }
 
 .subheading {
@@ -337,7 +337,7 @@ function backToCredentials() {
 
 .field input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(74, 107, 82, 0.15);
+  box-shadow: 0 0 0 3px rgba(209, 107, 134, 0.15);
 }
 
 .code-input {
@@ -373,7 +373,7 @@ function backToCredentials() {
 
 .ghost-icon-btn:hover {
   color: var(--accent);
-  background: rgba(74, 107, 82, 0.08);
+  background: rgba(209, 107, 134, 0.08);
 }
 
 .row-between {
@@ -454,7 +454,7 @@ function backToCredentials() {
   margin-top: 14px;
   padding: 12px 14px;
   border-radius: 10px;
-  background: #eef4ee;
+  background: #fdf4f6;
   border: 1px dashed var(--accent);
   text-align: left;
 }
