@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/Home.vue";
 import { getToken, getStoredUser } from "../apiReprint.js";
 
-const routes = [
+export const routes = [
   {
     path: "/admin",
     redirect: "/hr",

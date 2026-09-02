@@ -1,11 +1,6 @@
 # RePrint
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend** (this repository) lets customers browse a curated catalogue of home decor, office, garden, gaming and toy items, manage a shopping cart and wishlist, and sign up or log in to an account. The **Express backend** (`server/`) powers the API, authentication, and the HR admin dashboard.
-=======
-A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend** (this repository) lets customers browse a curated catalogue of home decor, office, garden, gaming and toy items, manage a shopping cart and wishlist, and sign up or log in to an account. The **Express backend** lives in the sibling [RePrint-API](https://github.com/imaanabrahams/RePrint-API) repository (branch `develop`), which powers the API, authentication, and the HR admin dashboard.
->>>>>>> 929c9c3ead9fe3d5cfc7c2138bc8e422c5360a45
+A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend** lives in [`RePrint-Frontend/`](./RePrint-Frontend) and lets customers browse a curated catalogue of home decor, office, garden, gaming and toy items, manage a shopping cart and wishlist, and sign up or log in to an account. The **Express backend** lives in the sibling [RePrint-API](https://github.com/imaanabrahams/RePrint-API) repository (branch `develop`), which powers the API, authentication, and the HR admin dashboard.
 
 ## Tech Stack
 
@@ -29,6 +24,7 @@ A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend
 ### Install
 
 ```bash
+cd RePrint-Frontend
 npm install                    # frontend dependencies
 npm install --prefix ../RePrint-API   # backend dependencies
 ```
@@ -38,6 +34,7 @@ Both repositories should sit side by side (e.g. `RePrint/` and `RePrint-API/` in
 ### Run everything (recommended)
 
 ```bash
+cd RePrint-Frontend
 npm run dev:all
 ```
 
@@ -64,6 +61,17 @@ npm run start:api                   # RePrint-API serves the site at http://loca
 ```
 
 The backend serves the API, `/images`, and the built frontend from one port.
+
+### Run the tests
+
+```bash
+cd RePrint-Frontend
+npm test                # run the Vitest suite once
+npm run test:watch      # watch mode
+npm run test:coverage   # run with a coverage report
+```
+
+See [`RePrint-Frontend/documentation/TEST_REPORT.md`](./RePrint-Frontend/documentation/TEST_REPORT.md) for the full test report.
 
 ### Demo accounts
 
@@ -94,28 +102,32 @@ Create a `.env` file in the project root for local overrides. See `.gitignore` f
 ## Project Structure
 
 ```
-RePrint/                  # frontend (this repo)
-├── index.html            # HTML entry point
-├── vite.config.js        # Vite config (Vue plugin, /api + /images proxy to :5000)
-├── package.json
-├── public/               # favicon + icons
-├── src/
-│   ├── mainReprint.js    # App bootstrap (Vue, Pinia, Router)
-│   ├── AppReprint.vue    # Root layout (Navbar + RouterView + Footer)
-│   ├── apiReprint.js     # HTTP client, auth helpers, session storage
-│   ├── currencyReprint.js# ZAR currency formatting
-│   ├── style.css         # Global styles & CSS custom properties
-│   ├── router/
-│   │   └── indexRouter.js
-│   ├── stores/           # auth, cart, products, wishlist (Pinia)
-│   ├── layouts/StaffLayout.vue
-│   ├── components/       # Navbar, Footer, ProductCard, RatingStars
-│   ├── views/            # Home, Shop, Product, Create, Cart, Wishlist,
-│   │                     # Login, Signup, Contact, Admin + StaffDashboard,
-│   │                     # StaffInventory, StaffOrders, StaffPrintQueue, ...
-│   └── assets/           # Images (product photos, hero, icons)
-├── dist/                 # Production build output (served by RePrint-API)
-└── server/               # legacy in-memory demo backend (superseded by RePrint-API)
+RePrint/                  # this repository
+├── README.md
+└── RePrint-Frontend/     # frontend
+    ├── index.html            # HTML entry point
+    ├── vite.config.js        # Vite config (Vue plugin, /api + /images proxy to :5000)
+    ├── package.json
+    ├── public/               # favicon + icons
+    ├── tests/                # Vitest unit & component tests
+    ├── documentation/        # test report, setup guide, architecture notes
+    ├── src/
+    │   ├── mainReprint.js    # App bootstrap (Vue, Pinia, Router)
+    │   ├── AppReprint.vue    # Root layout (Navbar + RouterView + Footer)
+    │   ├── apiReprint.js     # HTTP client, auth helpers, session storage
+    │   ├── currencyReprint.js# ZAR currency formatting
+    │   ├── style.css         # Global styles & CSS custom properties
+    │   ├── router/
+    │   │   └── indexRouter.js
+    │   ├── stores/           # auth, cart, products, wishlist (Pinia)
+    │   ├── layouts/StaffLayout.vue
+    │   ├── components/       # Navbar, Footer, ProductCard, RatingStars
+    │   ├── views/            # Home, Shop, Product, Create, Cart, Wishlist,
+    │   │                     # Login, Signup, Contact, Admin + StaffDashboard,
+    │   │                     # StaffInventory, StaffOrders, StaffPrintQueue, ...
+    │   └── assets/           # Images (product photos, hero, icons)
+    ├── dist/                 # Production build output (served by RePrint-API)
+    └── server/               # legacy in-memory demo backend (superseded by RePrint-API)
 
 RePrint-API/              # backend (sibling repo, branch develop)
 ├── server.js             # Express app: mounts /api, /images, serves dist
@@ -199,9 +211,3 @@ Components use scoped CSS. The font stack is Poppins with system-ui fallbacks.
 ## License
 
 This project is private and not currently licensed for public distribution.
-=======
-
-## Tech Stack
-FRONTEND:
-- Vue.JS
->>>>>>> feature/frontend-account

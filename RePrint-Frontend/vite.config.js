@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
@@ -17,27 +16,16 @@ export default defineConfig({
       },
     },
   },
-})
-
-=======
-import { fileURLToPath, URL } from 'node:url'
-
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueDevTools from 'vite-plugin-vue-devtools'
-
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    vueJsx(),
-    vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    include: ['tests/**/*.test.js'],
+    setupFiles: ['tests/setup/test-setup.js'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'json-summary'],
+      include: ['src/**/*.{js,vue}'],
+      exclude: ['src/mainReprint.js', 'src/router/indexRouter.js'],
     },
   },
 })
->>>>>>> feature/frontend-account
