@@ -82,7 +82,8 @@ export const routes = [
   {
     path: "/staff/login",
     name: "staff-login",
-    component: () => import("../views/StaffLogin.vue"),
+    component: () => import("../views/EmployeeLogin.vue"),
+    meta: { requiresAuth: true }
   },
   {
     path: "/staff",
@@ -92,27 +93,32 @@ export const routes = [
       { path: "dashboard",    
         name: "staff-dashboard",    
         component: () => import("../views/DashboardOverview.vue"), 
-        meta: { title: "Overview" } 
+        meta: { title: "Overview" } ,
+        meta: { requiresAuth: true }
       },
       { path: "print-queue",  
         name: "staff-print-queue",  
         component: () => import("../views/PrintQueue.vue"),         
-        meta: { title: "Print queue" } 
+        meta: { title: "Print queue" } ,
+        meta: { requiresAuth: true }
       },
       { path: "inventory",    
         name: "staff-inventory",    
         component: () => import("../views/Inventory.vue"),          
-        meta: { title: "Inventory" } 
+        meta: { title: "Inventory" },
+        meta: { requiresAuth: true }
       },
       { path: "orders",       
         name: "staff-orders",       
         component: () => import("../views/Orders.vue"),             
-        meta: { title: "Orders" } 
+        meta: { title: "Orders" } ,
+        meta: { requiresAuth: true }
       },
       { path: "team",         
         name: "staff-team",         
         component: () => import("../views/Team.vue"),               
-        meta: { title: "Team" } 
+        meta: { title: "Team" } ,
+        meta: { requiresAuth: true }
       },
     ],
   },
@@ -127,12 +133,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  if (to.meta.requiresAuth && to.meta.adminOnly) {
-    const user = getStoredUser();
-    if (getToken() && user?.role !== "admin") {
-      return { name: "home" };
-    }
-  } else if (to.meta.requiresAuth && !getToken()) {
+  const token = getToken();
+  const user = getStoredUser();
+
+  if (to.meta.adminOnly) {
+    if (!token) return { name: "login", query: { redirect: to.fullPath } };
+    if (user?.role !== "admin") return { name: "home" };
+    return true;
+  }
+  if (to.meta.requiresAuth && !token) {
     return { name: "login", query: { redirect: to.fullPath } };
   }
   return true;

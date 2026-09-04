@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { staffLogin } from '../apiReprint.js'
 
-// --- form state ---
+const router = useRouter()
 const employeeId = ref('')
 const password = ref('')
 const totpCode = ref('')
@@ -10,6 +12,7 @@ const rememberDevice = ref(false)
 const step = ref('credentials') // 'credentials' | 'verify'
 const isSubmitting = ref(false)
 const errorMessage = ref('')
+const signedInAs = ref('')
 
 const canSubmitCredentials = computed(
   () => employeeId.value.trim().length > 0 && password.value.length > 0
@@ -25,24 +28,30 @@ async function submitCredentials() {
   errorMessage.value = ''
   isSubmitting.value = true
 
-  // TODO: replace with real auth call, e.g.
-  // const res = await fetch('/api/auth/employee/login', { method: 'POST', body: ... })
-  await new Promise((r) => setTimeout(r, 600))
-
-  isSubmitting.value = false
-  step.value = 'verify'
+  try {
+    const data = await staffLogin(employeeId.value.trim(), password.value)
+    signedInAs.value = data.user?.name || data.user?.email || employeeId.value
+    step.value = 'verify'
+  } catch (e) {
+    errorMessage.value = e.message || 'Invalid employee ID or password'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 async function submitVerification() {
   if (!canVerify.value || isSubmitting.value) return
   errorMessage.value = ''
   isSubmitting.value = true
-
-  // TODO: replace with real 2FA verification call
-  await new Promise((r) => setTimeout(r, 600))
-
-  isSubmitting.value = false
-  // errorMessage.value = 'That code didn’t match. Try again.'
+    try {
+    // The backend doesn't issue/verify real TOTP codes yet — this step is a
+    // lightweight confirmation gate before entering the portal. Once 2FA
+    // exists server-side, verify totpCode here before navigating.
+    await new Promise((r) => setTimeout(r, 300))
+    router.push('/staff/dashboard')
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 function backToCredentials() {
