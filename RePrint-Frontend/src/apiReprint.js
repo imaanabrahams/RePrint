@@ -152,7 +152,7 @@ const MOCK_EMPLOYEES = [
 
 export async function getEmployees() {
   try {
-    return await request('/employees')
+    return await request('/hr/employees')
   } catch {
     return MOCK_EMPLOYEES
   }
@@ -167,7 +167,7 @@ const MOCK_NOTIFICATIONS = [
 
 export async function getNotifications() {
   try {
-    return await request('/notifications')
+    return await request('/users/notifications')
   } catch {
     return MOCK_NOTIFICATIONS
   }

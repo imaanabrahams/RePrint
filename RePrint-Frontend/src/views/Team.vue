@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getEmployees } from '@/services/api'
+import { getEmployees } from '@/apiReprint.js'
 
 const employees = ref([])
 const loading = ref(true)

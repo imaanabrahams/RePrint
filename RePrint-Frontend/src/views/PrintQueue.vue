@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getOrders } from '@/services/api'
+import { getOrders } from '@/apiReprint.js'
 
 // This page shows orders currently in production — i.e. orders whose
 // `status` (a real column on the orders table) is confirmed, printing,

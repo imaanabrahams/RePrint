@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getOrders, getMaterials, getEmployees, getNotifications } from '@/services/api'
+import { getOrders, getMaterials, getEmployees, getNotifications } from '@/apiReprint.js'
 
 const orders = ref([])
 const materials = ref([])

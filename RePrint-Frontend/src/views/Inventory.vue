@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getMaterials } from '@/services/api'
+import { getMaterials } from '@/apiReprint.js'
 
 // The `materials` table only tracks a boolean `in_stock` — there's no
 // quantity or reorder-threshold column, so this page shows stock as a

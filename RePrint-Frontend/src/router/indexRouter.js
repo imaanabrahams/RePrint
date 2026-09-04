@@ -89,35 +89,30 @@ export const routes = [
     component: () => import("../layouts/StaffLayout.vue"),
     redirect: "/staff/dashboard",
     children: [
-      {
-        path: "dashboard",
-        name: "staff-dashboard",
-        component: () => import("../views/StaffDashboard.vue"),
-        meta: { title: "Overview" },
+      { path: "dashboard",    
+        name: "staff-dashboard",    
+        component: () => import("../views/DashboardOverview.vue"), 
+        meta: { title: "Overview" } 
       },
-      {
-        path: "print-queue",
-        name: "staff-print-queue",
-        component: () => import("../views/StaffPrintQueue.vue"),
-        meta: { title: "Print queue" },
+      { path: "print-queue",  
+        name: "staff-print-queue",  
+        component: () => import("../views/PrintQueue.vue"),         
+        meta: { title: "Print queue" } 
       },
-      {
-        path: "inventory",
-        name: "staff-inventory",
-        component: () => import("../views/StaffInventory.vue"),
-        meta: { title: "Inventory" },
+      { path: "inventory",    
+        name: "staff-inventory",    
+        component: () => import("../views/Inventory.vue"),          
+        meta: { title: "Inventory" } 
       },
-      {
-        path: "orders",
-        name: "staff-orders",
-        component: () => import("../views/StaffOrders.vue"),
-        meta: { title: "Orders" },
+      { path: "orders",       
+        name: "staff-orders",       
+        component: () => import("../views/Orders.vue"),             
+        meta: { title: "Orders" } 
       },
-      {
-        path: "team",
-        name: "staff-team",
-        component: () => import("../views/StaffTeam.vue"),
-        meta: { title: "Team" },
+      { path: "team",         
+        name: "staff-team",         
+        component: () => import("../views/Team.vue"),               
+        meta: { title: "Team" } 
       },
     ],
   },
