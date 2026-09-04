@@ -3,6 +3,7 @@ import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Navbar from './components/NavbarComp.vue'
 import Footer from './components/FooterComp.vue'
+import DemoDataBanner from './components/DemoDataBanner.vue'
 import { useProductsStore } from './stores/productsStores.js'
 
 const route = useRoute()
@@ -15,6 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <DemoDataBanner />
   <Navbar v-if="!isStaffArea" />
   <main class="app-main">
     <RouterView />

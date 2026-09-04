@@ -1,5 +1,5 @@
 const BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '')
-
+import { markMockFallback } from './apiStatus.js'
 const TOKEN_KEY = 'reprint_token'
 const USER_KEY = 'reprint_user'
 
@@ -120,10 +120,10 @@ export async function getOrders() {
   try {
     return await request('/orders')
   } catch {
+    markMockFallback('/orders')
     return MOCK_ORDERS
   }
 }
-
 const MOCK_MATERIALS = [
   { id: 1, name: 'PLA', description: 'Standard PLA filament', color: 'Charcoal', price_per_gram: 0.18, properties: { type: 'virgin' }, in_stock: true },
   { id: 2, name: 'PLA', description: 'Recycled PLA filament', color: 'Ocean Blue', price_per_gram: 0.15, properties: { type: 'recycled' }, in_stock: true },
@@ -137,6 +137,7 @@ export async function getMaterials() {
   try {
     return await request('/materials', { auth: false })
   } catch {
+    markMockFallback('/materials')
     return MOCK_MATERIALS
   }
 }
@@ -154,6 +155,7 @@ export async function getEmployees() {
   try {
     return await request('/hr/employees')
   } catch {
+    markMockFallback('/hr/employees')
     return MOCK_EMPLOYEES
   }
 }
@@ -169,6 +171,7 @@ export async function getNotifications() {
   try {
     return await request('/users/notifications')
   } catch {
+    markMockFallback('/users/notifications')
     return MOCK_NOTIFICATIONS
   }
 }
