@@ -3,16 +3,45 @@ import fs from 'fs';
 import path from 'path';
 import 'dotenv/config';
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'reprint_api',
-  port: process.env.DB_PORT || 3307,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+function parseDatabaseUrl(url) {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    return {
+      host: u.hostname,
+      port: u.port ? Number(u.port) : 3306,
+      user: decodeURIComponent(u.username),
+      password: decodeURIComponent(u.password),
+      database: u.pathname.replace(/^\//, ''),
+    };
+  } catch {
+    return null;
+  }
+}
+
+const dbUrl = parseDatabaseUrl(process.env.DATABASE_URL);
+
+const pool = dbUrl
+  ? mysql.createPool({
+      host: dbUrl.host,
+      user: dbUrl.user,
+      password: dbUrl.password,
+      database: dbUrl.database,
+      port: dbUrl.port,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+    })
+  : mysql.createPool({
+      host: process.env.DB_HOST || 'localhost',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'reprint_api',
+      port: process.env.DB_PORT || 3307,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+    });
 
 // Initialize tables on startup
 const initDB = async () => {

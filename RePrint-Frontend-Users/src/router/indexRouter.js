@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
 import HomeView from "../views/Home.vue";
 import { getToken, getStoredUser } from "../apiReprint.js";
 
@@ -124,7 +124,7 @@ export const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: import.meta.env.VITE_GH_PAGES === 'true' ? createWebHashHistory('/RePrint/') : createWebHistory(),
   routes,
   scrollBehavior() {
     return { top: 0 };

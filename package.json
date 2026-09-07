@@ -1,0 +1,20 @@
+{
+  "name": "reprint-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:frontend": "cd RePrint-Frontend-Users && npm install",
+    "install:server": "cd server && npm install",
+    "build": "npm run install:frontend && npm run build:frontend",
+    "build:frontend": "cd RePrint-Frontend-Users && npm run build",
+    "build:github": "cd RePrint-Frontend-Users && GH_PAGES=true VITE_GH_PAGES=true npm run build",
+    "start": "cd server && node server.js",
+    "dev": "npm run install:server && npm run start",
+    "setup:db": "cd server && npm run setup",
+    "seed:db": "cd server && npm run seed"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
