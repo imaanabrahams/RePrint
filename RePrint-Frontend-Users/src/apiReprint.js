@@ -1,4 +1,5 @@
 const BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '')
+import { markMockFallback } from './apiStatus.js'
 
 const TOKEN_KEY = 'reprint_token'
 const USER_KEY = 'reprint_user'
@@ -120,6 +121,7 @@ export async function getOrders() {
   try {
     return await request('/orders')
   } catch {
+    markMockFallback('/orders')
     return MOCK_ORDERS
   }
 }
@@ -137,6 +139,7 @@ export async function getMaterials() {
   try {
     return await request('/materials', { auth: false })
   } catch {
+    markMockFallback('/materials')
     return MOCK_MATERIALS
   }
 }
@@ -152,8 +155,9 @@ const MOCK_EMPLOYEES = [
 
 export async function getEmployees() {
   try {
-    return await request('/employees')
+    return await request('/hr/employees')
   } catch {
+    markMockFallback('/hr/employees')
     return MOCK_EMPLOYEES
   }
 }
@@ -167,8 +171,9 @@ const MOCK_NOTIFICATIONS = [
 
 export async function getNotifications() {
   try {
-    return await request('/notifications')
+    return await request('/users/notifications')
   } catch {
+    markMockFallback('/users/notifications')
     return MOCK_NOTIFICATIONS
   }
 }

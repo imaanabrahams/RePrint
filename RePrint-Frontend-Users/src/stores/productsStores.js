@@ -10,6 +10,7 @@ import p7 from "../assets/p7.png";
 import best1 from "../assets/best1.png";
 import best2 from "../assets/best2.png";
 import best3 from "../assets/best3.png";
+import { markMockFallback } from '../apiStatus.js'
 
 const localCatalog = [
   {
@@ -187,10 +188,12 @@ export const useProductsStore = defineStore("products", {
           // Fall back to local catalog if API products don't have images
           this.products = localCatalog;
           this.source = "local";
+          markMockFallback('/products (no image_url on returned rows)');
         }
       } catch {
         this.products = localCatalog;
         this.source = "local";
+        markMockFallback('/products');
       } finally {
         this.loaded = true;
       }

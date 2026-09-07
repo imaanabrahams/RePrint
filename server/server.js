@@ -1,125 +1,79 @@
-import express from 'express'
-import cors from 'cors'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-import { products as seedProducts, users as seedUsers, employees as seedEmployees, shifts as seedShifts } from './data.js'
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import authRoutes from './src/routes/auth.js';
+import productRoutes from './src/routes/products.js';
+import materialRoutes from './src/routes/materials.js';
+import orderRoutes from './src/routes/orders.js';
+import designRoutes from './src/routes/designs.js';
+import adminRoutes from './src/routes/admin.js';
+import userRoutes from './src/routes/users.js';
+import hrRoutes from './src/routes/hr.js';
+import paymentRoutes from './src/routes/payments.js';
+import consultationRoutes from './src/routes/consultations.js';
 
-const app = express()
-const PORT = process.env.PORT || 5000
-const JWT_SECRET = process.env.JWT_SECRET || 'reprint-dev-secret-change-in-production'
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/materials', materialRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/designs', designRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/hr', hrRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/consultations', consultationRoutes);
 
-const users = seedUsers.map(({ password, ...rest }) => ({ ...rest, password: bcrypt.hashSync(password, 10) }))
-const employees = [...seedEmployees]
-const shifts = [...seedShifts]
-let nextUserId = users.length + 1
-
-function authMiddleware(req, res, next) {
-  const header = req.headers.authorization
-  if (!header || !header.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing or invalid authorization header' })
-  }
-  try {
-    const token = header.split(' ')[1]
-    const decoded = jwt.verify(token, JWT_SECRET)
-    req.user = decoded
-    next()
-  } catch {
-    return res.status(401).json({ error: 'Invalid or expired token' })
-  }
-}
-
-function adminMiddleware(req, res, next) {
-  if (req.user?.role !== 'admin') {
-    return res.status(403).json({ error: 'Admin access required' })
-  }
-  next()
-}
-
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() })
-})
-
-app.post('/auth/register', (req, res) => {
-  const { name, email, password } = req.body
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: 'Name, email and password are required' })
-  }
-  if (users.find((u) => u.email === email)) {
-    return res.status(409).json({ error: 'Email already registered' })
-  }
-  const hashed = bcrypt.hashSync(password, 10)
-  const user = { id: nextUserId++, email, name, password: hashed, role: 'user' }
-  users.push(user)
-  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' })
-  res.status(201).json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } })
-})
-
-app.post('/auth/login', (req, res) => {
-  const { email, password } = req.body
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' })
-  }
-  const user = users.find((u) => u.email === email)
-  if (!user) {
-    return res.status(401).json({ error: 'Invalid email or password' })
-  }
-  const valid = bcrypt.compareSync(password, user.password)
-  if (!valid) {
-    return res.status(401).json({ error: 'Invalid email or password' })
-  }
-  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' })
-  res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } })
-})
-
-app.get('/products', (_req, res) => {
-  res.json(seedProducts)
-})
-
-app.get('/hr/reports/overview', authMiddleware, adminMiddleware, (_req, res) => {
-  const activeEmployees = employees.filter((e) => e.status === 'active')
-  const today = new Date().toISOString().slice(0, 10)
-  const shiftsToday = shifts.filter((s) => s.shift_date === today)
-  const totalPayroll = activeEmployees.reduce((sum, e) => sum + e.salary, 0)
-
-  const deptMap = {}
-  activeEmployees.forEach((e) => {
-    deptMap[e.department] = (deptMap[e.department] || 0) + 1
-  })
-  const byDepartment = Object.entries(deptMap).map(([department, count]) => ({ department, count }))
-
-  const recentHires = [...activeEmployees]
-    .sort((a, b) => new Date(b.hire_date) - new Date(a.hire_date))
-    .slice(0, 5)
-    .map((e) => ({ id: e.id, name: e.name, position: e.position, department: e.department, hire_date: e.hire_date }))
-
+app.get('/api/health', (req, res) => {
   res.json({
-    totalEmployees: activeEmployees.length,
-    shiftsToday: shiftsToday.length,
-    totalPayroll,
-    byDepartment,
-    recentHires,
-  })
-})
+    status: 'running',
+    service: 'RePrint 3D API',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+  });
+});
 
-app.get('/hr/employees', authMiddleware, adminMiddleware, (_req, res) => {
-  res.json(employees)
-})
+// Product images (copied from the frontend assets)
+app.use('/images', express.static(path.join(import.meta.dirname, 'public', 'images')));
 
-app.get('/hr/shifts', authMiddleware, adminMiddleware, (_req, res) => {
-  res.json(shifts)
-})
+// Serve the built frontend (dist) when it exists.
+// In development the Vite dev server proxies /api and /images here instead.
+const clientDistCandidates = [
+  path.join(import.meta.dirname, '..', 'RePrint-Frontend-Users', 'dist'),
+  path.join(import.meta.dirname, '..', 'RePrint-Frontend', 'dist'),
+  path.join(import.meta.dirname, '..', 'RePrint', 'dist'),
+];
+const clientDist = clientDistCandidates.find((p) => fs.existsSync(p));
+if (clientDist) {
+  app.use(express.static(clientDist));
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' || req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
 
-app.use('/images', express.static(join(__dirname, '..', 'src', 'assets')))
-app.use('/images', express.static(join(__dirname, '..', 'public')))
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
 
 app.listen(PORT, () => {
-  console.log(`RePrint API running on http://localhost:${PORT}`)
-})
+  console.log(`
+  ============================================
+    RePrint 3D API Server
+    Running on http://localhost:${PORT}
+    API Base: http://localhost:${PORT}/api
+    Frontend: ${fs.existsSync(clientDist) ? `http://localhost:${PORT} (serving ${clientDist})` : 'Vite dev server (npm run dev in RePrint)'}
+  ============================================
+  `);
+});
+
+export default app;
