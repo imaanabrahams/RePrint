@@ -82,11 +82,9 @@ function backToCredentials() {
           <p class="subheading">Use your RePrint employee ID and password.</p>
 
           <div class="cred-box">
-            <p class="cred-title">Demo staff accounts</p>
+            <p class="cred-title">Demo admin credentials</p>
             <ul class="cred-list">
-              <li><strong>EMP-001</strong> &middot; aisha.d@reprint.co.za &middot; staff123</li>
-              <li><strong>EMP-002</strong> &middot; thabo.m@reprint.co.za &middot; staff123</li>
-              <li><strong>EMP-003</strong> &middot; chantelle.a@reprint.co.za &middot; staff123</li>
+              <li><strong>Admin</strong> &middot; admin@reprint.com &middot; password123</li>
             </ul>
           </div>
 
