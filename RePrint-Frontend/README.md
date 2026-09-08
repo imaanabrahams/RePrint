@@ -1,189 +1,153 @@
-# RePrint
+# RePrint Frontend
 
-A full-stack e-commerce storefront for 3D-printed products. The **Vue 3 frontend** (this repository) lets customers browse a curated catalogue of home decor, office, garden, gaming and toy items, manage a shopping cart and wishlist, and sign up or log in to an account. The **Express backend** (`server/`) powers the API, authentication, and the HR admin dashboard.
+The Vue 3 storefront for RePrint — a custom 3D printing studio. Customers can browse the catalogue, manage a cart and wishlist, create custom designs, book consultations, and sign up or log in. Staff and admins get their own portals for dashboards, orders, inventory, print queue, team and HR.
 
-## Tech Stack
+## Architecture
+
+This repository contains the **frontend only**. The Express + MySQL backend API lives in the separate **RePrint-API** repository.
 
 | Layer | Tool |
 |-------|------|
-| Frontend framework | Vue 3 (`<script setup>` SFCs) |
-| Build tool | Vite 8 |
-| Routing | Vue Router 4 (history mode) |
-| State management | Pinia 4 |
+| Frontend | Vue 3 (`<script setup>` SFCs) |
+| Build tool | Vite |
+| Routing | Vue Router 4 |
+| State | Pinia 4 |
 | Styling | Scoped CSS with CSS custom properties |
-| Backend API | Express/Node (`server/`) |
-| Authentication | JWT + bcrypt |
+| Auth | JWT (stored in `localStorage` as `reprint_token`) |
 
 ## Getting Started
 
 ### Prerequisites
 
 - **Node.js** 18+ (recommended 20+)
-- **npm** (ships with Node) or another package manager
+- A running instance of the **RePrint-API** backend on `http://localhost:5000`
 
 ### Install
 
 ```bash
-# From the project root
-npm install           # frontend dependencies
-npm install --prefix server   # backend dependencies
-``` 
-
-### Run everything (recommended)
-
-```bash
-npm run dev:all
+npm install
 ```
 
-This starts both servers with a single command:
-- Frontend (Vite): **http://localhost:5173**
-- Backend (API): **http://localhost:5000**
-
-### Run servers separately
+### Run
 
 ```bash
-npm run dev:api      # start only the API on http://localhost:5000
-npm run dev          # start only the Vite frontend on http://localhost:5173
+npm run dev        # Vite dev server on http://localhost:5173
 ```
 
-The app is served at **http://localhost:5173**. API requests (`/api` and `/images`) are proxied to `http://localhost:5000` via the Vite config.
+API requests (`/api` and `/images`) are proxied to `http://localhost:5000` via the Vite config during development.
 
-### Demo accounts
+### Build
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | `admin@reprint.com` | `password123` |
-| User | `user@reprint.com` | `user123` |
-
-### Other Commands
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start Vite dev server with HMR |
-| `npm run dev:api` | Start the backend API with auto-reload |
-| `npm run dev:all` | Start frontend + backend together |
-| `npm run start:api` | Start the backend API (no watch) |
-| `npm run build` | Production build to `dist/` |
-| `npm run preview` | Preview the production build locally |
+```bash
+npm run build      # production build to dist/
+npm run preview    # preview the production build
+```
 
 ## Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `VITE_API_URL` | `/api` | Base URL for the backend API. Override if your API runs on a different host/port. |
+| `VITE_API_URL` | `/api` | Base URL of the backend API. Override for a hosted backend. |
 
-Create a `.env` file in the project root for local overrides. See `.gitignore` for the convention.
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Vite dev server with HMR |
+| `npm run build` | Production build to `dist/` |
+| `npm run preview` | Preview the production build |
+| `npm run test` | Run the Vitest suite |
+| `npm run test:coverage` | Run tests with coverage report |
 
 ## Project Structure
 
 ```
-RePrint/
-├── index.html              # HTML entry point
-├── vite.config.js          # Vite config (Vue plugin, API proxy)
+RePrint-Frontend/
+├── index.html                  # HTML entry point
+├── vite.config.js              # Vite config (Vue plugin, API proxy, Vitest)
 ├── package.json
 ├── public/
 │   ├── favicon.svg
 │   └── icons.svg
-├── server/                 # Express backend API (RePrint-API)
-│   ├── server.js           # Express app, routes, middleware, static files
-│   ├── data.js             # In-memory seed data (products, users, HR)
-│   └── package.json
-├── src/
-│   ├── main.js             # App bootstrap (Vue, Pinia, Router)
-│   ├── App.vue             # Root layout (Navbar + RouterView + Footer)
-│   ├── api.js              # HTTP client, auth helpers, session storage
-│   ├── currency.js          # ZAR currency formatting
-│   ├── style.css            # Global styles & CSS custom properties
-│   ├── router/
-│   │   └── index.js         # Route definitions & navigation guards
-│   ├── stores/
-│   │   ├── auth.js          # Authentication (login/logout, token, user)
-│   │   ├── cart.js          # Shopping cart (add, update, remove, totals)
-│   │   ├── products.js      # Product catalogue (API + local fallback)
-│   │   └── wishlist.js      # Wishlist (toggle, add, remove)
-│   ├── components/
-│   │   ├── Navbar.vue       # Sticky nav with cart/wishlist badges
-│   │   ├── Footer.vue       # Site footer
-│   │   ├── ProductCard.vue  # Reusable product card
-│   │   └── RatingStars.vue  # Star rating display
-│   ├── views/
-│   │   ├── HomeView.vue     # Landing page with hero & featured items
-│   │   ├── ShopView.vue     # Full catalogue with filtering
-│   │   ├── ProductView.vue  # Single product detail page
-│   │   ├── CreateView.vue   # Custom design / request page
-│   │   ├── CartView.vue     # Shopping cart
-│   │   ├── WishlistView.vue # Saved items
-│   │   ├── LoginView.vue    # User login
-│   │   ├── SignupView.vue   # User registration
-│   │   ├── ContactView.vue  # Contact form / info
-│   │   └── AdminView.vue    # Admin dashboard (auth-protected)
-│   └── assets/              # Images (product photos, hero, icons)
-└── dist/                    # Production build output
+└── src/
+    ├── mainReprint.js          # App bootstrap (Vue, Pinia, Router)
+    ├── AppReprint.vue          # Root layout (Navbar + RouterView + Footer)
+    ├── apiReprint.js           # HTTP client, auth helpers, session storage
+    ├── apiStatus.js            # API/mock-data status flag
+    ├── currencyReprint.js      # ZAR currency formatting
+    ├── style.css               # Global styles & CSS custom properties
+    ├── assets/                 # Images (products, hero, icons), staff CSS
+    ├── router/
+    │   └── indexRouter.js      # Route definitions & navigation guards
+    ├── stores/
+    │   ├── authStores.js       # Auth state (login/logout, token, user)
+    │   ├── cartStores.js       # Shopping cart
+    │   ├── productsStores.js   # Product catalogue (API + fallback)
+    │   └── wishlistStores.js   # Wishlist
+    ├── components/
+    │   ├── NavbarComp.vue      # Sticky nav with cart/wishlist badges
+    │   ├── FooterComp.vue      # Site footer
+    │   ├── ProductcardComp.vue # Reusable product card
+    │   ├── RatingstarsComp.vue # Star rating display
+    │   └── DemoDataBanner.vue  # Banner when running on mock data
+    ├── layouts/
+    │   └── StaffLayout.vue     # Staff portal layout
+    └── views/
+        ├── Home.vue            # Landing page
+        ├── Shop.vue            # Catalogue with filtering
+        ├── Product.vue         # Product detail
+        ├── Create.vue          # Custom design request
+        ├── Cart.vue            # Shopping cart
+        ├── Wishlist.vue        # Saved items
+        ├── Login.vue           # User login
+        ├── Signup.vue          # Registration
+        ├── Contact.vue         # Contact
+        ├── Admin.vue           # Admin/HR dashboard
+        ├── StaffLogin.vue      # Staff login
+        ├── StaffDashboard.vue  # Staff overview
+        ├── StaffInventory.vue  # Inventory
+        ├── StaffOrders.vue     # Orders
+        ├── StaffPrintQueue.vue # Print queue
+        └── StaffTeam.vue       # Team roster
 ```
 
-## Pages & Features
+## Pages
 
-| Route | View | Description |
-|-------|------|-------------|
-| `/` | HomeView | Hero banner, featured products, call-to-action sections |
-| `/shop` | ShopView | Browse all products, filter by category |
-| `/product/:id` | ProductView | Product detail, options selector, add-to-cart / wishlist |
-| `/create` | CreateView | Request a custom 3D-printed design |
-| `/cart` | CartView | View cart, update quantities, proceed to checkout |
-| `/wishlist` | WishlistView | Saved products for later |
-| `/login` | LoginView | Email + password login |
-| `/signup` | SignupView | New account registration |
-| `/contact` | ContactView | Contact form and team info |
-| `/admin` | AdminView | Admin dashboard (requires authenticated admin user) |
+| Route | Description |
+|-------|-------------|
+| `/` | Home |
+| `/shop` | Browse all products, filter by category |
+| `/product/:id` | Product detail, add to cart / wishlist |
+| `/create` | Request a custom 3D-printed design |
+| `/cart` | Cart, update quantities, checkout |
+| `/wishlist` | Saved products |
+| `/login` | Login |
+| `/signup` | Registration |
+| `/contact` | Contact form and team info |
+| `/staff/login` | Staff portal login |
+| `/staff/*` | Staff dashboard, print queue, inventory, orders, team |
+| `/hr/*` | Admin dashboard, employees, shifts, orders, materials |
 
-## State Management
+## Demo Accounts
 
-All stores live in `src/stores/` and use Pinia's Composition API style:
-
-- **auth** -- Tracks JWT token and user object in `localStorage`. Exposes `isAuthenticated` and `isAdmin` computed properties.
-- **cart** -- In-memory cart with `addToCart`, `updateQuantity`, `removeFromCart`, and `clear`. Derives `count` and `subtotal`.
-- **products** -- Loads products from the API on mount; falls back to a hardcoded local catalogue of 10 items if the API is unavailable or returns data without images.
-- **wishlist** -- Toggle-based wishlist with `add`, `remove`, and `isWished` check.
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@reprint.com` | `password123` |
+| Customer | `john@example.com` | `password123` |
+| Staff | `aisha.d@reprint.co.za` | `staff123` |
 
 ## API Integration
 
-The frontend communicates with the Express backend through `src/api.js`:
+The frontend talks to the RePrint-API backend through `src/apiReprint.js`:
 
-- **Base URL**: Configurable via `VITE_API_URL` (defaults to `/api`).
-- **Authentication**: JWT Bearer token stored in `localStorage` under `reprint_token`. Passwords are hashed with bcrypt.
-- **Endpoints**:
-  - `GET /health` — health check
-  - `POST /auth/login` — user login
-  - `POST /auth/register` — new account
-  - `GET /products` — product catalogue
-  - `GET /hr/reports/overview` — admin dashboard stats (admin only)
-  - `GET /hr/employees` — employee list (admin only)
-  - `GET /hr/shifts` — shift schedule (admin only)
-  - `GET /images/*` — product images (served from `src/assets`)
-- **Proxy**: Vite rewrites `/api/*` → `http://localhost:5000/*` and proxies `/images` to `http://localhost:5000` during development.
+- **Base URL**: `VITE_API_URL` (defaults to `/api`).
+- **Auth**: JWT Bearer token in `localStorage` under `reprint_token`.
+- If the API is unreachable, the app falls back to hardcoded demo data and shows a "demo data" banner.
 
-## Styling
+## Testing
 
-Global styles and design tokens are defined in `src/style.css` using CSS custom properties:
+```bash
+npm run test
+```
 
-| Variable | Value | Usage |
-|----------|-------|-------|
-| `--bg` | `#DAFFEF` | Page background |
-| `--bg-card` | `#D0FFD6` | Card / surface background |
-| `--primary` | `#558564` | Primary brand green |
-| `--accent` | `#FFCFD2` | Accent pink |
-| `--dark` | `#0A0B10` | Text color |
-| `--star` | `#995E62` | Rating stars & badges |
-
-Components use scoped CSS. The font stack is Poppins with system-ui fallbacks.
-
-## Routing & Guards
-
-- Uses **history mode** (`createWebHistory`).
-- The `/admin` route requires authentication (`meta.requiresAuth`) and admin role (`meta.adminOnly`).
-- Unauthenticated users are redirected to `/admin?login=1`.
-- Scroll behavior resets to top on every navigation.
-
-## License
-
-This project is private and not currently licensed for public distribution.
+Runs the Vitest suite (components, stores, router, API client).
