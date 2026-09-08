@@ -370,7 +370,7 @@ Current connection details:
 ```js
 host: 'localhost'
 user: 'root'
-password: 'Kirsten.L1404'
+password: '<your-db-password>'
 database: 'reprint_api'
 ```
 

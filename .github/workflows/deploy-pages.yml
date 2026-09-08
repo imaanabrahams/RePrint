@@ -26,14 +26,14 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: RePrint-Frontend-Users/package-lock.json
+          cache-dependency-path: RePrint-Frontend/package-lock.json
 
       - name: Install dependencies
-        working-directory: RePrint-Frontend-Users
+        working-directory: RePrint-Frontend
         run: npm ci
 
       - name: Build
-        working-directory: RePrint-Frontend-Users
+        working-directory: RePrint-Frontend
         run: GH_PAGES=true VITE_GH_PAGES=true npm run build
 
       - name: Setup Pages
@@ -42,7 +42,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: RePrint-Frontend-Users/dist
+          path: RePrint-Frontend/dist
 
   deploy:
     needs: build

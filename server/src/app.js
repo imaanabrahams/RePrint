@@ -10,8 +10,8 @@ import consultationRoutes from './routes/consultations.js';
 import orderRoutes from './routes/orders.js';
 import userRoutes from './routes/users.js';
 import authRoutes from './routes/auth.js';
-import wishlistRoutes from './routes/wishlistRoutes.js';
-import notificationRoutes from './routes/notificationRoutes.js';
+import adminRoutes from './routes/admin.js';
+import hrRoutes from './routes/hr.js';
 
 const app = express();
 
@@ -34,7 +34,7 @@ app.use('/api/consultations', consultationRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/wishlist', wishlistRoutes);
-app.use('/api/notifications', notificationRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/hr', hrRoutes);
 
 export default app;
