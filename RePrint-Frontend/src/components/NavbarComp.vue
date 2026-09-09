@@ -12,19 +12,16 @@ const wishlist = useWishlistStore();
 const auth = useAuthStore();
 const open = ref(false);
 
-const links = computed(() => {
-  const base = [
-    { to: "/", label: "Home" },
-    { to: "/shop", label: "Shop" },
-    { to: "/create", label: "Create" },
-    { to: "/contact", label: "Contact" },
-  ];
-  if (auth.isAdmin) {
-    base.push({ to: "/hr", label: "HR System" });
-  }
-  base.push({ to: "/staff/login", label: "Staff Portal" });
-  return base;
-});
+const links = [
+  { to: "/", label: "Home" },
+  { to: "/shop", label: "Shop" },
+  { to: "/create", label: "Create" },
+  { to: "/contact", label: "Contact" },
+];
+
+const adminActive = computed(() =>
+  route.path === "/admin" || route.path.startsWith("/hr") || route.path.startsWith("/staff")
+);
 
 function isActive(to) {
   if (to === "/") return route.path === "/";
@@ -73,6 +70,36 @@ function isActive(to) {
       </nav>
 
       <div class="actions">
+        <RouterLink
+          v-if="auth.isAdmin"
+          to="/admin"
+          class="cart-btn"
+          :class="{ active: adminActive }"
+          aria-label="Admin"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2.5 20 5.5v6c0 4.5-3.2 8.2-8 9.8-4.8-1.6-8-5.3-8-9.8v-6l8-3z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8.5 12l2.3 2.3 4.7-4.8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </RouterLink>
+
         <RouterLink to="/wishlist" class="cart-btn heart" aria-label="Wishlist">
           <svg
             width="23"
@@ -256,6 +283,10 @@ function isActive(to) {
 
 .cart-btn:hover {
   background: rgba(85, 133, 100, 0.12);
+}
+
+.cart-btn.active {
+  background: rgba(85, 133, 100, 0.18);
 }
 
 .count {

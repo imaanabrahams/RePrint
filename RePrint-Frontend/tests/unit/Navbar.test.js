@@ -50,24 +50,26 @@ describe("Navbar", () => {
     expect(wrapper.find(".nav-cta").text()).toBe("Account");
   });
 
-  it("adds the HR system link for admins", () => {
+  it("shows the admin icon for admins", () => {
     localStorage.setItem("reprint_token", "t");
     localStorage.setItem(
       "reprint_user",
       JSON.stringify({ id: 1, role: "admin" }),
     );
     const wrapper = mount(Navbar, { global: { plugins: [pinia] } });
-    expect(wrapper.text()).toContain("HR System");
+    expect(wrapper.find('[aria-label="Admin"]').exists()).toBe(true);
   });
 
-  it("does not show the HR system link for regular users", () => {
+  it("hides the admin icon and staff links for regular users", () => {
     localStorage.setItem("reprint_token", "t");
     localStorage.setItem(
       "reprint_user",
       JSON.stringify({ id: 1, role: "user" }),
     );
     const wrapper = mount(Navbar, { global: { plugins: [pinia] } });
+    expect(wrapper.find('[aria-label="Admin"]').exists()).toBe(false);
     expect(wrapper.text()).not.toContain("HR System");
+    expect(wrapper.text()).not.toContain("Staff Portal");
   });
 
   it("displays cart and wishlist badge counts", () => {
