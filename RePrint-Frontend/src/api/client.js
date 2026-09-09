@@ -1,5 +1,14 @@
 const BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '')
-import { markMockFallback } from './status.js'
+// Origin that also serves static assets (e.g. /images/*) next to the API.
+const API_ORIGIN = BASE_URL.replace(/\/api$/, '')
+
+export function resolveApiUrl(path) {
+  if (!path) return ''
+  if (/^https?:\/\//.test(path)) return path
+  return `${API_ORIGIN}${path}`
+}
+
+import { markMockFallback, clearMockFallback } from './status.js'
 
 const TOKEN_KEY = 'reprint_token'
 const USER_KEY = 'reprint_user'
@@ -56,6 +65,7 @@ async function request(path, { method = 'GET', body, auth = true } = {}) {
     throw err
   }
 
+  clearMockFallback()
   return data
 }
 
@@ -120,8 +130,8 @@ const MOCK_ORDERS = [
 export async function getOrders() {
   try {
     return await request('/orders')
-  } catch {
-    markMockFallback('/orders')
+  } catch (err) {
+    markMockFallback('/orders', err)
     return MOCK_ORDERS
   }
 }
@@ -138,8 +148,8 @@ const MOCK_MATERIALS = [
 export async function getMaterials() {
   try {
     return await request('/materials', { auth: false })
-  } catch {
-    markMockFallback('/materials')
+  } catch (err) {
+    markMockFallback('/materials', err)
     return MOCK_MATERIALS
   }
 }
@@ -156,8 +166,8 @@ const MOCK_EMPLOYEES = [
 export async function getEmployees() {
   try {
     return await request('/hr/employees')
-  } catch {
-    markMockFallback('/hr/employees')
+  } catch (err) {
+    markMockFallback('/hr/employees', err)
     return MOCK_EMPLOYEES
   }
 }
@@ -172,8 +182,8 @@ const MOCK_NOTIFICATIONS = [
 export async function getNotifications() {
   try {
     return await request('/users/notifications')
-  } catch {
-    markMockFallback('/users/notifications')
+  } catch (err) {
+    markMockFallback('/users/notifications', err)
     return MOCK_NOTIFICATIONS
   }
 }

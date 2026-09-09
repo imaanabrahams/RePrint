@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { api } from "../api/client";
+import { api, resolveApiUrl } from "../api/client";
 import p1 from "../assets/p1.png";
 import p2 from "../assets/p2.png";
 import p3 from "../assets/p3.png";
@@ -157,7 +157,7 @@ function toProduct(row) {
     price: Number(row.base_price),
     rating: Number(row.rating) || 4.5,
     reviews: Number(row.reviews) || 0,
-    image: row.image_url || "",
+    image: resolveApiUrl(row.image_url) || "",
     description: row.description || "",
     options: parseOptions(row.options),
     featured: row.featured === 1 || row.featured === true,
@@ -190,10 +190,10 @@ export const useProductsStore = defineStore("products", {
           this.source = "local";
           markMockFallback('/products (no image_url on returned rows)');
         }
-      } catch {
+      } catch (error) {
         this.products = localCatalog;
         this.source = "local";
-        markMockFallback('/products');
+        markMockFallback('/products', error);
       } finally {
         this.loaded = true;
       }

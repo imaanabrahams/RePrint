@@ -7,8 +7,17 @@ export const apiStatus = reactive({
   failedEndpoints: new Set(),
 })
 
-export function markMockFallback(endpoint) {
+export function markMockFallback(endpoint, error = null) {
+  // Auth failures (401/403) mean "not allowed", not "API is down" —
+  // don't show the demo-data banner for those.
+  if (error && (error.status === 401 || error.status === 403)) return
   apiStatus.usingMockData = true
   apiStatus.failedEndpoints.add(endpoint)
-  console.warn(`[RePrint] "${endpoint}" failed — showing placeholder demo data, not real data.`)
+  const reason = error && error.message ? ` (${error.message})` : ''
+  console.warn(`[RePrint] "${endpoint}" failed${reason} — showing placeholder demo data, not real data.`)
+}
+
+export function clearMockFallback() {
+  apiStatus.usingMockData = false
+  apiStatus.failedEndpoints.clear()
 }
