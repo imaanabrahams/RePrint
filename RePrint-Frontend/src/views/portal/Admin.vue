@@ -3,6 +3,11 @@ import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/authStores";
 import { api } from "../../api/client";
+import StaffDashboard from "./StaffDashboard.vue";
+import StaffPrintQueue from "./StaffPrintQueue.vue";
+import StaffInventory from "./StaffInventory.vue";
+import StaffOrders from "./StaffOrders.vue";
+import StaffTeam from "./StaffTeam.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -21,6 +26,32 @@ const tab = computed(() => route.meta.tab || "dashboard");
 function goToTab(name) {
   router.push({ name });
 }
+
+const staffTab = ref("dashboard");
+const staffNavItems = [
+  { id: "dashboard", label: "Overview" },
+  { id: "print-queue", label: "Print queue" },
+  { id: "inventory", label: "Inventory" },
+  { id: "orders", label: "Orders" },
+  { id: "team", label: "Team" },
+];
+const staffComponents = {
+  dashboard: StaffDashboard,
+  "print-queue": StaffPrintQueue,
+  inventory: StaffInventory,
+  orders: StaffOrders,
+  team: StaffTeam,
+};
+const staffEmployee = {
+  name: "Aisha Daniels",
+  role: "Production Coordinator",
+  employeeId: "RP-0142",
+  initials: "AD",
+};
+const staffGreeting = computed(() => {
+  const h = new Date().getHours();
+  return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+});
 
 const overview = ref(null);
 const employees = ref([]);
@@ -301,6 +332,13 @@ async function checkApi() {
             @click="goToTab('hr-materials')"
           >
             Materials <span class="pill">{{ materials.length }}</span>
+          </button>
+          <button
+            class="tab"
+            :class="{ active: tab === 'staff' }"
+            @click="goToTab('hr-staff')"
+          >
+            Staff
           </button>
         </div>
         <div class="toolbar-right">
@@ -596,6 +634,41 @@ async function checkApi() {
           </table>
         </div>
         <p v-else class="loading">No materials.</p>
+      </template>
+
+      <!-- STAFF PORTAL -->
+      <template v-if="tab === 'staff'">
+        <div class="staff-app staff-panel">
+          <div class="staff-head">
+            <div>
+              <span class="staff-eyebrow">{{ staffGreeting }}</span>
+              <h2 class="staff-title">Staff Portal</h2>
+            </div>
+            <div class="staff-profile">
+              <span class="staff-avatar">{{ staffEmployee.initials }}</span>
+              <span class="staff-profile-text">
+                <strong class="staff-profile-name">{{ staffEmployee.name }}</strong>
+                <span class="staff-profile-role">{{ staffEmployee.role }} · {{ staffEmployee.employeeId }}</span>
+              </span>
+            </div>
+          </div>
+
+          <nav class="staff-nav" aria-label="Staff portal sections">
+            <button
+              v-for="item in staffNavItems"
+              :key="item.id"
+              class="staff-nav-btn"
+              :class="{ active: staffTab === item.id }"
+              @click="staffTab = item.id"
+            >
+              {{ item.label }}
+            </button>
+          </nav>
+
+          <div class="staff-content">
+            <component :is="staffComponents[staffTab]" />
+          </div>
+        </div>
       </template>
     </div>
   </div>
@@ -981,6 +1054,112 @@ async function checkApi() {
 
 .filters select {
   width: 180px;
+}
+
+.staff-app {
+  --bg: #fdeef1;
+  --accent: #d16b86;
+  --accent-hover: #bb5470;
+  --accent-dark: #9c3f5a;
+  --soft: #fbe3e9;
+}
+
+.staff-panel {
+  display: block;
+  display: flow-root;
+  background: var(--bg-card);
+  border: 1px solid var(--soft);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.staff-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.staff-eyebrow {
+  color: var(--accent-dark);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.staff-title {
+  font-size: 26px;
+  margin-top: 2px;
+}
+
+.staff-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.staff-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.staff-profile-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.staff-profile-name {
+  font-size: 14px;
+}
+
+.staff-profile-role {
+  color: var(--grey);
+  font-size: 12px;
+}
+
+.staff-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 20px 0 24px;
+}
+
+.staff-nav-btn {
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--accent-dark);
+  background: var(--bg);
+  border: 1px solid var(--soft);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.staff-nav-btn:hover {
+  background: var(--soft);
+}
+
+.staff-nav-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.staff-content {
+  min-height: 200px;
 }
 
 @media (max-width: 700px) {

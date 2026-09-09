@@ -37,6 +37,12 @@ export const routes = [
     component: () => import("../views/portal/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "materials" },
   },
+  {
+    path: "/hr/staff",
+    name: "hr-staff",
+    component: () => import("../views/portal/Admin.vue"),
+    meta: { requiresAuth: true, adminOnly: true, tab: "staff" },
+  },
   { path: "/", name: "home", component: HomeView },
   {
     path: "/shop",

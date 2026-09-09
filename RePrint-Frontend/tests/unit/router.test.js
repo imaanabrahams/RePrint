@@ -36,8 +36,9 @@ describe("Router definitions", () => {
     expect(staff.children.every((c) => c.meta.title)).toBe(true);
   });
 
-  it("has five admin tabs routed to the Admin view", () => {
+  it("routes all admin tabs to the Admin view", () => {
     const adminRoutes = routes.filter((r) => r.path.startsWith("/hr"));
-    expect(adminRoutes).toHaveLength(5);
+    expect(adminRoutes).toHaveLength(6);
+    expect(adminRoutes.map((r) => r.path)).toContain("/hr/staff");
   });
 });
