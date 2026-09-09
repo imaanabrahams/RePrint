@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatRand } from "../../src/currencyReprint";
+import { formatRand } from "../../src/utils/currency";
 
 describe("formatRand", () => {
   it("prepends the Rand symbol and formats to two decimals", () => {

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import * as api from "../../src/apiReprint";
+import * as api from "../../src/api/client.js";
 
 const TOKEN_KEY = "reprint_token";
 const USER_KEY = "reprint_user";

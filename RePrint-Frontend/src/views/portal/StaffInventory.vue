@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getMaterials } from '../apiReprint.js'
+import { getMaterials } from '../../api/client.js'
 
 const materials = ref([])
 const loading = ref(true)

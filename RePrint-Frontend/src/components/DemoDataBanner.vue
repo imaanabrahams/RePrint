@@ -1,5 +1,5 @@
 <script setup>
-import { apiStatus } from '../apiStatus.js'
+import { apiStatus } from '../api/status.js'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 const BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '')
-import { markMockFallback } from './apiStatus.js'
+import { markMockFallback } from './status.js'
 
 const TOKEN_KEY = 'reprint_token'
 const USER_KEY = 'reprint_user'

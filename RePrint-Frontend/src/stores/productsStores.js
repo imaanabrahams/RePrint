@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { api } from "../apiReprint";
+import { api } from "../api/client";
 import p1 from "../assets/p1.png";
 import p2 from "../assets/p2.png";
 import p3 from "../assets/p3.png";
@@ -10,7 +10,7 @@ import p7 from "../assets/p7.png";
 import best1 from "../assets/best1.png";
 import best2 from "../assets/best2.png";
 import best3 from "../assets/best3.png";
-import { markMockFallback } from '../apiStatus.js'
+import { markMockFallback } from '../api/status.js'
 
 const localCatalog = [
   {

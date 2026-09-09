@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { staffLogin } from '../apiReprint.js'
+import { staffLogin } from '../../api/client.js'
 
 const router = useRouter()
 

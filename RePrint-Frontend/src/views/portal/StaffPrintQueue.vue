@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getOrders } from '../apiReprint.js'
+import { getOrders } from '../../api/client.js'
 
 const PRODUCTION_STATUSES = ['confirmed', 'printing', 'quality_check']
 

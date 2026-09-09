@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
 import HomeView from "../views/Home.vue";
-import { getToken, getStoredUser } from "../apiReprint.js";
+import { getToken, getStoredUser } from "../api/client.js";
 
 export const routes = [
   {
@@ -10,31 +10,31 @@ export const routes = [
   {
     path: "/hr",
     name: "hr-overview",
-    component: () => import("../views/Admin.vue"),
+    component: () => import("../views/portal/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "dashboard" },
   },
   {
     path: "/hr/employees",
     name: "hr-employees",
-    component: () => import("../views/Admin.vue"),
+    component: () => import("../views/portal/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "employees" },
   },
   {
     path: "/hr/shifts",
     name: "hr-shifts",
-    component: () => import("../views/Admin.vue"),
+    component: () => import("../views/portal/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "shifts" },
   },
   {
     path: "/hr/orders",
     name: "hr-orders",
-    component: () => import("../views/Admin.vue"),
+    component: () => import("../views/portal/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "orders" },
   },
   {
     path: "/hr/materials",
     name: "hr-materials",
-    component: () => import("../views/Admin.vue"),
+    component: () => import("../views/portal/Admin.vue"),
     meta: { requiresAuth: true, adminOnly: true, tab: "materials" },
   },
   { path: "/", name: "home", component: HomeView },
@@ -82,7 +82,7 @@ export const routes = [
   {
     path: "/staff/login",
     name: "staff-login",
-    component: () => import("../views/StaffLogin.vue"),
+    component: () => import("../views/portal/StaffLogin.vue"),
   },
   {
     path: "/staff",
@@ -92,31 +92,31 @@ export const routes = [
       {
         path: "dashboard",
         name: "staff-dashboard",
-        component: () => import("../views/StaffDashboard.vue"),
+        component: () => import("../views/portal/StaffDashboard.vue"),
         meta: { title: "Overview" },
       },
       {
         path: "print-queue",
         name: "staff-print-queue",
-        component: () => import("../views/StaffPrintQueue.vue"),
+        component: () => import("../views/portal/StaffPrintQueue.vue"),
         meta: { title: "Print queue" },
       },
       {
         path: "inventory",
         name: "staff-inventory",
-        component: () => import("../views/StaffInventory.vue"),
+        component: () => import("../views/portal/StaffInventory.vue"),
         meta: { title: "Inventory" },
       },
       {
         path: "orders",
         name: "staff-orders",
-        component: () => import("../views/StaffOrders.vue"),
+        component: () => import("../views/portal/StaffOrders.vue"),
         meta: { title: "Orders" },
       },
       {
         path: "team",
         name: "staff-team",
-        component: () => import("../views/StaffTeam.vue"),
+        component: () => import("../views/portal/StaffTeam.vue"),
         meta: { title: "Team" },
       },
     ],

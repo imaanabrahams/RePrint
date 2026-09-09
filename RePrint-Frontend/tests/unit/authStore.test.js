@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { useAuthStore } from "../../src/stores/authStores";
-import * as api from "../../src/apiReprint";
+import * as api from "../../src/api/client";
 
 const TOKEN_KEY = "reprint_token";
 const USER_KEY = "reprint_user";

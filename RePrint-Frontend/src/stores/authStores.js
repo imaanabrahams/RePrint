@@ -7,7 +7,7 @@ import {
   getToken,
   getStoredUser,
   clearSession,
-} from "../apiReprint";
+} from "../api/client";
 
 export const useAuthStore = defineStore("auth", () => {
   const token = ref(getToken() || null);

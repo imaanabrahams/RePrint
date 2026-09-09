@@ -3,7 +3,7 @@ import { useWishlistStore } from "../stores/wishlistStores.js";
 import { useCartStore } from "../stores/cartStores.js";
 import RatingStars from "../components/RatingstarsComp.vue";
 import { useRouter } from "vue-router";
-import { formatRand } from "../currencyReprint.js";
+import { formatRand } from "../utils/currency.js";
 
 const wishlist = useWishlistStore();
 const cart = useCartStore();

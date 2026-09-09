@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import Signup from "../../src/views/Signup.vue";
 import { useAuthStore } from "../../src/stores/authStores";
-import * as api from "../../src/apiReprint";
+import * as api from "../../src/api/client";
 
 const push = vi.fn();
 vi.mock("vue-router", () => ({

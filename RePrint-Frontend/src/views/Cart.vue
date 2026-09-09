@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { useCartStore } from "../stores/cartStores.js";
-import { formatRand } from "../currencyReprint.js";
+import { formatRand } from "../utils/currency.js";
 
 const cart = useCartStore();
 

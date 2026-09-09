@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 import { useCartStore } from "../stores/cartStores.js";
 import { useWishlistStore } from "../stores/wishlistStores.js";
 import RatingStars from "./RatingstarsComp.vue";
-import { formatRand } from "../currencyReprint.js";
+import { formatRand } from "../utils/currency.js";
 
 const props = defineProps({
   product: { type: Object, required: true },

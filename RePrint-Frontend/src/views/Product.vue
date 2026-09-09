@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { useProductsStore } from "../stores/productsStores.js";
 import { useCartStore } from "../stores/cartStores.js";
 import RatingStars from "../components/RatingstarsComp.vue";
-import { formatRand } from "../currencyReprint.js";
+import { formatRand } from "../utils/currency.js";
 
 const route = useRoute();
 const products = useProductsStore();

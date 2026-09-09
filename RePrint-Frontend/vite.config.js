@@ -26,7 +26,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html', 'json-summary'],
       include: ['src/**/*.{js,vue}'],
-      exclude: ['src/mainReprint.js', 'src/router/indexRouter.js'],
+      exclude: ['src/main.js', 'src/router/indexRouter.js'],
     },
   },
 })
