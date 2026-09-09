@@ -1,99 +1,114 @@
 <script setup>
-import { ref, computed } from 'vue'
-import fallbackImg from '../assets/create-design.png'
-import p2 from '../assets/p2.png'
-import p3 from '../assets/p3.png'
-import p4 from '../assets/p4.png'
-import p6 from '../assets/p6.png'
-import p7 from '../assets/p7.png'
-import fidget from '../assets/fidget.png'
-import keyring from '../assets/keyring.png'
-import best2 from '../assets/best2.png'
-import best3 from '../assets/best3.png'
-import p8 from '../assets/p8.png'
+import { ref, computed } from "vue";
+import fallbackImg from "../assets/create-design.png";
+import p2 from "../assets/p2.png";
+import p3 from "../assets/p3.png";
+import p4 from "../assets/p4.png";
+import p5 from "../assets/p5.png";
+import p6 from "../assets/p6.png";
+import p7 from "../assets/p7.png";
+import fidget from "../assets/fidget.png";
+import keyring from "../assets/keyring.png";
+import best2 from "../assets/best2.png";
+import best3 from "../assets/best3.png";
+import p8 from "../assets/p8.png";
 
 const form = ref({
-  productType: 'Phone Stand',
-  title: '',
-  size: 'Small',
-})
+  productType: "Phone Stand",
+  title: "",
+  size: "Small",
+});
 
 const imageMap = {
-  'Phone Stand': p8,
-  'Home Decor': p2,
-  'Planter': p6,
-  'Desk Organiser': p4,
-  'Cable Organiser': p3,
-  'Gaming Accessory': best3,
-  'Fidget Toy': fidget,
-  'Keyring': keyring,
-  'Jewellery Holder': best2,
-  'Toy Sweet Dispenser': p7,
-  'Custom Part': fallbackImg,
-}
+  "Phone Stand": p8,
+  "Home Decor": p2,
+  Planter: p6,
+  "Desk Organiser": p4,
+  "Modular Drawer Organiser": p4,
+  "Cable Organiser": p3,
+  "Cable Management Tray": p3,
+  "Gaming Accessory": best3,
+  "Wall Mount Headset Hook": p5,
+  "Fidget Toy": fidget,
+  Keyring: keyring,
+  "Jewellery Holder": best2,
+  "Toy Sweet Dispenser": p7,
+  "Self-Watering Plant Insert": p6,
+  "Custom Part": fallbackImg,
+};
 
-const previewImg = computed(() => imageMap[form.value.productType] || fallbackImg)
+const previewImg = computed(
+  () => imageMap[form.value.productType] || fallbackImg,
+);
 
 const productTypes = [
-  'Phone Stand',
-  'Home Decor',
-  'Planter',
-  'Desk Organiser',
-  'Cable Organiser',
-  'Gaming Accessory',
-  'Fidget Toy',
-  'Keyring',
-  'Jewellery Holder',
-  'Toy Sweet Dispenser',
-  'Custom Part',
-]
-const sizes = ['Small', 'Medium', 'Large']
+  "Phone Stand",
+  "Home Decor",
+  "Planter",
+  "Desk Organiser",
+  "Modular Drawer Organiser",
+  "Cable Organiser",
+  "Cable Management Tray",
+  "Gaming Accessory",
+  "Wall Mount Headset Hook",
+  "Fidget Toy",
+  "Keyring",
+  "Jewellery Holder",
+  "Toy Sweet Dispenser",
+  "Self-Watering Plant Insert",
+  "Custom Part",
+];
+const sizes = ["Small", "Medium", "Large"];
 const swatches = [
-  '#000000',
-  '#FFFFFF',
-  '#F5F0E6',
-  '#B5B5BC',
-  '#FFD9E8',
-  '#FFCFD2',
-  '#FDE2E4',
-  '#E8C1D0',
-  '#FFD7BA',
-  '#FFE8CF',
-  '#FFF4C2',
-  '#FBF8CC',
-  '#E4F1D1',
-  '#CDEAC0',
-  '#B5E8D5',
-  '#CCEBF5',
-  '#D6E4FF',
-  '#E3D9FF',
-  '#F0D7FF',
-  '#C9DBD1',
-]
+  "#000000",
+  "#FFFFFF",
+  "#F5F0E6",
+  "#B5B5BC",
+  "#FFD9E8",
+  "#FFCFD2",
+  "#FDE2E4",
+  "#E8C1D0",
+  "#FFD7BA",
+  "#FFE8CF",
+  "#FFF4C2",
+  "#FBF8CC",
+  "#E4F1D1",
+  "#CDEAC0",
+  "#B5E8D5",
+  "#CCEBF5",
+  "#D6E4FF",
+  "#E3D9FF",
+  "#F0D7FF",
+  "#C9DBD1",
+];
 
-const color = ref(swatches[0])
-const quantity = ref(1)
-const submitted = ref(false)
+const color = ref(swatches[0]);
+const quantity = ref(1);
+const submitted = ref(false);
 
 const previewLabel = ref(
   {
-    'Phone Stand': 'Your design',
-    'Home Decor': 'Your decor',
-    'Planter': 'Your planter',
-    'Desk Organiser': 'Your organiser',
-    'Cable Organiser': 'Your organiser',
-    'Gaming Accessory': 'Your accessory',
-    'Fidget Toy': 'Your fidget',
-    'Keyring': 'Your keyring',
-    'Jewellery Holder': 'Your holder',
-    'Toy Sweet Dispenser': 'Your sweet dispenser',
-    'Custom Part': 'Your part',
-  }[form.value.productType]
-)
+    "Phone Stand": "Your design",
+    "Home Decor": "Your decor",
+    Planter: "Your planter",
+    "Desk Organiser": "Your organiser",
+    "Modular Drawer Organiser": "Your drawer organiser",
+    "Cable Organiser": "Your organiser",
+    "Cable Management Tray": "Your cable tray",
+    "Gaming Accessory": "Your accessory",
+    "Wall Mount Headset Hook": "Your headset hook",
+    "Fidget Toy": "Your fidget",
+    Keyring: "Your keyring",
+    "Jewellery Holder": "Your holder",
+    "Toy Sweet Dispenser": "Your sweet dispenser",
+    "Self-Watering Plant Insert": "Your plant insert",
+    "Custom Part": "Your part",
+  }[form.value.productType],
+);
 
 function submit() {
-  submitted.value = true
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  submitted.value = true;
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
 
@@ -108,8 +123,13 @@ function submit() {
     <div v-if="submitted" class="success" role="status">
       <div class="check">✓</div>
       <h2>Processing your design</h2>
-      <p>Your custom product has been added to the queue. We'll confirm once it's ready to print.</p>
-      <button class="btn btn-primary" @click="submitted = false">Create another</button>
+      <p>
+        Your custom product has been added to the queue. We'll confirm once it's
+        ready to print.
+      </p>
+      <button class="btn btn-primary" @click="submitted = false">
+        Create another
+      </button>
     </div>
 
     <div v-else class="editor">
@@ -117,13 +137,19 @@ function submit() {
         <div class="field">
           <label>Product type</label>
           <select v-model="form.productType" class="input-field">
-            <option v-for="t in productTypes" :key="t" :value="t">{{ t }}</option>
+            <option v-for="t in productTypes" :key="t" :value="t">
+              {{ t }}
+            </option>
           </select>
         </div>
 
         <div class="field">
           <label>Title / caption</label>
-          <input v-model="form.title" class="input-field" placeholder="e.g. Minimal phone stand" />
+          <input
+            v-model="form.title"
+            class="input-field"
+            placeholder="e.g. Minimal phone stand"
+          />
         </div>
 
         <div class="field">
@@ -165,7 +191,9 @@ function submit() {
           </div>
         </div>
 
-        <button class="btn btn-primary create-btn" @click="submit">Create product</button>
+        <button class="btn btn-primary create-btn" @click="submit">
+          Create product
+        </button>
       </div>
 
       <div class="panel preview-panel">
@@ -237,7 +265,9 @@ function submit() {
   height: 34px;
   border-radius: 50%;
   border: 3px solid transparent;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .swatch:hover {

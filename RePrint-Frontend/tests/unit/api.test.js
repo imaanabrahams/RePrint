@@ -82,6 +82,33 @@ describe("API data functions", () => {
     expect(api.getToken()).toBe("jwt");
   });
 
+  it("queues verification and update emails without requiring authentication", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 202,
+      text: async () => JSON.stringify({ queued: true }),
+    });
+    await expect(
+      api.sendSignupEmails({
+        name: "Jane",
+        email: "jane@example.com",
+        verificationToken: "verify-token",
+      }),
+    ).resolves.toEqual({ queued: true });
+    expect(global.fetch).toHaveBeenCalledWith(
+      "/api/notifications/signup",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({
+          name: "Jane",
+          email: "jane@example.com",
+          verificationToken: "verify-token",
+          subscribeToUpdates: true,
+        }),
+      }),
+    );
+  });
+
   it("throws an error response when the API returns an error", async () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,

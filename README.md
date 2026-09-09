@@ -6,14 +6,14 @@ The Vue 3 storefront for RePrint — a custom 3D printing studio. Customers can 
 
 This repository contains the **frontend only**. The Express + MySQL backend API lives in the separate **RePrint-API** repository.
 
-| Layer | Tool |
-|-------|------|
-| Frontend | Vue 3 (`<script setup>` SFCs) |
-| Build tool | Vite |
-| Routing | Vue Router 4 |
-| State | Pinia 4 |
-| Styling | Scoped CSS with CSS custom properties |
-| Auth | JWT (stored in `localStorage` as `reprint_token`) |
+| Layer      | Tool                                              |
+| ---------- | ------------------------------------------------- |
+| Frontend   | Vue 3 (`<script setup>` SFCs)                     |
+| Build tool | Vite                                              |
+| Routing    | Vue Router 4                                      |
+| State      | Pinia 4                                           |
+| Styling    | Scoped CSS with CSS custom properties             |
+| Auth       | JWT (stored in `localStorage` as `reprint_token`) |
 
 ## Getting Started
 
@@ -45,18 +45,18 @@ npm run preview    # preview the production build
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `VITE_API_URL` | `/api` | Base URL of the backend API. Override for a hosted backend. |
+| Variable       | Default | Description                                                 |
+| -------------- | ------- | ----------------------------------------------------------- |
+| `VITE_API_URL` | `/api`  | Base URL of the backend API. Override for a hosted backend. |
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start Vite dev server with HMR |
-| `npm run build` | Production build to `dist/` |
-| `npm run preview` | Preview the production build |
-| `npm run test` | Run the Vitest suite |
+| Command                 | Description                    |
+| ----------------------- | ------------------------------ |
+| `npm run dev`           | Start Vite dev server with HMR |
+| `npm run build`         | Production build to `dist/`    |
+| `npm run preview`       | Preview the production build   |
+| `npm run test`          | Run the Vitest suite           |
 | `npm run test:coverage` | Run tests with coverage report |
 
 ## Project Structure
@@ -113,28 +113,28 @@ RePrint-Frontend/
 
 ## Pages
 
-| Route | Description |
-|-------|-------------|
-| `/` | Home |
-| `/shop` | Browse all products, filter by category |
-| `/product/:id` | Product detail, add to cart / wishlist |
-| `/create` | Request a custom 3D-printed design |
-| `/cart` | Cart, update quantities, checkout |
-| `/wishlist` | Saved products |
-| `/login` | Login |
-| `/signup` | Registration |
-| `/contact` | Contact form and team info |
-| `/staff/login` | Staff portal login |
-| `/staff/*` | Staff dashboard, print queue, inventory, orders, team |
-| `/hr/*` | Admin dashboard, employees, shifts, orders, materials |
+| Route          | Description                                           |
+| -------------- | ----------------------------------------------------- |
+| `/`            | Home                                                  |
+| `/shop`        | Browse all products, filter by category               |
+| `/product/:id` | Product detail, add to cart / wishlist                |
+| `/create`      | Request a custom 3D-printed design                    |
+| `/cart`        | Cart, update quantities, checkout                     |
+| `/wishlist`    | Saved products                                        |
+| `/login`       | Login                                                 |
+| `/signup`      | Registration                                          |
+| `/contact`     | Contact form and team info                            |
+| `/staff/login` | Staff portal login                                    |
+| `/staff/*`     | Staff dashboard, print queue, inventory, orders, team |
+| `/hr/*`        | Admin dashboard, employees, shifts, orders, materials |
 
 ## Demo Accounts
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | `admin@reprint.com` | `password123` |
-| Customer | `john@example.com` | `password123` |
-| Staff | `aisha.d@reprint.co.za` | `staff123` |
+| Role     | Email                   | Password      |
+| -------- | ----------------------- | ------------- |
+| Admin    | `admin@reprint.com`     | `password123` |
+| Customer | `john@example.com`      | `password123` |
+| Staff    | `aisha.d@reprint.co.za` | `staff123`    |
 
 ## API Integration
 
@@ -142,6 +142,7 @@ The frontend talks to the RePrint-API backend through `src/apiReprint.js`:
 
 - **Base URL**: `VITE_API_URL` (defaults to `/api`).
 - **Auth**: JWT Bearer token in `localStorage` under `reprint_token`.
+- **Signup email hook**: after registration, the frontend posts to `POST /notifications/signup` with the user's name, email, verification token, and update subscription preference. The API should queue the verification email first and the subscription/update welcome email second; delivery failures do not block account creation.
 - If the API is unreachable, the app falls back to hardcoded demo data and shows a "demo data" banner.
 
 ## Testing

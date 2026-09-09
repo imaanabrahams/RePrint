@@ -19,7 +19,7 @@ describe("Shop view", () => {
 
   it("renders all products initially", () => {
     const wrapper = mount(Shop, { global: { plugins: [router] } });
-    expect(wrapper.findAll(".card")).toHaveLength(10);
+    expect(wrapper.findAll(".card")).toHaveLength(14);
   });
 
   it("filters products by category", async () => {
@@ -34,7 +34,7 @@ describe("Shop view", () => {
 
   it("shows the item count", () => {
     const wrapper = mount(Shop, { global: { plugins: [router] } });
-    expect(wrapper.find(".count").text()).toContain("10 items");
+    expect(wrapper.find(".count").text()).toContain("14 items");
   });
 
   it("renders a category sidebar and promo box", () => {
