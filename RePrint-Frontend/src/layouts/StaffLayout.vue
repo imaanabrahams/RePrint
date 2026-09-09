@@ -58,6 +58,11 @@ const navIcons = {
         </router-link>
       </nav>
 
+      <router-link class="nav-item admin" to="/hr">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 2.5 20 5.5v6c0 4.5-3.2 8.2-8 9.8-4.8-1.6-8-5.3-8-9.8v-6l8-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12l2.3 2.3 4.7-4.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Admin system
+      </router-link>
+
       <router-link class="nav-item logout" to="/staff/login">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         Sign out

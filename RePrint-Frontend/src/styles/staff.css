@@ -81,8 +81,12 @@
   color: var(--accent-hover);
 }
 
-.staff-app .nav-item.logout {
+.staff-app .nav-item.admin {
   margin-top: auto;
+}
+
+.staff-app .nav-item.logout {
+  margin-top: 0;
   border-top: 1px solid var(--panel-border);
   padding-top: 14px;
 }
