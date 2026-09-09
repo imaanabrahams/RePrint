@@ -186,6 +186,10 @@ const localCatalog = [
   },
 ];
 
+const localImageByName = {
+  "modular drawer organiser": p4,
+};
+
 function parseOptions(raw) {
   if (Array.isArray(raw)) return raw;
   if (!raw) return [];
@@ -198,6 +202,10 @@ function parseOptions(raw) {
 }
 
 function toProduct(row) {
+  const image = row.image_url
+    ? resolveApiUrl(row.image_url)
+    : localImageByName[row.name?.trim().toLowerCase()] || "";
+
   return {
     id: row.id,
     name: row.name,
@@ -205,7 +213,7 @@ function toProduct(row) {
     price: Number(row.base_price),
     rating: Number(row.rating) || 4.5,
     reviews: Number(row.reviews) || 0,
-    image: resolveApiUrl(row.image_url) || "",
+    image,
     description: row.description || "",
     options: parseOptions(row.options),
     featured: row.featured === 1 || row.featured === true,

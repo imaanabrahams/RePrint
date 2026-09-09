@@ -56,6 +56,29 @@ describe("Products store", () => {
     expect(products.products[0].featured).toBe(true);
   });
 
+  it("uses the local organiser image when the API row has no image URL", async () => {
+    vi.spyOn(api.api, "get").mockResolvedValue([
+      {
+        id: 1,
+        name: "Desk Accessories",
+        category: "Office",
+        base_price: "100",
+        image_url: "/images/desk.png",
+      },
+      {
+        id: 11,
+        name: "Modular Drawer Organiser",
+        category: "Home Decor",
+        base_price: "399",
+        image_url: null,
+      },
+    ]);
+    const products = useProductsStore();
+    await products.load();
+    expect(products.source).toBe("api");
+    expect(products.products[1].image).toBeTruthy();
+  });
+
   it("falls back to local catalog when the API has no products", async () => {
     const getSpy = vi.spyOn(api.api, "get").mockResolvedValue([]);
     const products = useProductsStore();
