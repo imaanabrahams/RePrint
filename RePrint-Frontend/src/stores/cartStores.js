@@ -9,13 +9,18 @@ export const useCartStore = defineStore('cart', () => {
     items.value.reduce((sum, i) => sum + i.price * i.quantity, 0)
   )
 
-  function addToCart(product, quantity = 1, option = '') {
+  function addToCart(product, quantity = 1, option = '', materialId = null) {
     const key = option || 'default'
     const existing = items.value.find((i) => i.id === product.id && i.option === key)
     if (existing) {
       existing.quantity += quantity
     } else {
-      items.value.push({ ...product, option: key, quantity })
+      items.value.push({
+        ...product,
+        option: key,
+        quantity,
+        material_id: materialId || product.default_material_id || 1,
+      })
     }
   }
 

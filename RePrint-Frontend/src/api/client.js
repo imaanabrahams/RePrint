@@ -492,3 +492,44 @@ export async function getNotifications() {
     return MOCK_NOTIFICATIONS;
   }
 }
+
+export async function createOrder(orderData) {
+  return api.post("/orders", orderData);
+}
+
+export async function initiatePayfastPayment(orderId) {
+  return api.post("/payments/payfast/initiate", { order_id: orderId });
+}
+
+export async function simulatePayfastOutcome(paymentId, outcome) {
+  return api.post("/payments/payfast/simulate", {
+    m_payment_id: paymentId,
+    outcome,
+  });
+}
+
+export async function getPaymentStatus(paymentId) {
+  return api.get(`/payments/payfast/status/${paymentId}`);
+}
+
+export async function forgotPassword(email) {
+  return request("/auth/forgot-password", {
+    method: "POST",
+    auth: false,
+    body: { email },
+  });
+}
+
+export async function resetPassword(token, password) {
+  return request("/auth/reset-password", {
+    method: "POST",
+    auth: false,
+    body: { token, password },
+  });
+}
+
+export async function verifyEmail(token) {
+  return request(`/auth/verify-email?token=${encodeURIComponent(token)}`, {
+    auth: false,
+  });
+}
