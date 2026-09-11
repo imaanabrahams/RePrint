@@ -88,6 +88,7 @@ export const routes = [
     path: "/staff",
     component: () => import("../layouts/StaffLayout.vue"),
     redirect: "/staff/dashboard",
+    meta: { requiresAuth: true },
     children: [
       {
         path: "dashboard",
@@ -120,6 +121,11 @@ export const routes = [
         meta: { title: "Team" },
       },
     ],
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    component: () => import("../views/Home.vue"),
   },
 ];
 

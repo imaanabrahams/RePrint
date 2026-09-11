@@ -8,7 +8,7 @@ import { useProductsStore } from './stores/productsStores.js'
 
 const route = useRoute()
 
-const isStaffArea = computed(() => route.path.startsWith('/staff'))
+const isStaffArea = computed(() => route.path.startsWith('/staff') || route.path.startsWith('/hr') || route.path === '/admin')
 
 onMounted(() => {
   useProductsStore().load()

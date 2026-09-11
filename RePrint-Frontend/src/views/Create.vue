@@ -11,7 +11,7 @@ import fidget from "../assets/fidget.png";
 import keyring from "../assets/keyring.png";
 import best2 from "../assets/best2.png";
 import best3 from "../assets/best3.png";
-import p8 from "../assets/p8.png";
+import p8 from "../assets/p8.jpg";
 
 const form = ref({
   productType: "Phone Stand",
@@ -24,7 +24,7 @@ const imageMap = {
   "Home Decor": p2,
   Planter: p6,
   "Desk Organiser": p4,
-  "Modular Drawer Organiser": p4,
+  "Modular Drawer Organiser": p8,
   "Cable Organiser": p3,
   "Cable Management Tray": p3,
   "Gaming Accessory": best3,

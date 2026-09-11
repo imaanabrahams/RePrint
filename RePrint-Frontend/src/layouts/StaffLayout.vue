@@ -1,15 +1,18 @@
 <script setup>
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/authStores'
 
-const employee = {
-  name: 'Aisha Daniels',
-  role: 'Production Coordinator',
-  employeeId: 'RP-0142',
-  initials: 'AD',
-}
-
+const auth = useAuthStore()
+const router = useRouter()
 const route = useRoute()
+
+const employee = computed(() => ({
+  name: auth.user?.name || 'Staff Member',
+  role: auth.user?.role || 'Staff',
+  employeeId: auth.user?.employee_id || 'RP-0000',
+  initials: (auth.user?.name || 'SM').split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase(),
+}))
 
 const greeting = computed(() => {
   const h = new Date().getHours()
@@ -63,7 +66,7 @@ const navIcons = {
         Admin system
       </router-link>
 
-      <router-link class="nav-item logout" to="/staff/login">
+      <router-link class="nav-item logout" to="/staff/login" @click.prevent="auth.logout(); router.push('/staff/login')">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         Sign out
       </router-link>

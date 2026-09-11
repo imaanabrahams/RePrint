@@ -34,6 +34,11 @@ const statusFilter = ref("");
 const orderStatusFilter = ref("");
 const materialTypeFilter = ref("");
 const loadingData = ref(false);
+const editingProduct = ref(null);
+const editingOrder = ref(null);
+const editingMaterial = ref(null);
+const editingEmployee = ref(null);
+const editSaving = ref(false);
 
 const departments = computed(() => {
   const set = new Set(employees.value.map((e) => e.department).filter(Boolean));
@@ -167,6 +172,90 @@ async function checkApi() {
   } catch {
     apiUp.value = false;
   }
+}
+
+function startEditProduct(p) {
+  editingProduct.value = { ...p };
+}
+function cancelEditProduct() {
+  editingProduct.value = null;
+}
+async function saveEditProduct() {
+  if (!editingProduct.value) return;
+  editSaving.value = true;
+  try {
+    const p = editingProduct.value;
+    await api.put(`/products/${p.id}`, { name: p.name, category: p.category, base_price: p.price, description: p.description });
+  } catch {}
+  const idx = products.value.findIndex(x => x.id === editingProduct.value.id);
+  if (idx !== -1) products.value[idx] = { ...editingProduct.value, price: Number(editingProduct.value.price) };
+  editingProduct.value = null;
+  editSaving.value = false;
+}
+
+function startEditOrder(o) {
+  editingOrder.value = { ...o };
+}
+function cancelEditOrder() {
+  editingOrder.value = null;
+}
+async function saveEditOrder() {
+  if (!editingOrder.value) return;
+  editSaving.value = true;
+  try {
+    await api.put(`/orders/${editingOrder.value.id}`, { status: editingOrder.value.status });
+  } catch {}
+  const idx = orders.value.findIndex(x => x.id === editingOrder.value.id);
+  if (idx !== -1) orders.value[idx] = { ...editingOrder.value };
+  editingOrder.value = null;
+  editSaving.value = false;
+}
+
+function startEditMaterial(m) {
+  editingMaterial.value = { ...m };
+}
+function cancelEditMaterial() {
+  editingMaterial.value = null;
+}
+async function saveEditMaterial() {
+  if (!editingMaterial.value) return;
+  editSaving.value = true;
+  try {
+    await api.put(`/materials/${editingMaterial.value.id}`, { price_per_gram: editingMaterial.value.price_per_gram, in_stock: editingMaterial.value.in_stock });
+  } catch {}
+  const idx = materials.value.findIndex(x => x.id === editingMaterial.value.id);
+  if (idx !== -1) materials.value[idx] = { ...editingMaterial.value };
+  editingMaterial.value = null;
+  editSaving.value = false;
+}
+
+function startEditEmployee(e) {
+  editingEmployee.value = { ...e, name: e.user?.name || e.name || '', email: e.user?.email || e.email || '' };
+}
+function cancelEditEmployee() {
+  editingEmployee.value = null;
+}
+async function saveEditEmployee() {
+  if (!editingEmployee.value) return;
+  editSaving.value = true;
+  try {
+    await api.put(`/hr/employees/${editingEmployee.value.id}`, {
+      position: editingEmployee.value.position,
+      department: editingEmployee.value.department,
+      employment_type: editingEmployee.value.employment_type,
+      status: editingEmployee.value.status,
+    });
+  } catch {}
+  const idx = employees.value.findIndex(x => x.id === editingEmployee.value.id);
+  if (idx !== -1) {
+    const updated = { ...employees.value[idx], ...editingEmployee.value };
+    if (editingEmployee.value.name || editingEmployee.value.email) {
+      updated.user = { ...updated.user, name: editingEmployee.value.name, email: editingEmployee.value.email };
+    }
+    employees.value[idx] = updated;
+  }
+  editingEmployee.value = null;
+  editSaving.value = false;
 }
 </script>
 
@@ -442,6 +531,7 @@ async function checkApi() {
                 <th>Hired</th>
                 <th>Salary</th>
                 <th>Status</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -455,6 +545,9 @@ async function checkApi() {
                 <td>{{ fmtMoney(e.salary) }}</td>
                 <td>
                   <span class="status" :class="e.status">{{ e.status }}</span>
+                </td>
+                <td>
+                  <button class="btn btn-accent btn-sm" @click="startEditEmployee(e)">Edit</button>
                 </td>
               </tr>
             </tbody>
@@ -541,6 +634,7 @@ async function checkApi() {
                 <th>Total</th>
                 <th>Status</th>
                 <th>Placed</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -555,6 +649,9 @@ async function checkApi() {
                   <span class="status" :class="o.status">{{ orderStatusLabels[o.status] || o.status }}</span>
                 </td>
                 <td>{{ fmtDate(o.created_at) }}</td>
+                <td>
+                  <button class="btn btn-accent btn-sm" @click="startEditOrder(o)">Edit</button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -583,6 +680,7 @@ async function checkApi() {
                 <th>Price / gram</th>
                 <th>Properties</th>
                 <th>Status</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -597,12 +695,91 @@ async function checkApi() {
                 <td>
                   <span class="status" :class="m.in_stock ? 'active' : ''">{{ m.in_stock ? 'In stock' : 'Out of stock' }}</span>
                 </td>
+                <td>
+                  <button class="btn btn-accent btn-sm" @click="startEditMaterial(m)">Edit</button>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         <p v-else class="loading">No materials.</p>
       </template>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div v-if="editingProduct || editingOrder || editingMaterial || editingEmployee" class="modal-overlay" @click.self="cancelEditProduct(); cancelEditOrder(); cancelEditMaterial(); cancelEditEmployee()">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Edit {{ editingProduct ? 'Product' : editingOrder ? 'Order' : editingMaterial ? 'Material' : 'Employee' }}</h3>
+          <button class="modal-close" @click="cancelEditProduct(); cancelEditOrder(); cancelEditMaterial(); cancelEditEmployee()">&times;</button>
+        </div>
+
+        <template v-if="editingProduct">
+          <div class="modal-body">
+            <label><span>Name</span><input v-model="editingProduct.name" class="input-field" /></label>
+            <label><span>Category</span><input v-model="editingProduct.category" class="input-field" /></label>
+            <label><span>Price (R)</span><input v-model.number="editingProduct.price" type="number" class="input-field" /></label>
+            <label><span>Description</span><textarea v-model="editingProduct.description" class="input-field" rows="3"></textarea></label>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm" @click="cancelEditProduct">Cancel</button>
+            <button class="btn btn-primary btn-sm" @click="saveEditProduct" :disabled="editSaving">{{ editSaving ? 'Saving...' : 'Save changes' }}</button>
+          </div>
+        </template>
+
+        <template v-if="editingOrder">
+          <div class="modal-body">
+            <p class="modal-info">Order #{{ editingOrder.id }} &mdash; {{ editingOrder.customer_name }}</p>
+            <label><span>Status</span>
+              <select v-model="editingOrder.status" class="input-field">
+                <option v-for="(label, key) in orderStatusLabels" :key="key" :value="key">{{ label }}</option>
+              </select>
+            </label>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm" @click="cancelEditOrder">Cancel</button>
+            <button class="btn btn-primary btn-sm" @click="saveEditOrder" :disabled="editSaving">{{ editSaving ? 'Saving...' : 'Save changes' }}</button>
+          </div>
+        </template>
+
+        <template v-if="editingMaterial">
+          <div class="modal-body">
+            <p class="modal-info">{{ editingMaterial.name }} &middot; {{ editingMaterial.color }}</p>
+            <label><span>Price per gram (R)</span><input v-model.number="editingMaterial.price_per_gram" type="number" step="0.01" class="input-field" /></label>
+            <label class="checkbox-row"><input type="checkbox" v-model="editingMaterial.in_stock" /><span>In stock</span></label>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm" @click="cancelEditMaterial">Cancel</button>
+            <button class="btn btn-primary btn-sm" @click="saveEditMaterial" :disabled="editSaving">{{ editSaving ? 'Saving...' : 'Save changes' }}</button>
+          </div>
+        </template>
+
+        <template v-if="editingEmployee">
+          <div class="modal-body">
+            <p class="modal-info">{{ editingEmployee.employee_id }}</p>
+            <label><span>Position</span><input v-model="editingEmployee.position" class="input-field" /></label>
+            <label><span>Department</span><input v-model="editingEmployee.department" class="input-field" /></label>
+            <label><span>Employment type</span>
+              <select v-model="editingEmployee.employment_type" class="input-field">
+                <option value="full_time">Full time</option>
+                <option value="part_time">Part time</option>
+                <option value="contract">Contract</option>
+              </select>
+            </label>
+            <label><span>Status</span>
+              <select v-model="editingEmployee.status" class="input-field">
+                <option value="active">Active</option>
+                <option value="on_leave">On leave</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm" @click="cancelEditEmployee">Cancel</button>
+            <button class="btn btn-primary btn-sm" @click="saveEditEmployee" :disabled="editSaving">{{ editSaving ? 'Saving...' : 'Save changes' }}</button>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -993,5 +1170,102 @@ async function checkApi() {
   .stat-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(85, 133, 100, 0.16);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--grey);
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--dark);
+}
+
+.modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-body label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal-body label > span {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--grey);
+}
+
+.modal-info {
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+}
+
+.modal-body textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.checkbox-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-row input {
+  width: 18px;
+  height: 18px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(85, 133, 100, 0.16);
 }
 </style>

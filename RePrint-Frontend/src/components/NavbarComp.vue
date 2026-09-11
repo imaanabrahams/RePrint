@@ -139,7 +139,7 @@ function isActive(to) {
           to="/cart"
           class="btn btn-primary nav-cta"
         >
-          Account
+          My Cart
         </RouterLink>
         <RouterLink v-else to="/signup" class="btn btn-primary nav-cta">
           Sign Up

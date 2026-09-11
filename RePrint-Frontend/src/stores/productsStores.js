@@ -7,6 +7,7 @@ import p4 from "../assets/p4.png";
 import p5 from "../assets/p5.png";
 import p6 from "../assets/p6.png";
 import p7 from "../assets/p7.png";
+import p8 from "../assets/p8.jpg";
 import best1 from "../assets/best1.png";
 import best2 from "../assets/best2.png";
 import best3 from "../assets/best3.png";
@@ -143,7 +144,7 @@ const localCatalog = [
     price: 399,
     rating: 4.8,
     reviews: 74,
-    image: p4,
+    image: p8,
     description:
       "A modular drawer organiser with stackable compartments for keeping small essentials neatly sorted.",
     options: ["2-piece", "4-piece", "6-piece"],
@@ -187,7 +188,7 @@ const localCatalog = [
 ];
 
 const localImageByName = {
-  "modular drawer organiser": p4,
+  "modular drawer organiser": p8,
 };
 
 function parseOptions(raw) {

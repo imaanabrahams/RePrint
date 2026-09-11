@@ -47,7 +47,7 @@ describe("Navbar", () => {
       JSON.stringify({ id: 1, role: "user" }),
     );
     const wrapper = mount(Navbar, { global: { plugins: [pinia] } });
-    expect(wrapper.find(".nav-cta").text()).toBe("Account");
+    expect(wrapper.find(".nav-cta").text()).toBe("My Cart");
   });
 
   it("shows the admin icon for admins", () => {
