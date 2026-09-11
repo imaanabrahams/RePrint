@@ -85,9 +85,7 @@ async function submit() {
             <input type="checkbox" />
             <span>Remember me</span>
           </label>
-          <a href="#" class="forgot" onclick="return false;"
-            >Forgot password?</a
-          >
+          <RouterLink to="/forgot-password" class="forgot">Forgot password?</RouterLink>
         </div>
 
         <button

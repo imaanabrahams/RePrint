@@ -79,6 +79,38 @@ export const routes = [
     name: "wishlist",
     component: () => import("../views/Wishlist.vue"),
   },
+    {
+    path: "/checkout",
+    name: "checkout",
+    component: () => import("../views/Checkout.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/payfast-sandbox",
+    name: "payfast-sandbox",
+    component: () => import("../views/PayFastSandbox.vue"),
+  },
+  {
+    path: "/order-confirmation/:orderId",
+    name: "order-confirmation",
+    component: () => import("../views/OrderConfirmation.vue"),
+    props: true,
+  },
+  {
+    path: "/forgot-password",
+    name: "forgot-password",
+    component: () => import("../views/ForgotPassword.vue"),
+  },
+  {
+    path: "/reset-password",
+    name: "reset-password",
+    component: () => import("../views/ResetPassword.vue"),
+  },
+  {
+    path: "/verify-email",
+    name: "verify-email",
+    component: () => import("../views/VerifyEmail.vue"),
+  },
   {
     path: "/staff/login",
     name: "staff-login",

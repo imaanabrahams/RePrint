@@ -92,10 +92,9 @@ const total = computed(() => cart.subtotal + shipping.value);
           <span>Total</span>
           <span>{{ formatRand(total) }}</span>
         </div>
-        <button class="btn btn-primary checkout" @click="cart.clear()">
+        <button class="btn btn-primary checkout" @click="$router.push('/checkout')">
           Checkout
         </button>
-        <p class="note">Demo checkout — no payment is processed.</p>
       </aside>
     </div>
   </div>
