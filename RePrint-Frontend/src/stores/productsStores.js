@@ -203,9 +203,11 @@ function parseOptions(raw) {
 }
 
 function toProduct(row) {
-  const image = row.image_url
-    ? resolveApiUrl(row.image_url)
-    : localImageByName[row.name?.trim().toLowerCase()] || "";
+  const localImage =
+    localImageByName[row.name?.trim().toLowerCase()] || "";
+  const image =
+    localImage ||
+    (row.image_url ? resolveApiUrl(row.image_url) : "");
 
   return {
     id: row.id,

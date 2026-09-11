@@ -12,7 +12,7 @@ import keyring from "../assets/keyring.png";
 import best2 from "../assets/best2.png";
 import best3 from "../assets/best3.png";
 import p8 from "../assets/p8.jpg";
-import p9 from "../assets/p9.jpg";
+import p9 from "../assets/Lotus 3D Printed Smartphone Dock _ Geometric Petal Desk Sculpture.jpg";
 
 const form = ref({
   productType: "Phone Stand",

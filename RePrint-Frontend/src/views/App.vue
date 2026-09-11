@@ -1,10 +1,10 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import Navbar from './components/NavbarComp.vue'
-import Footer from './components/FooterComp.vue'
-import DemoDataBanner from './components/DemoDataBanner.vue'
-import { useProductsStore } from './stores/productsStores.js'
+import Navbar from '../components/NavbarComp.vue'
+import Footer from '../components/FooterComp.vue'
+import DemoDataBanner from '../components/DemoDataBanner.vue'
+import { useProductsStore } from '../stores/productsStores.js'
 
 const route = useRoute()
 
