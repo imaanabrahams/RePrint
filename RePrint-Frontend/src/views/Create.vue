@@ -12,6 +12,7 @@ import keyring from "../assets/keyring.png";
 import best2 from "../assets/best2.png";
 import best3 from "../assets/best3.png";
 import p8 from "../assets/p8.jpg";
+import p9 from "../assets/p9.jpg";
 
 const form = ref({
   productType: "Phone Stand",
@@ -20,7 +21,7 @@ const form = ref({
 });
 
 const imageMap = {
-  "Phone Stand": p8,
+  "Phone Stand": p9,
   "Home Decor": p2,
   Planter: p6,
   "Desk Organiser": p4,
