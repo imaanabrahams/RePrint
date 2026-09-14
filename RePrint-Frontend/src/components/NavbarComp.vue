@@ -164,6 +164,7 @@ function isActive(to) {
   top: 0;
   z-index: 100;
   background: var(--bg-card);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }

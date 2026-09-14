@@ -8,7 +8,8 @@ export const useCartStore = defineStore('cart', () => {
   const subtotal = computed(() =>
     items.value.reduce((sum, i) => sum + i.price * i.quantity, 0)
   )
-
+  // Items are keyed by product id + option, so the same product with a
+  // different variant (e.g. colour/size) stacks as a separate cart line.
   function addToCart(product, quantity = 1, option = '', materialId = null) {
     const key = option || 'default'
     const existing = items.value.find((i) => i.id === product.id && i.option === key)

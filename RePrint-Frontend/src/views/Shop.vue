@@ -6,17 +6,24 @@ import ProductCard from "../components/ProductcardComp.vue";
 const products = useProductsStore();
 const active = ref("All");
 const categories = ["All", "Home Decor", "Office", "Gaming", "Toys", "Garden"];
+const query = ref("");
 
-const filtered = computed(() =>
-  active.value === "All"
+const filtered = computed(() => {
+  let list = active.value === "All"
     ? products.products
-    : products.products.filter((p) => p.category === active.value),
-);
+    : products.products.filter((p) => p.category === active.value);
+  if (query.value.trim()) {
+    const q = query.value.toLowerCase();
+    list = list.filter((p) => p.name.toLowerCase().includes(q));
+  }
+  return list;
+});
 </script>
 
 <template>
   <div class="shop fade-up container">
     <div class="shop-head">
+      <input v-model="query" type="search" placeholder="Search products..." class="input-field" />
       <div>
         <span class="section-label">Our Collection</span>
         <h1 class="page-title">Shop all products</h1>
