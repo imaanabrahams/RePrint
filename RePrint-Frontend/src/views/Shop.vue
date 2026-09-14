@@ -23,12 +23,12 @@ const filtered = computed(() => {
 <template>
   <div class="shop fade-up container">
     <div class="shop-head">
-      <input v-model="query" type="search" placeholder="Search products..." class="input-field" />
       <div>
         <span class="section-label">Our Collection</span>
         <h1 class="page-title">Shop all products</h1>
       </div>
       <span class="count">{{ filtered.length }} items</span>
+      <input v-model="query" type="search" placeholder="Search products..." class="input-field" />
     </div>
 
     <div class="layout">

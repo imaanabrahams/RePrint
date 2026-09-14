@@ -10,12 +10,16 @@ import {
 } from "../api/client";
 
 export const useAuthStore = defineStore("auth", () => {
+  // Hydrate initial state from localStorage (via api/client.js) so a page
+  // refresh doesn't log the user out — the store just mirrors what's stored.
   const token = ref(getToken() || null);
   const user = ref(getStoredUser());
 
   const isAuthenticated = computed(() => !!token.value);
   const isAdmin = computed(() => user.value?.role === "admin");
-
+  // apiLogin persists the token/user to localStorage internally;
+  // we re-read getToken() here rather than trusting the response directly
+  // so the store always matches what's actually in storage.
   async function login(email, password) {
     const data = await apiLogin(email, password);
     token.value = getToken();
