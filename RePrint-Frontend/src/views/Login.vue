@@ -100,7 +100,7 @@ async function submit() {
         </button>
       </form>
 
-      <p class="hint">Demo customer — user@reprint.com / user123</p>
+      <p class="hint">Demo customer — john@example.com / password123</p>
 
       <div class="divider"><span>or</span></div>
 

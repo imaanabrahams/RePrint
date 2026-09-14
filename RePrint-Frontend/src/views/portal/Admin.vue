@@ -347,7 +347,7 @@ async function saveEditEmployee() {
         <p class="cred-title">Staff login details</p>
         <ul class="cred-list">
           <li><strong>Admin:</strong> admin@reprint.com / password123</li>
-          <li><strong>Customer:</strong> user@reprint.com / user123</li>
+          <li><strong>Customer:</strong> john@example.com / password123</li>
         </ul>
       </div>
     </div>
