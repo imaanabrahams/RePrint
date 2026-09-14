@@ -27,6 +27,12 @@ function isActive(to) {
   if (to === "/") return route.path === "/";
   return route.path.startsWith(to);
 }
+
+function handleLogout() {
+  open.value = false;
+  auth.logout();
+  router.push("/");
+}
 </script>
 
 <template>
@@ -134,13 +140,14 @@ function isActive(to) {
           <span v-if="cart.count" class="count">{{ cart.count }}</span>
         </RouterLink>
 
-        <RouterLink
+        <button
           v-if="auth.isAuthenticated"
-          to="/cart"
           class="btn btn-primary nav-cta"
+          aria-label="Log out"
+          @click="handleLogout"
         >
-          My Cart
-        </RouterLink>
+          Logout
+        </button>
         <RouterLink v-else to="/signup" class="btn btn-primary nav-cta">
           Sign Up
         </RouterLink>
