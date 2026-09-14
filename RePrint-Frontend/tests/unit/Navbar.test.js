@@ -40,14 +40,25 @@ describe("Navbar", () => {
     expect(wrapper.find(".nav-cta").text()).toBe("Sign Up");
   });
 
-  it("shows the account CTA when authenticated", () => {
+  it("shows the logout button when authenticated", () => {
     localStorage.setItem("reprint_token", "t");
     localStorage.setItem(
       "reprint_user",
       JSON.stringify({ id: 1, role: "user" }),
     );
     const wrapper = mount(Navbar, { global: { plugins: [pinia] } });
-    expect(wrapper.find(".nav-cta").text()).toBe("Account");
+    expect(wrapper.find(".nav-cta").text()).toBe("Logout");
+  });
+
+  it("logs out and clears the session when the logout button is clicked", async () => {
+    const user = { id: 1, role: "user" };
+    localStorage.setItem("reprint_token", "t");
+    localStorage.setItem("reprint_user", JSON.stringify(user));
+    const wrapper = mount(Navbar, { global: { plugins: [pinia] } });
+    await wrapper.find('[aria-label="Log out"]').trigger("click");
+    expect(localStorage.getItem("reprint_token")).toBeNull();
+    expect(localStorage.getItem("reprint_user")).toBeNull();
+    expect(wrapper.find(".nav-cta").text()).toBe("Sign Up");
   });
 
   it("shows the admin icon for admins", () => {

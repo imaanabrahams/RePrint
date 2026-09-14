@@ -3,7 +3,6 @@ import { computed, ref } from "vue";
 import {
   login as apiLogin,
   register as apiRegister,
-  logout as apiLogout,
   getToken,
   getStoredUser,
   clearSession,

@@ -120,38 +120,44 @@ export const routes = [
     path: "/staff",
     component: () => import("../layouts/StaffLayout.vue"),
     redirect: "/staff/dashboard",
+    meta: { requiresAuth: true, staffOnly: true },
     children: [
       {
         path: "dashboard",
         name: "staff-dashboard",
         component: () => import("../views/portal/StaffDashboard.vue"),
-        meta: { title: "Overview" },
+        meta: { title: "Overview", staffOnly: true },
       },
       {
         path: "print-queue",
         name: "staff-print-queue",
         component: () => import("../views/portal/StaffPrintQueue.vue"),
-        meta: { title: "Print queue" },
+        meta: { title: "Print queue", staffOnly: true },
       },
       {
         path: "inventory",
         name: "staff-inventory",
         component: () => import("../views/portal/StaffInventory.vue"),
-        meta: { title: "Inventory" },
+        meta: { title: "Inventory", staffOnly: true },
       },
       {
         path: "orders",
         name: "staff-orders",
         component: () => import("../views/portal/StaffOrders.vue"),
-        meta: { title: "Orders" },
+        meta: { title: "Orders", staffOnly: true },
       },
       {
         path: "team",
         name: "staff-team",
         component: () => import("../views/portal/StaffTeam.vue"),
-        meta: { title: "Team" },
+        meta: { title: "Team", staffOnly: true },
       },
     ],
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    component: () => import("../views/Home.vue"),
   },
 ];
 
@@ -164,13 +170,24 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  if (to.meta.requiresAuth && to.meta.adminOnly) {
+  if (to.meta.requiresAuth) {
+    const token = getToken();
     const user = getStoredUser();
-    if (getToken() && user?.role !== "admin") {
+
+    if (!token) {
+      return {
+        name: "login",
+        query: { redirect: to.fullPath },
+      };
+    }
+
+    if (to.meta.adminOnly && user?.role !== "admin") {
       return { name: "home" };
     }
-  } else if (to.meta.requiresAuth && !getToken()) {
-    return { name: "login", query: { redirect: to.fullPath } };
+
+    if (to.meta.staffOnly && !["admin", "staff"].includes(user?.role)) {
+      return { name: "home" };
+    }
   }
   return true;
 });

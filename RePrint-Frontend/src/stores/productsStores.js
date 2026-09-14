@@ -7,10 +7,11 @@ import p4 from "../assets/p4.png";
 import p5 from "../assets/p5.png";
 import p6 from "../assets/p6.png";
 import p7 from "../assets/p7.png";
+import p8 from "../assets/p8.jpg";
 import best1 from "../assets/best1.png";
 import best2 from "../assets/best2.png";
 import best3 from "../assets/best3.png";
-import { markMockFallback } from '../api/status.js'
+import { markMockFallback } from "../api/status.js";
 
 const localCatalog = [
   {
@@ -136,7 +137,59 @@ const localCatalog = [
       "A fun, 3D-printed sweet dispenser that makes it easy to hand out your favourite treats. Perfect for parties, kids and playful kitchens.",
     options: ["Small", "Large"],
   },
+  {
+    id: 11,
+    name: "Modular Drawer Organiser",
+    category: "Home Decor",
+    price: 399,
+    rating: 4.8,
+    reviews: 74,
+    image: p8,
+    description:
+      "A modular drawer organiser with stackable compartments for keeping small essentials neatly sorted.",
+    options: ["2-piece", "4-piece", "6-piece"],
+  },
+  {
+    id: 12,
+    name: "Cable Management Tray",
+    category: "Office",
+    price: 329,
+    rating: 4.7,
+    reviews: 61,
+    image: p3,
+    description:
+      "A compact tray for routing chargers and cables cleanly beneath your desk.",
+    options: ["Short", "Long"],
+  },
+  {
+    id: 13,
+    name: "Wall Mount Headset Hook",
+    category: "Gaming",
+    price: 249,
+    rating: 4.6,
+    reviews: 49,
+    image: p5,
+    description:
+      "A sturdy wall-mounted hook that keeps headsets off your desk and ready to use.",
+    options: ["Single", "Double"],
+  },
+  {
+    id: 14,
+    name: "Self-Watering Plant Insert",
+    category: "Garden",
+    price: 279,
+    rating: 4.5,
+    reviews: 38,
+    image: p6,
+    description:
+      "A practical insert that helps indoor plants stay hydrated between waterings.",
+    options: ["Small", "Medium", "Large"],
+  },
 ];
+
+const localImageByName = {
+  "modular drawer organiser": p8,
+};
 
 function parseOptions(raw) {
   if (Array.isArray(raw)) return raw;
@@ -150,6 +203,12 @@ function parseOptions(raw) {
 }
 
 function toProduct(row) {
+  const localImage =
+    localImageByName[row.name?.trim().toLowerCase()] || "";
+  const image =
+    localImage ||
+    (row.image_url ? resolveApiUrl(row.image_url) : "");
+
   return {
     id: row.id,
     name: row.name,
@@ -157,7 +216,7 @@ function toProduct(row) {
     price: Number(row.base_price),
     rating: Number(row.rating) || 4.5,
     reviews: Number(row.reviews) || 0,
-    image: resolveApiUrl(row.image_url) || "",
+    image,
     description: row.description || "",
     options: parseOptions(row.options),
     featured: row.featured === 1 || row.featured === true,
@@ -188,12 +247,12 @@ export const useProductsStore = defineStore("products", {
           // Fall back to local catalog if API products don't have images
           this.products = localCatalog;
           this.source = "local";
-          markMockFallback('/products (no image_url on returned rows)');
+          markMockFallback("/products (no image_url on returned rows)");
         }
       } catch (error) {
         this.products = localCatalog;
         this.source = "local";
-        markMockFallback('/products', error);
+        markMockFallback("/products", error);
       } finally {
         this.loaded = true;
       }

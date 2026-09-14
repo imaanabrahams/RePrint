@@ -8,7 +8,8 @@
     "build": "npm run install:frontend && npm run build:frontend",
     "build:frontend": "cd RePrint-Frontend && npm run build",
     "build:github": "cd RePrint-Frontend && GH_PAGES=true VITE_GH_PAGES=true npm run build",
-    "dev": "npm run dev --prefix RePrint-Frontend"
+    "dev": "npm run dev --prefix RePrint-Frontend",
+    "preview": "cd RePrint-Frontend && npm run preview"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { createRouter, createMemoryHistory } from "vue-router";
 import Cart from "../../src/views/Cart.vue";
@@ -71,11 +71,17 @@ describe("Cart view", () => {
     expect(wrapper.text()).toContain("Free");
   });
 
-  it("checkout clears the cart", async () => {
+  it("checkout navigates to the checkout page", async () => {
     const cart = useCartStore();
     cart.addToCart({ ...product }, 1);
-    const wrapper = mountCart(pinia, makeRouter());
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [{ path: "/checkout", component: { template: "<div/>" } }],
+    });
+    const wrapper = mountCart(pinia, router);
     await wrapper.find(".checkout").trigger("click");
-    expect(cart.items).toHaveLength(0);
+    await flushPromises();
+    expect(router.currentRoute.value.path).toBe("/checkout");
+    expect(cart.items).toHaveLength(1);
   });
 });

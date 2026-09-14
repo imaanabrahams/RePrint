@@ -9,9 +9,9 @@ describe("Create view", () => {
     expect(wrapper.find("select").exists()).toBe(true);
   });
 
-  it("shows 11 product types in the select", () => {
+  it("shows all available product types in the select", () => {
     const wrapper = mount(Create);
-    expect(wrapper.findAll("option").length).toBe(11);
+    expect(wrapper.findAll("option").length).toBe(15);
   });
 
   it("renders 20 colour swatches", () => {
