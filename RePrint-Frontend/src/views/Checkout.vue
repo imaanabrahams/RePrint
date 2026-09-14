@@ -5,6 +5,7 @@ import { useCartStore } from "../stores/cartStores.js";
 import { useAuthStore } from "../stores/authStores.js";
 import { createOrder, initiatePayfastPayment } from "../api/client.js";
 import { formatRand } from "../utils/currency.js";
+import { toast } from "vue3-toastify";
 
 const router = useRouter();
 const cart = useCartStore();
@@ -19,6 +20,7 @@ const shippingCost = computed(() =>
   cart.subtotal >= 1000 || cart.subtotal === 0 ? 0 : 80,
 );
 const total = computed(() => cart.subtotal + shippingCost.value);
+
 
 async function submit() {
   if (!shipping_address.value) {
@@ -52,6 +54,7 @@ async function submit() {
     router.push("/payfast-sandbox");
   } catch (e) {
     err.value = e.message || "Checkout failed";
+    toast.error(err.value);
   } finally {
     loading.value = false;
   }

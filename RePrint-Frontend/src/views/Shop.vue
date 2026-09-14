@@ -179,4 +179,10 @@ const filtered = computed(() =>
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; }
+}
+
 </style>

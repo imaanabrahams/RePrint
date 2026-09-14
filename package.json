@@ -12,5 +12,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "vue3-toastify": "^0.2.9"
   }
 }

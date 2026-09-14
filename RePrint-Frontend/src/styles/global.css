@@ -154,3 +154,7 @@ img {
 .fade-up {
   animation: fadeUp 0.5s ease both;
 }
+
+@media (max-width: 768px) {
+  .container { padding-inline: 16px; }
+}
