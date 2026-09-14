@@ -5,6 +5,8 @@ import { useProductsStore } from "../stores/productsStores.js";
 import { useCartStore } from "../stores/cartStores.js";
 import RatingStars from "../components/RatingstarsComp.vue";
 import { formatRand } from "../utils/currency.js";
+import { toast } from "vue3-toastify";
+
 
 const route = useRoute();
 const products = useProductsStore();
@@ -39,6 +41,7 @@ function add() {
   cart.addToCart(product.value, quantity.value, selectedOption.value);
   added.value = true;
   setTimeout(() => (added.value = false), 1600);
+  toast.success(`${product.name} added to cart`);
 }
 
 const faqs = [

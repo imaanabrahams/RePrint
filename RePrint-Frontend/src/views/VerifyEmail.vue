@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { verifyEmail } from "../api/client.js";
+import { toast } from "vue3-toastify";
 
 const route = useRoute();
 const status = ref("checking"); // checking | success | error
@@ -17,9 +18,11 @@ onMounted(async () => {
   try {
     await verifyEmail(token);
     status.value = "success";
+    toast.success("Email verified");
   } catch (e) {
     status.value = "error";
     message.value = e.message || "This link is invalid or has expired.";
+    toast.error("Verification failed");
   }
 });
 </script>

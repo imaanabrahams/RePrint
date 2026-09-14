@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { staffLogin } from '../../api/client.js'
+import { toast } from 'vue3-toastify'
 
 const router = useRouter()
 
@@ -35,6 +36,7 @@ async function submitCredentials() {
     step.value = 'verify'
   } catch (e) {
     errorMessage.value = e.message || 'Invalid employee ID or password'
+    toast.error(errorMessage.value)
   } finally {
     isSubmitting.value = false
   }

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { forgotPassword } from "../api/client.js";
+import { toast } from "vue3-toastify";
 
 const email = ref("");
 const loading = ref(false);
@@ -13,8 +14,10 @@ async function submit() {
   try {
     await forgotPassword(email.value);
     sent.value = true;
+    toast.success("Reset link sent — check your email");
   } catch (e) {
     err.value = e.message || "Something went wrong";
+    toast.error(err.value);
   } finally {
     loading.value = false;
   }

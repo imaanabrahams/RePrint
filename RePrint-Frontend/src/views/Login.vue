@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStores";
+import { toast } from "vue3-toastify";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -17,9 +18,11 @@ async function submit() {
   err.value = "";
   try {
     await auth.login(email.value, password.value);
+    toast.success("Welcome back!");
     router.push("/");
   } catch (e) {
     err.value = e.message || "Login failed";
+    toast.error(err.value);
   } finally {
     loading.value = false;
   }

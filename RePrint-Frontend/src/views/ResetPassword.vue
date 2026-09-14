@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { resetPassword } from "../api/client.js";
+import { toast } from "vue3-toastify";
 
 const route = useRoute();
 const router = useRouter();
@@ -21,9 +22,11 @@ async function submit() {
   try {
     await resetPassword(route.query.token, password.value);
     done.value = true;
+    toast.success("Password updated");
     setTimeout(() => router.push("/login"), 1800);
   } catch (e) {
     err.value = e.message || "Reset failed — the link may have expired";
+    toast.error(err.value);
   } finally {
     loading.value = false;
   }
