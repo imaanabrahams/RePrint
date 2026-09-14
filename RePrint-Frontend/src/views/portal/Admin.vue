@@ -344,10 +344,9 @@ async function saveEditEmployee() {
       <p class="hint">Demo credentials — admin@reprint.com / password123</p>
 
       <div class="cred-box">
-        <p class="cred-title">Staff login details</p>
+        <p class="cred-title">Admin login details</p>
         <ul class="cred-list">
           <li><strong>Admin:</strong> admin@reprint.com / password123</li>
-          <li><strong>Customer:</strong> john@example.com / password123</li>
         </ul>
       </div>
     </div>
