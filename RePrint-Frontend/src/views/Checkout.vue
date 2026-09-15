@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useCartStore } from "../stores/cartStores.js";
 import { useAuthStore } from "../stores/authStores.js";
-import { createOrder, initiatePayfastPayment } from "../api/client.js";
+import { createOrder, initiatePayfastPayment, redirectToPayfast } from "../api/client.js";
 import { formatRand } from "../utils/currency.js";
 import { toast } from "vue3-toastify";
 
@@ -41,17 +41,22 @@ async function submit() {
 
     const payment = await initiatePayfastPayment(order.id);
 
-    sessionStorage.setItem(
-      "pf_pending",
-      JSON.stringify({
-        order_id: order.id,
-        payment_id: payment.payment_id,
-        amount: order.total_price,
-        item_name: `RePrint order #${order.id}`,
-      }),
-    );
-
-    router.push("/payfast-sandbox");
+    if (payment.useLocalSimulator) {
+      sessionStorage.setItem(
+        "pf_pending",
+        JSON.stringify({
+          order_id: order.id,
+          payment_id: payment.payment_id,
+          amount: order.total_price,
+          item_name: `RePrint order #${order.id}`,
+        }),
+      );
+      router.push("/payfast-sandbox");
+    } else {
+      // Real PayFast gateway (sandbox or live) — hand off to PayFast's
+      // hosted page. Cart is cleared on return via OrderConfirmation.
+      redirectToPayfast(payment.action, payment.fields);
+    }
   } catch (e) {
     err.value = e.message || "Checkout failed";
     toast.error(err.value);

@@ -3,14 +3,17 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { getPaymentStatus } from "../api/client.js";
 import { formatRand } from "../utils/currency.js";
+import { useCartStore } from "../stores/cartStores.js";
 
 const props = defineProps({ orderId: String });
 const route = useRoute();
+const cart = useCartStore();
 
 const payment = ref(null);
 const polling = ref(true);
 let interval = null;
 let attempts = 0;
+let cartCleared = false;
 
 async function poll() {
   const paymentId = route.query.payment_id;
@@ -29,6 +32,13 @@ async function poll() {
     // keep trying until attempts run out
   }
   attempts++;
+
+  // Whichever path got us here (local simulator or PayFast's real
+  // gateway), clear the cart once the outcome is settled.
+  if (!cartCleared && payment.value && payment.value.status !== "pending") {
+    cart.clear();
+    cartCleared = true;
+  }
 }
 
 onMounted(() => {

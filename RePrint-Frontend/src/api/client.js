@@ -512,6 +512,25 @@ export async function getPaymentStatus(paymentId) {
   return api.get(`/payments/payfast/status/${paymentId}`);
 }
 
+// Navigates the browser to PayFast's hosted payment page (sandbox or live)
+// by building a hidden form and POSTing it — PayFast requires this exact
+// delivery method for its action/fields payload, not a fetch/XHR call.
+export function redirectToPayfast(action, fields) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = action;
+  form.style.display = "none";
+  for (const [key, value] of Object.entries(fields)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+}
+
 export async function forgotPassword(email) {
   return request("/auth/forgot-password", {
     method: "POST",
