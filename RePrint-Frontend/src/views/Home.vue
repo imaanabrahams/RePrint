@@ -255,7 +255,8 @@ const testimonials = [
 .hero-art {
   display: grid;
   place-items: center;
-  overflow: hidden;
+  overflow: visible;
+  padding: 18px;
 }
 
 .hero-frame {
