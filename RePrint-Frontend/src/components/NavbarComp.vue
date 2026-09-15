@@ -73,6 +73,21 @@ function handleLogout() {
           {{ link.label }}
           <span class="underline"></span>
         </RouterLink>
+
+        <div class="mobile-auth">
+          <template v-if="!auth.isAuthenticated">
+            <RouterLink to="/login" class="link" @click="open = false">
+              Log in
+              <span class="underline"></span>
+            </RouterLink>
+            <RouterLink to="/signup" class="btn btn-primary mobile-auth-btn" @click="open = false">
+              Sign Up
+            </RouterLink>
+          </template>
+          <button v-else class="btn btn-primary mobile-auth-btn" @click="handleLogout">
+            Logout
+          </button>
+        </div>
       </nav>
 
       <div class="actions">
@@ -318,6 +333,10 @@ function handleLogout() {
   font-size: 14px;
 }
 
+.mobile-auth {
+  display: none;
+}
+
 .burger {
   display: none;
   flex-direction: column;
@@ -364,6 +383,27 @@ function handleLogout() {
 
   .nav-cta {
     display: none;
+  }
+
+  .mobile-auth {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .mobile-auth .link {
+    border-bottom: none;
+    padding: 4px 2px;
+  }
+
+  .mobile-auth-btn {
+    width: 100%;
+    padding: 13px;
+    text-align: center;
   }
 }
 </style>
