@@ -263,7 +263,15 @@ label > span {
   .row-2 {
     grid-template-columns: 1fr;
   }
+}
 
+@media (min-width: 641px) and (max-width: 820px) {
+  .info-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
   .info-cards {
     grid-template-columns: 1fr;
   }

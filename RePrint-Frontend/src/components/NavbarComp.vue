@@ -157,15 +157,20 @@ function handleLogout() {
 
         <button
           v-if="auth.isAuthenticated"
-          class="btn btn-primary nav-cta"
+          class="btn btn-primary nav-cta nav-cta-logout"
           aria-label="Log out"
           @click="handleLogout"
         >
           Logout
         </button>
-        <RouterLink v-else to="/signup" class="btn btn-primary nav-cta">
-          Sign Up
-        </RouterLink>
+        <template v-else>
+          <RouterLink to="/login" class="nav-cta nav-cta-login">
+            Log in
+          </RouterLink>
+          <RouterLink to="/signup" class="btn btn-primary nav-cta">
+            Sign Up
+          </RouterLink>
+        </template>
 
         <button
           class="burger"
@@ -333,6 +338,15 @@ function handleLogout() {
   font-size: 14px;
 }
 
+.nav-cta-login {
+  display: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary);
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
 .mobile-auth {
   display: none;
 }
@@ -381,8 +395,25 @@ function handleLogout() {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 
-  .nav-cta {
+  .nav-cta-logout {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .btn-primary.nav-cta:not(.nav-cta-logout) {
     display: none;
+  }
+
+  .nav-cta-login {
+    display: inline-flex;
+  }
+
+  .nav-inner {
+    gap: 12px;
+  }
+
+  .actions {
+    gap: 8px;
   }
 
   .mobile-auth {
@@ -404,6 +435,37 @@ function handleLogout() {
     width: 100%;
     padding: 13px;
     text-align: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .word {
+    font-size: 20px;
+  }
+
+  .word::after {
+    width: 20px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .nav-inner {
+    gap: 6px;
+  }
+
+  .actions {
+    gap: 4px;
+  }
+
+  .nav-cta-logout {
+    padding: 9px 12px;
+  }
+
+  .nav-cta-login {
+    padding: 4px 6px;
+    font-size: 13px;
   }
 }
 </style>

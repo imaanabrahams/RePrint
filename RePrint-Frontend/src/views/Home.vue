@@ -255,6 +255,7 @@ const testimonials = [
 .hero-art {
   display: grid;
   place-items: center;
+  overflow: hidden;
 }
 
 .hero-frame {
@@ -513,20 +514,51 @@ const testimonials = [
     justify-content: center;
   }
 
+  .hero-frame {
+    transform: none;
+  }
+
+  .tag-one {
+    left: -6px;
+    top: -10px;
+  }
+
+  .tag-two {
+    right: -4px;
+    bottom: -8px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .grid,
+  .steps,
+  .t-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
   .grid,
   .steps,
   .t-grid {
     grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 1fr;
+  .hero-title {
+    font-size: clamp(32px, 9vw, 44px);
   }
 
-  .steps {
-    grid-template-columns: 1fr;
+  .hero {
+    padding-top: 28px;
+  }
+
+  .cta-box {
+    padding: 34px 24px;
+  }
+
+  .t-card,
+  .step {
+    padding: 26px 20px;
   }
 }
 </style>

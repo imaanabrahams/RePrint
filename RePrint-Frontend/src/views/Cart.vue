@@ -305,4 +305,25 @@ const total = computed(() => cart.subtotal + shipping.value);
     position: static;
   }
 }
+
+@media (max-width: 480px) {
+  .item {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .thumb {
+    width: 64px;
+    height: 64px;
+  }
+
+  .price-col {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid rgba(85, 133, 100, 0.12);
+  }
+}
 </style>

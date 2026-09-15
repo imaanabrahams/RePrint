@@ -35,9 +35,10 @@ describe("Navbar", () => {
     expect(text).toContain("Contact");
   });
 
-  it("shows the sign up CTA when unauthenticated", () => {
+  it("shows the log in link and sign up CTA when unauthenticated", () => {
     const wrapper = mount(Navbar, { global: { plugins: [pinia] } });
-    expect(wrapper.find(".nav-cta").text()).toBe("Sign Up");
+    expect(wrapper.find(".nav-cta-login").text()).toBe("Log in");
+    expect(wrapper.find(".btn-primary.nav-cta").text()).toBe("Sign Up");
   });
 
   it("shows the logout button when authenticated", () => {
@@ -47,7 +48,7 @@ describe("Navbar", () => {
       JSON.stringify({ id: 1, role: "user" }),
     );
     const wrapper = mount(Navbar, { global: { plugins: [pinia] } });
-    expect(wrapper.find(".nav-cta").text()).toBe("Logout");
+    expect(wrapper.find(".nav-cta-logout").text()).toBe("Logout");
   });
 
   it("logs out and clears the session when the logout button is clicked", async () => {
@@ -58,7 +59,8 @@ describe("Navbar", () => {
     await wrapper.find('[aria-label="Log out"]').trigger("click");
     expect(localStorage.getItem("reprint_token")).toBeNull();
     expect(localStorage.getItem("reprint_user")).toBeNull();
-    expect(wrapper.find(".nav-cta").text()).toBe("Sign Up");
+    expect(wrapper.find(".nav-cta-login").text()).toBe("Log in");
+    expect(wrapper.find(".btn-primary.nav-cta").text()).toBe("Sign Up");
   });
 
   it("shows the admin icon for admins", () => {
