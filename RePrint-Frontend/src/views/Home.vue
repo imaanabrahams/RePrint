@@ -256,7 +256,6 @@ const testimonials = [
   display: grid;
   place-items: center;
   overflow: visible;
-  padding: 18px;
 }
 
 .hero-frame {
@@ -292,15 +291,15 @@ const testimonials = [
 }
 
 .tag-one {
-  top: -14px;
-  left: -10px;
+  top: 16px;
+  left: 16px;
   background: var(--accent);
   color: var(--dark);
 }
 
 .tag-two {
-  bottom: -12px;
-  right: -8px;
+  bottom: 16px;
+  right: 16px;
 }
 
 .features {
@@ -520,13 +519,13 @@ const testimonials = [
   }
 
   .tag-one {
-    left: -6px;
-    top: -10px;
+    left: 12px;
+    top: 12px;
   }
 
   .tag-two {
-    right: -4px;
-    bottom: -8px;
+    right: 12px;
+    bottom: 12px;
   }
 }
 
