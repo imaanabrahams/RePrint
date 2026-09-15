@@ -4,6 +4,7 @@ import { useCartStore } from "../stores/cartStores.js";
 import { useWishlistStore } from "../stores/wishlistStores.js";
 import RatingStars from "./RatingstarsComp.vue";
 import { formatRand } from "../utils/currency.js";
+import { toast } from "vue3-toastify";
 
 const props = defineProps({
   product: { type: Object, required: true },
@@ -16,6 +17,11 @@ const wishlist = useWishlistStore();
 
 function goToProduct(product) {
   router.push(`/product/${product.id}`);
+}
+
+function addToCart() {
+  cart.addToCart(props.product);
+  toast.success(`${props.product.name} added to cart`);
 }
 </script>
 
@@ -64,7 +70,7 @@ function goToProduct(product) {
         <span class="price">{{ formatRand(product.price) }}</span>
         <button
           class="add"
-          @click="cart.addToCart(product)"
+          @click="addToCart"
           aria-label="Add to cart"
         >
           <svg

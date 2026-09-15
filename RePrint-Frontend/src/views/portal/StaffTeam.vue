@@ -11,9 +11,9 @@ onMounted(async () => {
 })
 
 const statusColors = {
-  active: '#1d5534',
-  on_leave: '#7a5b0e',
-  terminated: '#8a2020',
+  active: '#4a6b52',
+  on_leave: '#d6a13c',
+  terminated: '#a8a8a8',
 }
 
 const departmentLabels = {
@@ -31,6 +31,16 @@ const filteredEmployees = computed(() => {
   if (filterStatus.value === 'all') return employees.value
   return employees.value.filter(e => e.status === filterStatus.value)
 })
+
+function empName(e) {
+  return e.user?.name ?? e.name ?? e.email ?? 'Staff member'
+}
+function empId(e) {
+  return e.employee_id ?? e.employeeId ?? '—'
+}
+function todaysShift(e) {
+  return e.todays_shift || (e.shift && e.shift.length ? e.shift[0] : null)
+}
 
 function initials(name) {
   if (!name) return 'U'
@@ -51,9 +61,9 @@ function initials(name) {
       <p class="stat-sub">Currently employed</p>
     </div>
     <div class="stat-card">
-      <p class="stat-label">Departments</p>
-      <p class="stat-value">{{ new Set(employees.map(e => e.department).filter(Boolean)).size }}</p>
-      <p class="stat-sub">Active departments</p>
+      <p class="stat-label">On shift today</p>
+      <p class="stat-value">{{ employees.filter(e => todaysShift(e)).length }}</p>
+      <p class="stat-sub">Scheduled for today</p>
     </div>
   </section>
 
@@ -69,26 +79,27 @@ function initials(name) {
       <button class="filter-tab" :class="{ active: filterStatus === 'on_leave' }" @click="filterStatus = 'on_leave'">On leave</button>
     </div>
 
-    <p v-if="loading" class="cell-secondary">Loading team...</p>
+    <p v-if="loading" class="cell-secondary">Loading team…</p>
     <p v-else-if="!filteredEmployees.length" class="cell-secondary">No team members found.</p>
 
     <div v-else class="team-grid">
       <div class="team-card" v-for="emp in filteredEmployees" :key="emp.id">
         <div class="team-card-top">
           <div class="avatar" :style="{ background: emp.status === 'active' ? '#e4f7ea' : '#fbe9e5', color: emp.status === 'active' ? '#1d5534' : '#8a2020' }">
-            {{ initials(emp.name) }}
+            {{ initials(empName(emp)) }}
           </div>
           <div>
-            <p class="team-name">{{ emp.name || emp.email }}</p>
-            <p class="team-role">{{ emp.position || '---' }} &middot; {{ departmentLabels[emp.department] || emp.department || '---' }}</p>
+            <p class="team-name">{{ empName(emp) }}</p>
+            <p class="team-role">{{ emp.position || '—' }} &middot; {{ departmentLabels[emp.department] || emp.department || '—' }}</p>
           </div>
         </div>
         <div class="team-meta">
           <span class="status-dot" :style="{ background: statusColors[emp.status] || '#8a8a8a' }"></span>
           {{ emp.status ? emp.status.replace('_', ' ') : 'Unknown' }}
-          <span v-if="emp.hourly_rate"> &middot; R{{ Number(emp.hourly_rate).toFixed(2) }}/hr</span>
+          <span v-if="todaysShift(emp)"> &middot; {{ todaysShift(emp).start_time }}–{{ todaysShift(emp).end_time }}</span>
+          <span v-else> &middot; No shift today</span>
         </div>
-        <p class="cell-secondary">{{ emp.email }}</p>
+        <p class="cell-secondary">{{ empId(emp) }}</p>
       </div>
     </div>
   </section>

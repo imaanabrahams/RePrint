@@ -4,6 +4,7 @@ import { createPinia, setActivePinia } from "pinia";
 import ProductCard from "../../src/components/ProductcardComp.vue";
 import { useCartStore } from "../../src/stores/cartStores";
 import { useWishlistStore } from "../../src/stores/wishlistStores";
+import { toast } from "vue3-toastify";
 
 const pushMock = vi.fn();
 vi.mock("vue-router", () => ({
@@ -48,6 +49,19 @@ describe("ProductCard", () => {
     await wrapper.find(".add").trigger("click");
     expect(cart.items).toHaveLength(1);
     expect(cart.items[0].id).toBe(5);
+  });
+
+  it("shows a toast notification when adding to cart", async () => {
+    const spy = vi.spyOn(toast, "success");
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const wrapper = mount(ProductCard, {
+      props: { product },
+      global: { plugins: [pinia] },
+    });
+    await wrapper.find(".add").trigger("click");
+    expect(spy).toHaveBeenCalledWith("Test Mug added to cart");
+    spy.mockRestore();
   });
 
   it("toggles the product in the wishlist", async () => {

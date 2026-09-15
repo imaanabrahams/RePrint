@@ -50,7 +50,7 @@ function materialType(material) {
       <button class="filter-tab" :class="{ active: showOutOfStockOnly }" @click="showOutOfStockOnly = true">Out of stock only</button>
     </div>
 
-    <p v-if="loading" class="cell-secondary">Loading materials...</p>
+    <p v-if="loading" class="cell-secondary">Loading materials…</p>
 
     <table v-else class="table">
       <thead>
@@ -68,7 +68,7 @@ function materialType(material) {
             <span v-if="materialType(m)" class="tag" :class="{ recycled: materialType(m) === 'recycled' }">
               {{ materialType(m) }}
             </span>
-            <span v-else class="cell-secondary">---</span>
+            <span v-else class="cell-secondary">—</span>
           </td>
           <td class="cell-secondary">R {{ Number(m.price_per_gram).toFixed(2) }}</td>
           <td>

@@ -41,7 +41,7 @@ function add() {
   cart.addToCart(product.value, quantity.value, selectedOption.value);
   added.value = true;
   setTimeout(() => (added.value = false), 1600);
-  toast.success(`${product.name} added to cart`);
+  toast.success(`${product.value.name} added to cart`);
 }
 
 const faqs = [

@@ -14,9 +14,9 @@ onMounted(async () => {
 })
 
 const statusStyles = {
-  confirmed: { bg: '#e4eefb', color: '#1f4268', label: 'Confirmed' },
-  printing: { bg: '#e4f7ea', color: '#1d5534', label: 'Printing' },
-  quality_check: { bg: '#fdf3dd', color: '#7a5b0e', label: 'Quality check' },
+  confirmed: { bg: '#e4eefb', color: '#2f5d8a', label: 'Confirmed' },
+  printing: { bg: '#e4f7ea', color: '#2f6b45', label: 'Printing' },
+  quality_check: { bg: '#fdf3dd', color: '#9a6d1f', label: 'Quality check' },
 }
 
 const filters = ['All', ...PRODUCTION_STATUSES]
@@ -33,6 +33,16 @@ const productionStats = computed(() => ({
   printing: orders.value.filter(o => o.status === 'printing').length,
   quality_check: orders.value.filter(o => o.status === 'quality_check').length,
 }))
+
+function customerName(o) {
+  return o.customer?.name ?? o.customer_name ?? 'Customer'
+}
+function productName(o) {
+  return o.product?.name ?? o.product_name ?? '—'
+}
+function materialLabel(o) {
+  return o.material ? `${o.material.name} · ${o.material.color}` : o.material_name ?? '—'
+}
 
 function formatDate(iso) {
   return new Date(iso).toLocaleString('en-ZA', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -81,7 +91,7 @@ function formatDate(iso) {
       </button>
     </div>
 
-    <p v-if="loading" class="cell-secondary">Loading production queue...</p>
+    <p v-if="loading" class="cell-secondary">Loading production queue…</p>
     <p v-else-if="!filteredOrders.length" class="cell-secondary">Nothing in this stage right now.</p>
 
     <table v-else class="table">
@@ -99,10 +109,10 @@ function formatDate(iso) {
         <tr v-for="o in filteredOrders" :key="o.id">
           <td>
             <div class="cell-primary">#{{ o.id }}</div>
-            <div class="cell-secondary">{{ o.customer_name || 'Customer' }}</div>
+            <div class="cell-secondary">{{ customerName(o) }}</div>
           </td>
-          <td class="cell-secondary">{{ o.product_name || '---' }}</td>
-          <td class="cell-secondary">{{ o.material_name || '---' }}</td>
+          <td class="cell-secondary">{{ productName(o) }}</td>
+          <td class="cell-secondary">{{ materialLabel(o) }}</td>
           <td class="cell-secondary">{{ o.quantity }}</td>
           <td>
             <span class="badge" :style="{ background: statusStyles[o.status]?.bg, color: statusStyles[o.status]?.color }">
