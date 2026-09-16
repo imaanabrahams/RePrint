@@ -203,11 +203,9 @@ function parseOptions(raw) {
 }
 
 function toProduct(row) {
-  const localImage =
-    localImageByName[row.name?.trim().toLowerCase()] || "";
+  const localImage = localImageByName[row.name?.trim().toLowerCase()] || "";
   const image =
-    localImage ||
-    (row.image_url ? resolveApiUrl(row.image_url) : "");
+    localImage || (row.image_url ? resolveApiUrl(row.image_url) : "");
 
   return {
     id: row.id,
@@ -239,15 +237,13 @@ export const useProductsStore = defineStore("products", {
     async load() {
       try {
         const rows = await api.get("/products");
-        // Only use API products if they have valid images
-        if (rows && rows.length > 0 && rows[0].image_url) {
+        if (Array.isArray(rows)) {
           this.products = rows.map(toProduct);
           this.source = "api";
         } else {
-          // Fall back to local catalog if API products don't have images
           this.products = localCatalog;
           this.source = "local";
-          markMockFallback("/products (no image_url on returned rows)");
+          markMockFallback("/products (invalid response)");
         }
       } catch (error) {
         this.products = localCatalog;

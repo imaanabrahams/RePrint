@@ -56,14 +56,14 @@ describe("Products store", () => {
     expect(products.products[0].featured).toBe(true);
   });
 
-  it("uses the local organiser image when the API row has no image URL", async () => {
+  it("uses API products even when a row has no image URL", async () => {
     vi.spyOn(api.api, "get").mockResolvedValue([
       {
         id: 1,
         name: "Desk Accessories",
         category: "Office",
         base_price: "100",
-        image_url: "/images/desk.png",
+        image_url: null,
       },
       {
         id: 11,
@@ -76,16 +76,17 @@ describe("Products store", () => {
     const products = useProductsStore();
     await products.load();
     expect(products.source).toBe("api");
+    expect(products.products[0].name).toBe("Desk Accessories");
     expect(products.products[1].image).toBeTruthy();
   });
 
-  it("falls back to local catalog when the API has no products", async () => {
+  it("keeps an empty API catalog empty", async () => {
     const getSpy = vi.spyOn(api.api, "get").mockResolvedValue([]);
     const products = useProductsStore();
     await products.load();
-    expect(products.source).toBe("local");
+    expect(products.source).toBe("api");
     expect(products.loaded).toBe(true);
-    expect(products.products.length).toBeGreaterThan(0);
+    expect(products.products).toEqual([]);
     expect(getSpy).toHaveBeenCalledWith("/products");
   });
 
