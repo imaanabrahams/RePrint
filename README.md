@@ -49,6 +49,13 @@ npm run preview    # preview the production build
 | -------------- | ------- | ----------------------------------------------------------- |
 | `VITE_API_URL` | `/api`  | Base URL of the backend API. Override for a hosted backend. |
 
+### Hosted deployment
+
+For a hosted frontend (Vercel, Netlify, etc.) set `VITE_API_URL` at **build time**
+to the live backend URL — for example `https://reprint-api-production-e854.up.railway.app`.
+A stale or dead API URL makes the page fall back to demo data and logs CORS/network
+errors in the console (see the [RePrint-API](https://github.com/imaanabrahams/RePrint-API) repo).
+
 ## Scripts
 
 | Command                 | Description                    |
